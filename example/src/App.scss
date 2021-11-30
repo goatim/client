@@ -1,0 +1,55 @@
+@use "~@fleuraison/ui/dist/colors";
+@use "~@fleuraison/ui/dist/forms";
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+a,
+a:visited,
+a:active,
+button {
+  outline: none;
+  text-decoration: none;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+
+  > body {
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
+    background: colors.$beige;
+    font-size: 1rem;
+
+    .App {
+      padding: 40px;
+
+      > .buttons {
+
+        > .line {
+          margin-top: 50px;
+          display: flex;
+
+          > div {
+            margin-left: 50px;
+          }
+        }
+      }
+
+      > .form {
+        margin-top: 100px;
+        @include forms.form();
+      }
+    }
+  }
+}
