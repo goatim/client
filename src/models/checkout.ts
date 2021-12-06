@@ -7,7 +7,7 @@ import Session from './session';
 export default interface Checkout extends Model {
   session?: Session | string;
   user?: User | string;
-  items?: Item[] | string;
+  items?: Item[];
   total_items?: number;
   expiration?: DateTime;
   token?: string;
