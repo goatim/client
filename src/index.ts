@@ -1,15 +1,18 @@
 import Address, { MinifiedAddress, formatFullAddress } from './models/address';
 import Article from './models/article';
+import Asset, { AssetType } from './models/asset';
 import Billing, { MinifiedBilling } from './models/billing';
-import Category from './models/category';
+import Booster from './models/booster';
+import BoosterInUse from './models/boosterInUse';
+import BoosterInWallet from './models/boosterInWallet';
 import Checkout from './models/checkout';
 import City from './models/city';
-import Collect, { CollectStatus } from './models/collect';
+import Club from './models/club';
 import Country from './models/country';
 import Currency, { formatCurrencyAmount } from './models/currency';
-import Invoice from './models/invoice';
-import Item from './models/item';
-import Order, { OrderType, OrderStatus, formatOrderStatus } from './models/order';
+import Item, { ItemType } from './models/item';
+import League from './models/league';
+import Order, { OrderType } from './models/order';
 import Paragraph, { ParagraphType, ParagraphSize } from './models/paragraph';
 import PaymentIntent, {
   PaymentIntentStatus,
@@ -20,23 +23,14 @@ import PaymentIntent, {
   OxxoDisplayDetails,
 } from './models/paymentIntent';
 import PaymentMethod, { MinifiedPaymentMethod, Card, CardBrands } from './models/paymentMethod';
-import Period, { TimeSlot, PeriodType, formatTimeSlot } from './models/period';
-import Product, { ProductAvailability } from './models/product';
-import Recipient from './models/recipient';
+import Player, { PlayerPosition, PlayerSide } from './models/player';
+import Portfolio from './models/portfolio';
+import Score from './models/score';
 import Session from './models/session';
-import Shipment, { ShipmentStatus, formatShipmentStatus } from './models/shipment';
-import Shop from './models/shop';
 import Tax from './models/tax';
+import Transaction from './models/transaction';
 import User from './models/user';
-import {
-  StandardTimeSlot,
-  standardsTimeSlots,
-  StandardTimeSlotObject,
-  containsTimeSlot,
-  addTimeSlot,
-  removeTimeSlot,
-  formatDateAndTimeslot,
-} from './utils/time';
+import Wallet, { WalletType } from './models/wallet';
 import unSlugify from './utils/unSlugify';
 
 /**
@@ -47,20 +41,23 @@ export type {
   Address,
   MinifiedAddress,
   Article,
+  Asset,
+  AssetType,
   Billing,
   MinifiedBilling,
-  Category,
+  Booster,
+  BoosterInUse,
+  BoosterInWallet,
   Checkout,
   City,
-  Collect,
-  CollectStatus,
+  Club,
   Country,
   Currency,
-  Invoice,
   Item,
+  ItemType,
+  League,
   Order,
   OrderType,
-  OrderStatus,
   Paragraph,
   ParagraphType,
   ParagraphSize,
@@ -75,39 +72,23 @@ export type {
   MinifiedPaymentMethod,
   Card,
   CardBrands,
-  Period,
-  TimeSlot,
-  PeriodType,
-  Product,
-  ProductAvailability,
-  Recipient,
+  Player,
+  PlayerPosition,
+  PlayerSide,
+  Portfolio,
+  Score,
   Session,
-  Shipment,
-  ShipmentStatus,
-  Shop,
   Tax,
+  Transaction,
   User,
+  Wallet,
+  WalletType,
 };
 
-export {
-  formatFullAddress,
-  formatCurrencyAmount,
-  formatTimeSlot,
-  formatShipmentStatus,
-  formatOrderStatus,
-};
+export { formatFullAddress, formatCurrencyAmount };
 
 /**
  * Utils
  */
 
-export type { StandardTimeSlot, StandardTimeSlotObject };
-
-export {
-  standardsTimeSlots,
-  containsTimeSlot,
-  addTimeSlot,
-  removeTimeSlot,
-  formatDateAndTimeslot,
-  unSlugify,
-};
+export { unSlugify };

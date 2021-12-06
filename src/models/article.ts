@@ -3,10 +3,19 @@ import { Image, Model } from '@cezembre/fronts';
 import User from './user';
 import Paragraph from './paragraph';
 
+export type ArticleType =
+  | 'static'
+  | 'article'
+  | 'support'
+  | 'document'
+  | 'legal'
+  | 'content'
+  | 'unknown';
+
 export default interface Article extends Model {
   publication?: DateTime;
   is_published?: boolean;
-  type?: string;
+  type?: ArticleType;
   author?: User | string;
   title?: string;
   slug?: string;
