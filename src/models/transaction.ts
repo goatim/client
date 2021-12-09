@@ -7,5 +7,6 @@ export default interface Transaction extends Model {
   from?: Wallet | string;
   to?: Wallet | string;
   price?: number;
+  asset_quotation_gain?: number;
   quantity?: number;
 }
