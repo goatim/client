@@ -26,6 +26,7 @@ import PaymentMethod, { MinifiedPaymentMethod, Card, CardBrands } from './models
 import Player, { PlayerPosition, PlayerSide } from './models/player';
 import Portfolio from './models/portfolio';
 import Rank from './models/rank';
+import Ranking, { RankingPeriod } from './models/ranking';
 import Score from './models/score';
 import Session from './models/session';
 import Tax from './models/tax';
@@ -78,6 +79,8 @@ export type {
   PlayerSide,
   Portfolio,
   Rank,
+  Ranking,
+  RankingPeriod,
   Score,
   Session,
   Tax,
