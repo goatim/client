@@ -7,4 +7,6 @@ export default interface Rank extends Model {
   slug?: string;
   description?: string;
   level?: number;
+  ceiling?: number;
+  position?: number;
 }
