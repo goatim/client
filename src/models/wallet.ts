@@ -7,6 +7,7 @@ export type WalletType = 'user' | 'team' | 'broker';
 export default interface Wallet extends Model {
   owner?: User | string;
   name?: string;
+  slug?: string;
   type?: WalletType;
   amount?: number;
   is_default?: boolean;
