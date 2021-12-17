@@ -2,7 +2,16 @@ import { Model } from '@cezembre/fronts';
 import { DateTime } from 'luxon';
 import Rank from './rank';
 
-export type RankingPeriod = 'day' | 'week' | 'month' | 'season' | 'year' | 'custom';
+export type RankingPeriod =
+  | 'day'
+  | 'week'
+  | 'month'
+  | 'quarter'
+  | 'year'
+  | 'decade'
+  | 'century'
+  | 'millennium'
+  | 'custom';
 
 export default interface Ranking extends Model {
   name?: string;

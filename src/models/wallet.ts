@@ -12,6 +12,11 @@ export default interface Wallet extends Model {
   amount?: number;
   is_default?: boolean;
   ranks?: Rank[];
-  rank?: Rank | string;
   position?: number;
+  rank?: Rank | string;
+  rank_position?: number;
+  portfolios_gains?: number;
+  boosters_gains?: number;
+  dividends_gains?: number;
+  total_gains?: number;
 }
