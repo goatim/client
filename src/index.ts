@@ -10,7 +10,7 @@ import City from './models/city';
 import Club from './models/club';
 import Country from './models/country';
 import Currency, { formatCurrencyAmount } from './models/currency';
-import Item, { ItemType } from './models/item';
+import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './models/item';
 import League from './models/league';
 import Order, { OrderType } from './models/order';
 import Paragraph, { ParagraphType, ParagraphSize } from './models/paragraph';
@@ -57,6 +57,9 @@ export type {
   Currency,
   Item,
   ItemType,
+  OrderItem,
+  BoosterItem,
+  PackItem,
   League,
   Order,
   OrderType,
