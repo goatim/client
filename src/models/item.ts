@@ -10,7 +10,7 @@ export interface OrderItem {
   order_type?: OrderType;
   asset?: Asset | string;
   price_limit?: number;
-  booster?: Booster | string | null;
+  booster?: Booster | string;
   unit_price?: number;
   unit_vat?: number;
   total_price?: number;
@@ -42,7 +42,7 @@ export interface PackItem {
 export default interface Item {
   id?: string;
   type?: ItemType;
-  order?: OrderItem | string;
-  booster?: BoosterItem | string;
-  pack?: PackItem | string;
+  order?: OrderItem;
+  booster?: BoosterItem;
+  pack?: PackItem;
 }
