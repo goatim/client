@@ -1,9 +1,10 @@
-import { Model } from '@cezembre/fronts';
+import { Image, Model } from '@cezembre/fronts';
 import Address from './address';
 import Country from './country';
 
 export default interface User extends Model {
   email?: string;
+  picture?: Image;
   gender?: string;
   first_name?: string;
   last_name?: string;

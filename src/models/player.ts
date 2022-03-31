@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Image, Model } from '@cezembre/fronts';
 import Club from './club';
 
 export type PlayerPosition =
@@ -21,6 +21,7 @@ export type PlayerSide = 'center' | 'left' | 'right';
 export default interface Player extends Model {
   club?: Club | string;
   name?: string;
+  picture?: Image;
   nickname?: string;
   slug?: string;
   description?: string;
