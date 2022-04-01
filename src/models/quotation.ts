@@ -1,5 +1,4 @@
 export default interface Quotation {
-  id: string;
-  date: string;
+  date: number;
   price: number;
 }
