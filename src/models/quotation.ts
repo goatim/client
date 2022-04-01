@@ -1,4 +1,4 @@
 export default interface Quotation {
-  date: number;
-  price: number;
+  t: number; // Timestamp
+  v: number; // Value
 }
