@@ -25,6 +25,7 @@ import PaymentIntent, {
 import PaymentMethod, { MinifiedPaymentMethod, Card, CardBrands } from './models/paymentMethod';
 import Player, { PlayerPosition, PlayerSide } from './models/player';
 import Portfolio from './models/portfolio';
+import Quotation from './models/quotation';
 import Rank from './models/rank';
 import Ranking, { RankingPeriod } from './models/ranking';
 import Score from './models/score';
@@ -81,6 +82,7 @@ export type {
   PlayerPosition,
   PlayerSide,
   Portfolio,
+  Quotation,
   Rank,
   Ranking,
   RankingPeriod,
