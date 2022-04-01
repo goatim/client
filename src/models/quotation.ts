@@ -1,4 +1,4 @@
 export default interface Quotation {
-  t: string; // Time
+  t: number; // Timestamp
   v: number; // Value
 }
