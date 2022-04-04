@@ -36,7 +36,7 @@ import User from './models/user';
 import Wallet, { WalletType } from './models/wallet';
 import {
   formatPercentage,
-  formatVariation,
+  formatPercentageVariation,
   resolveCurrency,
   adaptCurrency,
   formatCurrency,
@@ -44,6 +44,7 @@ import {
   resolveFridayCoins,
   adaptFridayCoins,
   formatFridayCoins,
+  formatFridayCoinsVariation,
 } from './utils/adapters';
 import unSlugify from './utils/unSlugify';
 
@@ -114,7 +115,7 @@ export { formatFullAddress, formatCurrencyAmount };
 
 export {
   formatPercentage,
-  formatVariation,
+  formatPercentageVariation,
   resolveCurrency,
   adaptCurrency,
   formatCurrency,
@@ -122,6 +123,7 @@ export {
   resolveFridayCoins,
   adaptFridayCoins,
   formatFridayCoins,
+  formatFridayCoinsVariation,
 };
 
 export { unSlugify };

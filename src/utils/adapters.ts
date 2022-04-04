@@ -2,7 +2,7 @@ export function formatPercentage(percentage = 0): string {
   return `${(percentage / 100).toFixed(2)}%`;
 }
 
-export function formatVariation(variation = 0): string {
+export function formatPercentageVariation(variation = 0): string {
   if (variation > 0) {
     return `+${formatPercentage(variation)}`;
   }
@@ -40,4 +40,11 @@ export function adaptFridayCoins(amount: number): number {
 
 export function formatFridayCoins(amount = 0, decimalDigits = 2): string {
   return `${adaptFridayCoins(amount).toFixed(decimalDigits)} FDY`;
+}
+
+export function formatFridayCoinsVariation(variation = 0, decimalDigits = 2): string {
+  if (variation > 0) {
+    return `+${formatFridayCoins(variation, decimalDigits)}`;
+  }
+  return formatFridayCoins(variation, decimalDigits);
 }
