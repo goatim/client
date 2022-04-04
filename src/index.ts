@@ -34,6 +34,17 @@ import Tax from './models/tax';
 import Transaction from './models/transaction';
 import User from './models/user';
 import Wallet, { WalletType } from './models/wallet';
+import {
+  formatPercentage,
+  formatVariation,
+  resolveCurrency,
+  adaptCurrency,
+  formatCurrency,
+  fridayCoinsSmallestUnitFactor,
+  resolveFridayCoins,
+  adaptFridayCoins,
+  formatFridayCoins,
+} from './utils/adapters';
 import unSlugify from './utils/unSlugify';
 
 /**
@@ -100,5 +111,17 @@ export { formatFullAddress, formatCurrencyAmount };
 /**
  * Utils
  */
+
+export {
+  formatPercentage,
+  formatVariation,
+  resolveCurrency,
+  adaptCurrency,
+  formatCurrency,
+  fridayCoinsSmallestUnitFactor,
+  resolveFridayCoins,
+  adaptFridayCoins,
+  formatFridayCoins,
+};
 
 export { unSlugify };

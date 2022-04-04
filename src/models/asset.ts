@@ -12,7 +12,7 @@ export default interface Asset extends Model {
   description?: string;
   slug?: string;
   shares?: number;
-  dividends?: number;
+  last_dividend?: number;
   quotation?: number;
   session_variation?: number;
   player?: Player | string;
