@@ -9,7 +9,7 @@ import Checkout from './models/checkout';
 import City from './models/city';
 import Club from './models/club';
 import Country from './models/country';
-import Currency, { formatCurrencyAmount } from './models/currency';
+import Currency from './models/currency';
 import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './models/item';
 import League from './models/league';
 import Order, { OrderType } from './models/order';
@@ -107,7 +107,7 @@ export type {
   WalletType,
 };
 
-export { formatFullAddress, formatCurrencyAmount };
+export { formatFullAddress };
 
 /**
  * Utils

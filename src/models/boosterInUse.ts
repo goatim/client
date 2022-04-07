@@ -5,6 +5,10 @@ import Portfolio from './portfolio';
 export default interface BoosterInUse extends Model {
   booster?: Booster | string;
   portfolio?: Portfolio | string;
-  quantity?: number;
   leverage?: number;
+  start_quotation?: number;
+  gains?: number;
+  variation?: number;
+  stopped_at?: string;
+  end_quotation?: number;
 }

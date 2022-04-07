@@ -6,7 +6,3 @@ export default interface Currency extends Model {
   symbol?: string;
   smallest_unit_factor?: number;
 }
-
-export function formatCurrencyAmount(amount = 0, currency = 'EUR', locale = 'fr-FR'): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount / 100);
-}
