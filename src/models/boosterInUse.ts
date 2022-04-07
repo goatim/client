@@ -10,5 +10,5 @@ export default interface BoosterInUse extends Model {
   gains?: number;
   variation?: number;
   stopped_at?: string;
-  end_quotation?: number;
+  stop_quotation?: number;
 }
