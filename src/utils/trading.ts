@@ -1,3 +1,5 @@
+import User from '../models/user';
+
 export function formatPercentage(percentage = 0): string {
   return `${(percentage / 100).toFixed(2)}%`;
 }

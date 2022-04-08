@@ -45,7 +45,7 @@ import {
   adaptFridayCoins,
   formatFridayCoins,
   formatFridayCoinsVariation,
-} from './utils/adapters';
+} from './utils/trading';
 import unSlugify from './utils/unSlugify';
 
 /**
