@@ -23,6 +23,7 @@ import PaymentIntent, {
   OxxoDisplayDetails,
 } from './models/paymentIntent';
 import PaymentMethod, { MinifiedPaymentMethod, Card, CardBrands } from './models/paymentMethod';
+import Permission, { PermissionLevel } from './models/permission';
 import Player, { PlayerPosition, PlayerSide } from './models/player';
 import Portfolio from './models/portfolio';
 import Quotation from './models/quotation';
@@ -91,6 +92,8 @@ export type {
   MinifiedPaymentMethod,
   Card,
   CardBrands,
+  Permission,
+  PermissionLevel,
   Player,
   PlayerPosition,
   PlayerSide,
