@@ -46,6 +46,7 @@ import {
   formatFridayCoins,
   formatFridayCoinsVariation,
 } from './utils/trading';
+import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 
 /**
@@ -125,5 +126,7 @@ export {
   formatFridayCoins,
   formatFridayCoinsVariation,
 };
+
+export { getUserPublicName };
 
 export { unSlugify };
