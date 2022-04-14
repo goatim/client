@@ -1,5 +1,3 @@
-import User from '../models/user';
-
 export function formatPercentage(percentage = 0): string {
   return `${(percentage / 100).toFixed(2)}%`;
 }
@@ -12,11 +10,11 @@ export function formatPercentageVariation(variation = 0): string {
 }
 
 export function resolveCurrency(amount = 0, smallestUnitFactor = 100): number {
-  return Math.round(amount * smallestUnitFactor);
+  return amount / smallestUnitFactor;
 }
 
 export function adaptCurrency(amount = 0, smallestUnitFactor = 100): number {
-  return amount / smallestUnitFactor;
+  return Math.round(amount * smallestUnitFactor);
 }
 
 export function formatCurrency(
@@ -26,7 +24,7 @@ export function formatCurrency(
   locale = 'fr-FR',
 ): string {
   return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(
-    adaptCurrency(amount, smallestUnitFactor),
+    resolveCurrency(amount, smallestUnitFactor),
   );
 }
 
@@ -41,7 +39,7 @@ export function adaptFridayCoins(amount: number): number {
 }
 
 export function formatFridayCoins(amount = 0, decimalDigits = 2): string {
-  return `${adaptFridayCoins(amount).toFixed(decimalDigits)} FDY`;
+  return `${resolveFridayCoins(amount).toFixed(decimalDigits)} FDY`;
 }
 
 export function formatFridayCoinsVariation(variation = 0, decimalDigits = 2): string {
