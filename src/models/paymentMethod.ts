@@ -22,9 +22,9 @@ export interface MinifiedPaymentMethod {
 }
 
 export default interface PaymentMethod {
-  id?: string;
+  id: string;
   type?: 'card' | 'cash' | 'wallet';
   card?: Card;
-  metadata: unknown;
+  metadata?: unknown;
   is_default?: boolean;
 }
