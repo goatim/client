@@ -11,6 +11,8 @@ export default interface Wallet extends Model {
   slug?: string;
   type?: WalletType;
   amount?: number;
+  portfolios_quotation?: number;
+  portfolios_session_variation?: number;
   is_default?: boolean;
   ranks?: Rank[];
   position?: number;
