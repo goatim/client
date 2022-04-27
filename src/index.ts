@@ -8,6 +8,8 @@ import BoosterInWallet from './models/boosterInWallet';
 import Checkout from './models/checkout';
 import City from './models/city';
 import Club from './models/club';
+import CompositionSetting, { CompositionSettingPosition } from './models/compositionSetting';
+import Composition, { CompositionPosition } from './models/composition';
 import Country from './models/country';
 import Currency from './models/currency';
 import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './models/item';
@@ -68,6 +70,10 @@ export type {
   Checkout,
   City,
   Club,
+  CompositionSetting,
+  CompositionSettingPosition,
+  Composition,
+  CompositionPosition,
   Country,
   Currency,
   Item,
