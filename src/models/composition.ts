@@ -11,6 +11,6 @@ export interface CompositionPosition {
 export default interface Composition extends Model {
   wallet?: Wallet | string;
   setting?: CompositionSetting | string;
-  goal?: Player | string;
+  goalkeeper?: Player | string;
   positions?: CompositionPosition[];
 }
