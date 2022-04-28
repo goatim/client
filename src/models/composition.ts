@@ -1,9 +1,10 @@
 import { Model } from '@cezembre/fronts';
 import Wallet from './wallet';
-import CompositionSetting, { CompositionSettingPosition } from './compositionSetting';
+import CompositionSetting from './compositionSetting';
 import Player from './player';
 
-export interface CompositionPosition extends CompositionSettingPosition {
+export interface CompositionPosition {
+  id?: string;
   player?: Player | string;
 }
 
