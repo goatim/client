@@ -10,4 +10,5 @@ export default interface CompositionSetting extends Model {
   name?: string;
   description?: string;
   positions?: CompositionSettingPosition[];
+  is_default?: boolean;
 }
