@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import {Image, Model} from '@cezembre/fronts';
 import Wallet from './wallet';
 
 export default interface Match extends Model {
@@ -6,6 +6,7 @@ export default interface Match extends Model {
   title?: string;
   slug?: string;
   description?: string;
+  icon?: Image;
   start?: string;
   end?: string;
   nb_participants?: number;
