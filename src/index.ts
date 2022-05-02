@@ -14,7 +14,7 @@ import Country from './models/country';
 import Currency from './models/currency';
 import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './models/item';
 import League from './models/league';
-import Match from './models/match';
+import Match, { MatchStatus } from './models/match';
 import Order, { OrderType } from './models/order';
 import Paragraph, { ParagraphType, ParagraphSize } from './models/paragraph';
 import PaymentIntent, {
@@ -136,6 +136,7 @@ export {
   adaptFridayCoins,
   formatFridayCoins,
   formatFridayCoinsVariation,
+  MatchStatus,
 };
 
 export { getUserPublicName };
