@@ -8,11 +8,11 @@ export default interface Match extends Model {
   title?: string;
   slug?: string;
   description?: string;
-  icon?: Image;
   start?: string;
   end?: string;
-  nb_participants?: number;
   is_public?: boolean;
   participants?: Wallet[];
   status?: MatchStatus;
+  icon?: Image;
+  nb_participants?: number;
 }

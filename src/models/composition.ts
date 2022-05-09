@@ -4,7 +4,7 @@ import CompositionSetting from './compositionSetting';
 import Player from './player';
 
 export interface CompositionPosition {
-  id?: string;
+  id: string;
   player?: Player | string;
 }
 

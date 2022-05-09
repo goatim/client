@@ -1,7 +1,7 @@
 import { Model } from '@cezembre/fronts';
 
 export interface CompositionSettingPosition {
-  id?: string;
+  id: string;
   name?: string;
   x?: number;
   y?: number;

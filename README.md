@@ -1,3 +1,2 @@
-# FleuraisonIcon UI
+# Friday Client
 
-A concise ui library for react
