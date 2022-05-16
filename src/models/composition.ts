@@ -3,14 +3,14 @@ import Wallet from './wallet';
 import CompositionSetting from './compositionSetting';
 import Player from './player';
 
-export interface CompositionPosition {
+export interface CompositionPosition<P = Player | string> {
   id: string;
-  player: Player | string;
+  player: P;
 }
 
-export default interface Composition extends Model {
+export default interface Composition<P = Player | string> extends Model {
   wallet?: Wallet | string;
   setting?: CompositionSetting | string;
-  goalkeeper?: Player | string;
-  positions?: CompositionPosition[];
+  goalkeeper?: P;
+  positions?: CompositionPosition<P>[];
 }
