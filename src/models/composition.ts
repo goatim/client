@@ -5,7 +5,7 @@ import Player from './player';
 
 export interface CompositionPosition {
   id: string;
-  player?: Player | string;
+  player: Player | string;
 }
 
 export default interface Composition extends Model {
