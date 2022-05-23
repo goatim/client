@@ -41,6 +41,7 @@ export default interface Permission extends Model {
   expiration?: string;
   is_revoked?: boolean;
   user?: string;
+  wallet?: string;
   level?: PermissionLevel;
   target?: string;
   tags?: string[];
