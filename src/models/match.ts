@@ -8,7 +8,7 @@ export default interface Match extends Model {
   title?: string;
   slug?: string;
   description?: string;
-  begin?: string;
+  beginning?: string;
   end?: string;
   is_public?: boolean;
   participants?: Wallet[];
