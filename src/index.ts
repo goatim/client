@@ -38,6 +38,8 @@ import Tax from './models/tax';
 import Transaction from './models/transaction';
 import User from './models/user';
 import Wallet, { WalletType } from './models/wallet';
+import PhysicalEvent, { PhysicalEventType } from './models/physicalEvent';
+import Dividend from './models/dividend';
 import {
   formatPercentage,
   formatPercentageVariation,
@@ -117,6 +119,9 @@ export type {
   User,
   Wallet,
   WalletType,
+  PhysicalEvent,
+  PhysicalEventType,
+  Dividend,
 };
 
 export { formatFullAddress };
