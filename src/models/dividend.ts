@@ -7,5 +7,5 @@ export default interface Dividend extends Model {
   physical_event?: PhysicalEvent | string;
   percentage?: number;
   amount?: number;
-  nb_donated?: number;
+  nb_distributed?: number;
 }
