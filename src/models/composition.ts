@@ -14,5 +14,6 @@ export default interface Composition<P = Player | string> extends Model {
   goalkeeper?: P;
   positions?: CompositionPosition<P>[];
   is_valid?: boolean;
+  is_published?: boolean;
   positions_missing?: number;
 }
