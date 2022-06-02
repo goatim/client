@@ -14,6 +14,5 @@ export default interface Match extends Model {
   is_public?: boolean;
   status?: MatchStatus;
   icon?: Image;
-  total_compositions?: number;
-  compositions?: Composition[] | ApiListResponse<'compositions'>;
+  compositions?: ApiListResponse<'compositions', Composition>;
 }
