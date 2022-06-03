@@ -1,5 +1,6 @@
 import { Image, Model, ApiListResponse } from '@cezembre/fronts';
 import Wallet from './wallet';
+import Composition from './composition';
 
 export type MatchStatus = 'planned' | 'ongoing' | 'passed' | 'cancelled';
 
@@ -13,5 +14,5 @@ export default interface Match extends Model {
   is_public?: boolean;
   status?: MatchStatus;
   icon?: Image;
-  participants?: ApiListResponse<'wallets', Wallet>;
+  compositions?: ApiListResponse<'compositions', Composition>;
 }
