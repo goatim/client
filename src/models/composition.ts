@@ -18,4 +18,6 @@ export default interface Composition<P = Player | string> extends Model {
   is_valid?: boolean;
   is_active?: boolean;
   positions_missing?: number;
+  rank?: number;
+  score?: number;
 }
