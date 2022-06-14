@@ -267,6 +267,7 @@ import {
 } from './utils/trading';
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
+import FridayClient, { FridayClientContext, useFridayClient } from './client';
 
 /**
  * Auth
@@ -577,3 +578,11 @@ export {
   getUserPublicName,
   unSlugify,
 };
+
+/**
+ * Client
+ */
+
+export type { FridayClientContext };
+
+export { FridayClient, useFridayClient };
