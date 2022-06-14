@@ -89,15 +89,16 @@ export function useUpdateOrder(): UseMutationResult<Order, unknown, UpdateOrderV
   );
 }
 
-export function useDeleteOrder(id: string): UseMutationResult<void, unknown, void> {
+export function useDeleteOrder(): UseMutationResult<string, unknown, string> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<void, unknown, void>(
-    async () => {
+  return useMutation<string, unknown, string>(
+    async (id: string) => {
       await api.delete<void>(`/orders/${id}`);
+      return id;
     },
     {
-      onSuccess() {
+      onSuccess(id: string) {
         queryClient.removeQueries(['orders', id], { exact: true });
         // TODO : Remove in list
       },
