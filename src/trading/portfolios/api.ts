@@ -11,10 +11,14 @@ import { useCurrentWallet } from '../../market/wallets/api';
 
 export function usePortfolio(id?: string): UseQueryResult<Portfolio> {
   const api = useApi();
-  return useQuery<Portfolio>(['portfolios', id], async () => {
-    const { data } = await api.get<Portfolio>(`/portfolios/${id}`);
-    return data;
-  });
+  return useQuery<Portfolio>(
+    ['portfolios', id],
+    async () => {
+      const { data } = await api.get<Portfolio>(`/portfolios/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type PortfolioList = PaginatedList<'portfolios', Portfolio>;

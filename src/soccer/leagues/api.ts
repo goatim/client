@@ -8,12 +8,16 @@ import {
 } from 'react-query';
 import League from './model';
 
-export function useLeague(id: string): UseQueryResult<League> {
+export function useLeague(id?: string): UseQueryResult<League> {
   const api = useApi();
-  return useQuery<League>(['leagues', id], async () => {
-    const { data } = await api.get<League>(`/leagues/${id}`);
-    return data;
-  });
+  return useQuery<League>(
+    ['leagues', id],
+    async () => {
+      const { data } = await api.get<League>(`/leagues/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type LeagueList = PaginatedList<'leagues', League>;

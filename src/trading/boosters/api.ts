@@ -11,10 +11,14 @@ import { useCurrentWallet } from '../../market/wallets/api';
 
 export function useBooster(id?: string): UseQueryResult<Booster> {
   const api = useApi();
-  return useQuery<Booster>(['boosters', id], async () => {
-    const { data } = await api.get<Booster>(`/boosters/${id}`);
-    return data;
-  });
+  return useQuery<Booster>(
+    ['boosters', id],
+    async () => {
+      const { data } = await api.get<Booster>(`/boosters/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type BoosterList = PaginatedList<'boosters', Booster>;
@@ -24,7 +28,7 @@ export interface UseBoostersParams extends RequestParams {
   wallet?: string;
 }
 
-export function useBoosters(params: UseBoostersParams): UseQueryResult<BoosterList> {
+export function useBoosters(params?: UseBoostersParams): UseQueryResult<BoosterList> {
   const api = useApi();
   return useQuery<BoosterList>(['boosters', params], async () => {
     const { data } = await api.get<BoosterList>('/boosters', params);

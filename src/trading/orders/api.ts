@@ -9,12 +9,16 @@ import {
 import Order, { OrderType } from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
-export function useOrder(id: string): UseQueryResult<Order> {
+export function useOrder(id?: string): UseQueryResult<Order> {
   const api = useApi();
-  return useQuery<Order>(['orders', id], async () => {
-    const { data } = await api.get<Order>(`/orders/${id}`);
-    return data;
-  });
+  return useQuery<Order>(
+    ['orders', id],
+    async () => {
+      const { data } = await api.get<Order>(`/orders/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type OrderList = PaginatedList<'orders', Order>;

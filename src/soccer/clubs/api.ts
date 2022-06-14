@@ -8,12 +8,16 @@ import {
 } from 'react-query';
 import Club from './model';
 
-export function useClub(id: string): UseQueryResult<Club> {
+export function useClub(id?: string): UseQueryResult<Club> {
   const api = useApi();
-  return useQuery<Club>(['clubs', id], async () => {
-    const { data } = await api.get<Club>(`/clubs/${id}`);
-    return data;
-  });
+  return useQuery<Club>(
+    ['clubs', id],
+    async () => {
+      const { data } = await api.get<Club>(`/clubs/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type ClubList = PaginatedList<'clubs', Club>;

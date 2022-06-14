@@ -8,12 +8,16 @@ import {
 } from 'react-query';
 import Rank from './model';
 
-export function useRank(id: string): UseQueryResult<Rank> {
+export function useRank(id?: string): UseQueryResult<Rank> {
   const api = useApi();
-  return useQuery<Rank>(['ranks', id], async () => {
-    const { data } = await api.get<Rank>(`/ranks/${id}`);
-    return data;
-  });
+  return useQuery<Rank>(
+    ['ranks', id],
+    async () => {
+      const { data } = await api.get<Rank>(`/ranks/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type RankList = PaginatedList<'ranks', Rank>;

@@ -10,10 +10,14 @@ import Asset, { AssetType } from './model';
 
 export function useAsset(id?: string): UseQueryResult<Asset> {
   const api = useApi();
-  return useQuery<Asset>(['assets', id], async () => {
-    const { data } = await api.get<Asset>(`/assets/${id}`);
-    return data;
-  });
+  return useQuery<Asset>(
+    ['assets', id],
+    async () => {
+      const { data } = await api.get<Asset>(`/assets/${id}`);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type AssetList = PaginatedList<'assets', Asset>;

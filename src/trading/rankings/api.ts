@@ -12,12 +12,16 @@ export interface UseRankingParams extends RequestParams {
   expand?: string;
 }
 
-export function useRanking(id: string, params?: UseRankingParams): UseQueryResult<Ranking> {
+export function useRanking(id?: string, params?: UseRankingParams): UseQueryResult<Ranking> {
   const api = useApi();
-  return useQuery<Ranking>(['rankings', id, params], async () => {
-    const { data } = await api.get<Ranking>(`/rankings/${id}`, params);
-    return data;
-  });
+  return useQuery<Ranking>(
+    ['rankings', id, params],
+    async () => {
+      const { data } = await api.get<Ranking>(`/rankings/${id}`, params);
+      return data;
+    },
+    { enabled: !!id },
+  );
 }
 
 export type RankingList = PaginatedList<'rankings', Ranking>;
