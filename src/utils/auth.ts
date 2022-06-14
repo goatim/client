@@ -1,4 +1,4 @@
-import User from '../models/user';
+import User from '../auth/users/model';
 
 export function getUserPublicName(user: User): string | null {
   if (user.pseudo?.length) {

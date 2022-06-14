@@ -25,7 +25,7 @@
   ],
   "plugins": [
     "react",
-    "@typescript-eslint"
+    "@typescript-eslint/eslint-plugin"
   ],
   "rules": {
     "prettier/prettier": [
@@ -46,7 +46,9 @@
     "react/button-has-type": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
     "import/extensions": "off",
+    "import/no-cycle": "off",
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     "react/function-component-definition": [1, {
@@ -62,7 +64,6 @@
     "react/no-arrow-function-lifecycle": "off",
     "react/no-invalid-html-attribute": "off",
     "react/no-unused-class-component-methods": "off",
-    "react/no-unstable-nested-components": "off",
-    "import/no-cycle": "off"
+    "react/no-unstable-nested-components": "off"
   }
 }
