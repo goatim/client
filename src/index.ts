@@ -76,6 +76,12 @@ import PaymentIntent, {
   PaymentIntentStatus,
 } from './payment/intents/model';
 import PaymentMethod, { CardBrands, Card, MinifiedPaymentMethod } from './payment/methods/model';
+import {
+  PaymentMethodList,
+  usePaymentMethods,
+  CreditCardBody,
+  useAddCreditCard,
+} from './payment/methods/api';
 import Club from './soccer/clubs/model';
 import {
   useClub,
@@ -380,7 +386,11 @@ export type {
   CardBrands,
   Card,
   MinifiedPaymentMethod,
+  PaymentMethodList,
+  CreditCardBody,
 };
+
+export { usePaymentMethods, useAddCreditCard };
 
 /**
  * Soccer
