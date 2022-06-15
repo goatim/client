@@ -36,15 +36,15 @@ export function useFridayClient(): FridayClientContext {
 }
 
 export interface Props
-  extends Omit<ApiParams, 'key' | 'bearerToken'>,
-    Required<Pick<ApiContext, 'key'>> {
+  extends Omit<ApiParams, 'apiKey' | 'bearerToken'>,
+    Required<Pick<ApiContext, 'apiKey'>> {
   children: ReactElement;
 }
 
 export default function FridayClient({
   children,
   host = 'https://api.fridaygame.fr',
-  key,
+  apiKey,
   locale = 'fr',
 }: Props): ReactElement {
   const [wallet, setWallet] = useState<string | null>('default');
@@ -59,7 +59,7 @@ export default function FridayClient({
 
   return (
     <fridayClientContext.Provider value={value}>
-      <ApiProvider host={host} key={key} locale={locale}>
+      <ApiProvider host={host} apiKey={apiKey} locale={locale}>
         <QueryClientProvider client={queryClient}>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
