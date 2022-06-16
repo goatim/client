@@ -1,5 +1,5 @@
 import { ReactElement, useState, createContext, useMemo, useContext } from 'react';
-import { ApiContext, ApiParams, ApiProvider } from '@cezembre/fronts';
+import { ApiConfig, ApiProvider } from '@cezembre/fronts';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
@@ -20,7 +20,7 @@ persistQueryClient({
   persistor: localStoragePersistor,
 }).then();
 
-export interface FridayClientContext {
+export interface FridayClientContext extends ApiConfig {
   wallet: string | null;
   setWallet(wallet: string | null): void;
 }
@@ -36,8 +36,8 @@ export function useFridayClient(): FridayClientContext {
 }
 
 export interface Props
-  extends Omit<ApiParams, 'apiKey' | 'bearerToken'>,
-    Required<Pick<ApiContext, 'apiKey'>> {
+  extends Omit<ApiConfig, 'apiKey' | 'bearerToken'>,
+    Required<Pick<ApiConfig, 'apiKey'>> {
   children: ReactElement;
 }
 
@@ -57,9 +57,17 @@ export default function FridayClient({
     [wallet],
   );
 
+  const apiConfig = useMemo<ApiConfig>(() => {
+    return {
+      host,
+      apiKey,
+      locale,
+    };
+  }, [apiKey, host, locale]);
+
   return (
     <fridayClientContext.Provider value={value}>
-      <ApiProvider host={host} apiKey={apiKey} locale={locale}>
+      <ApiProvider config={apiConfig}>
         <QueryClientProvider client={queryClient}>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />

@@ -11,7 +11,7 @@
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "keywords": [
-    "Fleuraison",
+    "Friday",
     "React",
     "Client"
   ],
@@ -27,11 +27,13 @@
     "watch": "rollup -cw",
     "test": "echo 'No tests written",
     "lint": "eslint",
-    "release": "npm run build && release-it"
+    "release": "npm run build && release-it",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "@cezembre/forms": ">=1.6.12",
-    "@cezembre/fronts": ">=0.8.6",
+    "@cezembre/forms": ">=1.7.0",
+    "@cezembre/fronts": ">=0.9.0",
     "@stripe/stripe-js": ">=1.31.0",
     "draft-js": ">=0.11.7",
     "luxon": ">=2.0.0",
@@ -53,6 +55,14 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.3",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-interactions": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-webpack5": "^6.5.9",
+    "@storybook/manager-webpack5": "^6.5.9",
+    "@storybook/react": "^6.5.9",
+    "@storybook/testing-library": "^0.0.13",
     "@types/draft-js": "^0.11.9",
     "@types/lodash.isequal": "^4.5.6",
     "@types/luxon": "^2.3.2",
