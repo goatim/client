@@ -93,6 +93,7 @@ export function useCreateComposition(
 
 export function useUpdateComposition(
   id = 'current',
+  match?: string,
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const wallet = useCurrentWallet();
   const api = useApi();
@@ -105,7 +106,10 @@ export function useUpdateComposition(
         saneBody.wallet = wallet.data?.id;
       }
 
-      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody);
+      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody, {
+        wallet: wallet.data?.id,
+        match,
+      });
       return data;
     },
     {
