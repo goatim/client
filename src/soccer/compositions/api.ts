@@ -93,11 +93,22 @@ export function useCreateComposition(
 
 export function useUpdateComposition(
   id = 'current',
-  match?: string,
+  params?: UseCompositionParams,
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const wallet = useCurrentWallet();
   const api = useApi();
   const queryClient = useQueryClient();
+
+  const memoizedParams = useMemo<UseCompositionParams | undefined>(() => {
+    if (params?.wallet) {
+      return params;
+    }
+    return {
+      ...params,
+      wallet: wallet.data?.id,
+    };
+  }, [params, wallet.data?.id]);
+
   return useMutation<Composition, unknown, CompositionBody>(
     async (body: CompositionBody) => {
       const saneBody = JSON.parse(JSON.stringify(body)) as CompositionBody;
@@ -106,15 +117,12 @@ export function useUpdateComposition(
         saneBody.wallet = wallet.data?.id;
       }
 
-      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody, {
-        wallet: wallet.data?.id,
-        match,
-      });
+      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody, memoizedParams);
       return data;
     },
     {
       onSuccess(composition: Composition) {
-        queryClient.setQueryData<Composition>(['compositions', id], composition);
+        queryClient.setQueryData<Composition>(['compositions', id, memoizedParams], composition);
       },
     },
   );
