@@ -15,7 +15,7 @@ export interface UseCompositionParams extends RequestParams {
 }
 
 export function useComposition(
-  id = 'default',
+  id = 'current',
   params?: UseCompositionParams,
 ): UseQueryResult<Composition> {
   const wallet = useCurrentWallet();
