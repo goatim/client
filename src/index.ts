@@ -39,7 +39,7 @@ import {
   CheckoutConfirmation,
   useConfirmCheckout,
 } from './market/checkouts/api';
-import Item, { OrderItem, BoosterItem, PackItem } from './market/items/model';
+import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './market/items/model';
 import Tax from './market/taxes/model';
 import {
   useTax,
@@ -330,6 +330,7 @@ export type {
   ConfirmCheckoutBody,
   CheckoutConfirmation,
   Item,
+  ItemType,
   OrderItem,
   BoosterItem,
   PackItem,
