@@ -46,16 +46,16 @@ export interface CompositionPositionBody extends RequestBody {
 }
 
 export interface CompositionBody extends RequestBody {
-  match?: string;
-  wallet?: string;
-  setting?: string;
+  match?: string | null;
+  wallet?: string | null;
+  setting?: string | null;
   goalkeeper?: string | null;
-  positions?: string;
+  positions?: string | null;
   is_active?: boolean;
 }
 
 export function useCreateComposition(
-  compositionKey = 'default',
+  compositionKey = 'current',
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const api = useApi();
   const queryClient = useQueryClient();
@@ -77,7 +77,7 @@ export function useCreateComposition(
 }
 
 export function useUpdateComposition(
-  compositionKey = 'default',
+  compositionKey = 'current',
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const wallet = useCurrentWallet();
   const api = useApi();
@@ -92,7 +92,7 @@ export function useUpdateComposition(
 
       const composition = queryClient.getQueryData<Composition>(['compositions', compositionKey]);
       const { data } = await api.put<Composition>(
-        `/compositions/${composition?.id || 'default'}`,
+        `/compositions/${composition?.id || 'current'}`,
         saneBody,
       );
       return data;
@@ -106,7 +106,7 @@ export function useUpdateComposition(
 }
 
 export function useDeleteComposition(
-  compositionKey = 'default',
+  compositionKey = 'current',
 ): UseMutationResult<void, unknown, void> {
   const wallet = useCurrentWallet();
   const api = useApi();
@@ -114,7 +114,7 @@ export function useDeleteComposition(
   return useMutation<void, unknown, void>(
     async () => {
       const composition = queryClient.getQueryData<Composition>(['compositions', compositionKey]);
-      await api.delete<void>(`/checkouts/${composition?.id || 'default'}`, {
+      await api.delete<void>(`/checkouts/${composition?.id || 'current'}`, {
         wallet: wallet.data?.id,
       });
     },
