@@ -1,5 +1,5 @@
-import { PaginatedList, useApi } from '@cezembre/fronts';
 import { useQuery, UseQueryResult } from 'react-query';
+import { PaginatedList, useApi } from '../../api';
 import CompositionSetting from './model';
 
 export function useCompositionSetting(id?: string): UseQueryResult<CompositionSetting> {

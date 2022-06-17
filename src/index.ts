@@ -1,3 +1,34 @@
+import env, { Env, NativeEnv } from './env';
+import {
+  Model,
+  PaginatedList,
+  FormErrors,
+  ApiErrorData,
+  ApiError,
+  isApiError,
+  RequestBody,
+  buildRequestBody,
+  RequestParams,
+  buildRequestConfig,
+  apiGet,
+  apiPost,
+  apiPut,
+  apiDelete,
+  ApiConfig,
+  ApiContext,
+  useApi,
+  ApiProvider,
+} from './api';
+import {
+  Dimension,
+  Format,
+  Image,
+  AspectRatio,
+  Orientation,
+  resolveRatio,
+  calcHeight,
+  calcWidth,
+} from './medias/image';
 import Permission, { PermissionLevel } from './auth/permissions/model';
 import Session from './auth/sessions/model';
 import { useSession, useActiveSession, SignInBody, useSignIn } from './auth/sessions/api';
@@ -17,7 +48,13 @@ import {
 } from './auth/users/api';
 import Article from './blog/articles/model';
 import Paragraph from './blog/paragraphs/model';
-import Address from './geo/addresses/model';
+import Address, {
+  MinifiedAddress,
+  serializeGeoLocation,
+  parseGeoLocation,
+  GeoLocation,
+  formatFullAddress,
+} from './geo/addresses/model';
 import City from './geo/cities/model';
 import Country from './geo/countries/model';
 import Currency from './geo/currencies/model';
@@ -276,6 +313,46 @@ import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 
 /**
+ * State
+ */
+
+export { env };
+
+export type { Env, NativeEnv };
+
+export {
+  buildRequestBody,
+  buildRequestConfig,
+  apiGet,
+  apiPost,
+  apiPut,
+  apiDelete,
+  useApi,
+  ApiProvider,
+  isApiError,
+  ApiError,
+};
+
+export type {
+  Model,
+  PaginatedList,
+  FormErrors,
+  ApiErrorData,
+  RequestBody,
+  RequestParams,
+  ApiConfig,
+  ApiContext,
+};
+
+/**
+ * Medias
+ */
+
+export type { Dimension, Image, Format, AspectRatio, Orientation };
+
+export { resolveRatio, calcHeight, calcWidth };
+
+/**
  * Auth
  */
 
@@ -314,7 +391,9 @@ export type { Article, Paragraph };
  * Geo
  */
 
-export type { Address, City, Country, Currency };
+export type { Address, MinifiedAddress, GeoLocation, City, Country, Currency };
+
+export { serializeGeoLocation, parseGeoLocation, formatFullAddress };
 
 /**
  * Market

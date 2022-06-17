@@ -1,4 +1,3 @@
-import { PaginatedList, RequestBody, RequestParams, useApi } from '@cezembre/fronts';
 import {
   useMutation,
   UseMutationResult,
@@ -7,6 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useMemo } from 'react';
+import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Player from '../players/model';
 import { useCurrentWallet } from '../../market/wallets/api';
 import Composition from './model';

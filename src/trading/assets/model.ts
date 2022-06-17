@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Player from '../../soccer/players/model';
 import Club from '../../soccer/clubs/model';
 import League from '../../soccer/leagues/model';

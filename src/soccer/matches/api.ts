@@ -1,4 +1,3 @@
-import { PaginatedList, RequestBody, RequestParams, useApi } from '@cezembre/fronts';
 import {
   useMutation,
   UseMutationResult,
@@ -6,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Match from './model';
 
 export function useMatch(id?: string): UseQueryResult<Match> {

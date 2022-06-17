@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Wallet from '../../market/wallets/model';
 import Asset from '../assets/model';
 

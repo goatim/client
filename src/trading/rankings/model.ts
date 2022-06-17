@@ -1,5 +1,5 @@
-import { Model } from '@cezembre/fronts';
 import { DateTime } from 'luxon';
+import { Model } from '../../api';
 import Rank from '../ranks/model';
 
 export type RankingPeriod =

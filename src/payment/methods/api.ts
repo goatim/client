@@ -1,5 +1,5 @@
-import { useApi, RequestBody, PaginatedList } from '@cezembre/fronts';
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
+import { useApi, RequestBody, PaginatedList } from '../../api';
 import PaymentMethod from './model';
 
 export type PaymentMethodList = PaginatedList<'payment_methods', PaymentMethod>;

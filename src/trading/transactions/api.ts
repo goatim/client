@@ -1,5 +1,5 @@
-import { useApi, PaginatedList, RequestParams } from '@cezembre/fronts';
 import { useQuery, UseQueryResult } from 'react-query';
+import { useApi, PaginatedList, RequestParams } from '../../api';
 import Transaction from './model';
 
 export function useTransaction(id: string): UseQueryResult<Transaction> {

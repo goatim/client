@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Ranking from '../rankings/model';
 
 export default interface Rank extends Model {

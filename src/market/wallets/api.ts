@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '@cezembre/fronts';
+import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Wallet from './model';
 import { useFridayClient } from '../../client';
 

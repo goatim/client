@@ -1,9 +1,9 @@
 import { ReactElement, useState, createContext, useMemo, useContext } from 'react';
-import { ApiConfig, ApiProvider } from '@cezembre/fronts';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
+import { ApiConfig, ApiProvider } from './api';
 
 const queryClient = new QueryClient({
   defaultOptions: {

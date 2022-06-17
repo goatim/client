@@ -1,5 +1,6 @@
-import { Model, GeoLocation } from '@cezembre/fronts';
 import Currency from '../currencies/model';
+import { Model } from '../../api';
+import { GeoLocation } from '../addresses/model';
 
 export default interface Country extends Model {
   currency?: Currency | string;

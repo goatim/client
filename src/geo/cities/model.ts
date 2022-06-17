@@ -1,5 +1,6 @@
-import { Image, Model } from '@cezembre/fronts';
 import Country from '../countries/model';
+import { Image } from '../../medias/image';
+import { Model } from '../../api';
 
 export default interface City extends Model {
   name?: string;

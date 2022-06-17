@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 
 export default interface Currency extends Model {
   name?: string;

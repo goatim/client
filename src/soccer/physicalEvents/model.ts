@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Dividend from '../../trading/dividends/model';
 
 export type PhysicalEventType = 'match' | 'goal';

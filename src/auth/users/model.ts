@@ -1,7 +1,8 @@
-import { Image, Model } from '@cezembre/fronts';
 import Address from '../../geo/addresses/model';
 import Country from '../../geo/countries/model';
 import Session from '../sessions/model';
+import { Model } from '../../api';
+import { Image } from '../../medias/image';
 
 export default interface User extends Model {
   slug?: string;

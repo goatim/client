@@ -1,5 +1,4 @@
-import { Model } from '@cezembre/fronts';
-import { RawDraftContentState } from 'draft-js';
+import { Model } from '../../api';
 
 export type ParagraphType = 'title' | 'text' | 'rich-text' | 'media';
 
@@ -10,6 +9,6 @@ export default interface Paragraph extends Model {
   type?: ParagraphType;
   size?: ParagraphSize;
   style?: string;
-  content?: string | RawDraftContentState;
+  content?: string;
   position?: number;
 }

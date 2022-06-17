@@ -1,7 +1,8 @@
-import { Image, Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import City from '../../geo/cities/model';
 import League from '../leagues/model';
 import Player from '../players/model';
+import { Image } from '../../medias/image';
 
 export default interface Club extends Model {
   league?: League | string;

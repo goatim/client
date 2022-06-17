@@ -1,4 +1,3 @@
-import { RequestBody, useApi } from '@cezembre/fronts';
 import {
   useMutation,
   useQuery,
@@ -7,6 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import Session from './model';
+import { RequestBody, useApi } from '../../api';
 
 export function useSession(id: string): UseQueryResult<Session> {
   const api = useApi();

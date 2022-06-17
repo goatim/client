@@ -1,4 +1,3 @@
-import { PaginatedList, RequestBody, useApi } from '@cezembre/fronts';
 import {
   useMutation,
   UseMutationResult,
@@ -6,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { PaginatedList, RequestBody, useApi } from '../../api';
 import Rank from './model';
 
 export function useRank(id?: string): UseQueryResult<Rank> {

@@ -1,5 +1,6 @@
-import { Image, Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Club from '../clubs/model';
+import { Image } from '../../medias/image';
 
 export type PlayerPosition =
   | 'goalkeeper'

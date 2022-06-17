@@ -1,5 +1,5 @@
-import { Model } from '@cezembre/fronts';
 import { DateTime } from 'luxon';
+import { Model } from '../../api';
 import User from '../../auth/users/model';
 import Item from '../items/model';
 import Session from '../../auth/sessions/model';

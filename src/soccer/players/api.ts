@@ -1,4 +1,3 @@
-import { ApiContext, PaginatedList, RequestBody, RequestParams, useApi } from '@cezembre/fronts';
 import {
   useMutation,
   UseMutationResult,
@@ -7,6 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { AxiosResponse } from 'axios';
+import { ApiContext, PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Player from './model';
 
 export function usePlayer(id: string): UseQueryResult<Player> {

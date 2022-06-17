@@ -1,6 +1,7 @@
-import { Image, Model, PaginatedList } from '@cezembre/fronts';
+import { Model, PaginatedList } from '../../api';
 import Wallet from '../../market/wallets/model';
 import Composition from '../compositions/model';
+import { Image } from '../../medias/image';
 
 export type MatchStatus = 'planned' | 'ongoing' | 'passed' | 'cancelled';
 

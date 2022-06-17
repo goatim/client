@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Address, { MinifiedAddress } from '../../geo/addresses/model';
 
 export interface MinifiedBilling {

@@ -1,4 +1,3 @@
-import { useApi, RequestBody, PaginatedList } from '@cezembre/fronts';
 import {
   useMutation,
   UseMutationResult,
@@ -6,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { useApi, RequestBody, PaginatedList } from '../../api';
 import PhysicalEvent from './model';
 
 export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {

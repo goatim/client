@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 
 export interface CompositionSettingPosition {
   id: string;

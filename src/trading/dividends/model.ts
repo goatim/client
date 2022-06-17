@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Asset from '../assets/model';
 import PhysicalEvent from '../../soccer/physicalEvents/model';
 

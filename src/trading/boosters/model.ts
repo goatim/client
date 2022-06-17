@@ -1,4 +1,4 @@
-import { Model } from '@cezembre/fronts';
+import { Model } from '../../api';
 import Tax from '../../market/taxes/model';
 
 export default interface Booster extends Model {
