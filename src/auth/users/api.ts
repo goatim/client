@@ -57,8 +57,9 @@ export function useCreateUser(
     },
     {
       onSuccess({ session, ...user }: User) {
-        if (createSession) {
+        if (session) {
           queryClient.setQueryData(['sessions', 'active'], session);
+          api.setBearerToken(session.bearer_token);
         }
         queryClient.setQueryData(['users', userKey || user.id], user);
       },
