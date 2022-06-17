@@ -8,16 +8,25 @@ import {
 import Session from './model';
 import { RequestBody, useApi } from '../../api';
 
-export function useSession(id: string): UseQueryResult<Session> {
+export function useSession(id: string, onError?: () => void): UseQueryResult<Session> {
   const api = useApi();
-  return useQuery<Session>(['sessions', id], async () => {
-    const { data } = await api.get<Session>(`/sessions/${id}`);
-    return data;
-  });
+  return useQuery<Session>(
+    ['sessions', id],
+    async () => {
+      const { data } = await api.get<Session>(`/sessions/${id}`);
+      return data;
+    },
+    {
+      onError,
+    },
+  );
 }
 
 export function useActiveSession(): UseQueryResult<Session> {
-  return useSession('active');
+  const api = useApi();
+  return useSession('active', () => {
+    api.setBearerToken(null);
+  });
 }
 
 export interface SignInBody extends RequestBody {
