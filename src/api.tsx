@@ -290,13 +290,15 @@ export interface Props {
 }
 
 export function ApiProvider({ children, config, persistConfig = true }: Props): ReactElement {
-  const [apiConfig, setApiConfig] = useState<ApiConfig | undefined>(config);
+  const [apiConfig, setApiConfig] = useState<ApiConfig | undefined>(
+    persistConfig ? hydrateConfig(config) : config,
+  );
 
-  useEffect(() => {
-    if (persistConfig) {
-      setApiConfig(hydrateConfig(config));
-    }
-  }, [config, persistConfig]);
+  // useEffect(() => {
+  //   if (persistConfig) {
+  //     setApiConfig(hydrateConfig(config));
+  //   }
+  // }, [config, persistConfig]);
 
   const setConfig = useCallback(
     (_config: ApiConfig) => {

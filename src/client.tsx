@@ -1,24 +1,9 @@
 import { ReactElement, useState, createContext, useMemo, useContext } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
-import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import { ApiConfig, ApiProvider } from './api';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
-    },
-  },
-});
-
-const localStoragePersistor = createWebStoragePersistor({ storage: window.localStorage });
-
-persistQueryClient({
-  queryClient,
-  persistor: localStoragePersistor,
-}).then();
+const queryClient = new QueryClient();
 
 export interface FridayClientContext extends ApiConfig {
   wallet: string | null;
