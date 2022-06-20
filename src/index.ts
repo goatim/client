@@ -251,6 +251,8 @@ import {
   useUpdateOrder,
   useDeleteOrder,
 } from './trading/orders/api';
+import OrdersBook from './trading/orders/book/model';
+import { useOrdersBook, UseOrdersBookParams } from './trading/orders/book/api';
 import Portfolio from './trading/portfolios/model';
 import {
   usePortfolio,
@@ -590,6 +592,8 @@ export type {
   UseOrdersParams,
   OrderBody,
   UpdateOrderVariables,
+  OrdersBook,
+  UseOrdersBookParams,
   Portfolio,
   PortfolioList,
   UsePortfoliosParams,
@@ -630,6 +634,7 @@ export {
   useCreateOrder,
   useUpdateOrder,
   useDeleteOrder,
+  useOrdersBook,
   usePortfolio,
   usePortfolios,
   useCurrentWalletPortfolios,
