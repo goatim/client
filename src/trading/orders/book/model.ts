@@ -6,7 +6,7 @@ interface AggregatedOrders {
   price_limit?: number;
 }
 
-export default interface OrdersBook extends Model {
+export default interface OrderBook extends Model {
   selling?: AggregatedOrders[];
   buying?: AggregatedOrders[];
 }
