@@ -12,7 +12,7 @@ export function useOrderBook(params: UseOrderBookParams): UseQueryResult<OrdersB
   return useQuery<OrdersBook>(
     ['orders', 'book', params],
     async () => {
-      const { data } = await api.get<OrdersBook>('/orders/book', params);
+      const { data } = await api.get<OrdersBook>('/order_book', params);
       return data;
     },
     { enabled: !!params?.asset },
