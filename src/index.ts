@@ -314,7 +314,7 @@ import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification from './notifications/model';
-import NotificationEvent from './notifications/events';
+import NotificationEvent, { EventOrderMatchPayload } from './notifications/events';
 
 /**
  * State
@@ -661,7 +661,7 @@ export {
  * Notifications
  */
 
-export type { Notification, NotificationEvent };
+export type { Notification, NotificationEvent, EventOrderMatchPayload };
 
 /**
  * Utils
