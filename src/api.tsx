@@ -1,13 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
-import {
-  createContext,
-  ReactElement,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
 import httpStatus from 'http-status';
 import base64 from 'base-64';
 
