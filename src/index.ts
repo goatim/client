@@ -313,6 +313,8 @@ import {
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
+import Notification from './notifications/model';
+import NotificationEvent from './notifications/events';
 
 /**
  * State
@@ -654,6 +656,12 @@ export {
   useTransaction,
   useTransactions,
 };
+
+/**
+ * Notifications
+ */
+
+export type { Notification, NotificationEvent };
 
 /**
  * Utils
