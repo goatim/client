@@ -251,6 +251,7 @@ import {
   useUpdateOrder,
   useDeleteOrder,
 } from './trading/orders/api';
+import { OrderEvent, MatchOrderEventPayload } from './trading/orders/events';
 import OrderBook from './trading/orders/book/model';
 import { useOrderBook, UseOrderBookParams } from './trading/orders/book/api';
 import Portfolio from './trading/portfolios/model';
@@ -314,7 +315,6 @@ import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification from './notifications/model';
-import NotificationEvent, { EventOrderMatchPayload } from './notifications/events';
 
 /**
  * State
@@ -596,6 +596,8 @@ export type {
   UpdateOrderVariables,
   OrderBook,
   UseOrderBookParams,
+  OrderEvent,
+  MatchOrderEventPayload,
   Portfolio,
   PortfolioList,
   UsePortfoliosParams,
@@ -661,7 +663,7 @@ export {
  * Notifications
  */
 
-export type { Notification, NotificationEvent, EventOrderMatchPayload };
+export type { Notification };
 
 /**
  * Utils
