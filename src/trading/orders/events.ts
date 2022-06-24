@@ -1,9 +1,9 @@
 import { OrderType } from './model';
 import Asset from '../assets/model';
 
-export type OrderEvent = 'create_order' | 'update_order' | 'delete_order' | 'match_order';
+export type OrderEvent = 'create_order' | 'update_order' | 'delete_order' | 'order_match';
 
-export interface MatchOrderEventPayload {
+export interface OrderMatchEventPayload {
   type?: OrderType;
   nb_matched?: number;
   total?: number;

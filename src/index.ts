@@ -251,7 +251,7 @@ import {
   useUpdateOrder,
   useDeleteOrder,
 } from './trading/orders/api';
-import { OrderEvent, MatchOrderEventPayload } from './trading/orders/events';
+import { OrderEvent, OrderMatchEventPayload } from './trading/orders/events';
 import OrderBook from './trading/orders/book/model';
 import { useOrderBook, UseOrderBookParams } from './trading/orders/book/api';
 import Portfolio from './trading/portfolios/model';
@@ -597,7 +597,7 @@ export type {
   OrderBook,
   UseOrderBookParams,
   OrderEvent,
-  MatchOrderEventPayload,
+  OrderMatchEventPayload,
   Portfolio,
   PortfolioList,
   UsePortfoliosParams,
