@@ -150,6 +150,10 @@ import {
   useCompositionSetting,
   CompositionSettingList,
   useCompositionSettings,
+  CompositionSettingBody,
+  useCreateCompositionSetting,
+  UpdateCompositionSettingVariables,
+  useUpdateCompositionSetting,
 } from './soccer/compositionSettings/api';
 import League from './soccer/leagues/model';
 import {
@@ -497,6 +501,8 @@ export type {
   CompositionSetting,
   CompositionSettingPosition,
   CompositionSettingList,
+  CompositionSettingBody,
+  UpdateCompositionSettingVariables,
   League,
   LeagueList,
   UseLeaguesParams,
@@ -543,6 +549,8 @@ export {
   useDeleteComposition,
   useCompositionSetting,
   useCompositionSettings,
+  useCreateCompositionSetting,
+  useUpdateCompositionSetting,
   useLeague,
   useLeagues,
   useCreateLeague,

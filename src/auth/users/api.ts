@@ -8,12 +8,18 @@ import {
 import User from './model';
 import { PaginatedList, RequestBody, useApi } from '../../api';
 
-export function useUser(id: string): UseQueryResult<User> {
+export function useUser(id?: string): UseQueryResult<User> {
   const api = useApi();
-  return useQuery<User>(['users', id], async () => {
-    const { data } = await api.get<User>(`/users/${id}`);
-    return data;
-  });
+  return useQuery<User>(
+    ['users', id],
+    async () => {
+      const { data } = await api.get<User>(`/users/${id}`);
+      return data;
+    },
+    {
+      enabled: !!id,
+    },
+  );
 }
 
 export function useMe(): UseQueryResult<User> {
