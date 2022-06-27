@@ -9,12 +9,18 @@ import { AxiosResponse } from 'axios';
 import { ApiContext, PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Player from './model';
 
-export function usePlayer(id: string): UseQueryResult<Player> {
+export function usePlayer(id?: string): UseQueryResult<Player> {
   const api = useApi();
-  return useQuery<Player>(['players', id], async () => {
-    const { data } = await api.get<Player>(`/players/${id}`);
-    return data;
-  });
+  return useQuery<Player>(
+    ['players', id],
+    async () => {
+      const { data } = await api.get<Player>(`/players/${id}`);
+      return data;
+    },
+    {
+      enabled: !!id,
+    },
+  );
 }
 
 export type PlayerList = PaginatedList<'players', Player>;
