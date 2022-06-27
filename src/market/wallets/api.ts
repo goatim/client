@@ -13,12 +13,18 @@ export interface UseWalletParams extends RequestParams {
   ranking?: string;
 }
 
-export function useWallet(id: string, params?: UseWalletParams): UseQueryResult<Wallet> {
+export function useWallet(id?: string, params?: UseWalletParams): UseQueryResult<Wallet> {
   const api = useApi();
-  return useQuery<Wallet>(['wallets', id], async () => {
-    const { data } = await api.get<Wallet>(`/wallets/${id}`, params);
-    return data;
-  });
+  return useQuery<Wallet>(
+    ['wallets', id],
+    async () => {
+      const { data } = await api.get<Wallet>(`/wallets/${id}`, params);
+      return data;
+    },
+    {
+      enabled: !!id,
+    },
+  );
 }
 
 export function useDefaultWallet(params?: UseWalletParams): UseQueryResult<Wallet> {
