@@ -7,7 +7,7 @@ export default interface Portfolio extends Model {
   wallet?: Wallet | string;
   asset?: Asset | string;
   buy_price?: number;
-  quantity?: number;
+  nb_shares?: number;
   valuation?: number;
   gains?: number;
   variation?: number;

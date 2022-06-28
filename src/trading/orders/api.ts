@@ -51,7 +51,7 @@ export interface OrderBody extends RequestBody {
   asset?: string | null;
   type?: OrderType;
   price_limit?: number;
-  quantity?: number;
+  nb_shares?: number;
   is_cancelled?: boolean;
 }
 

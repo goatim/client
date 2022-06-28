@@ -55,7 +55,6 @@ export interface WalletBody extends RequestBody {
   owner?: string | null;
   name?: string | null;
   type?: string | null;
-  amount?: number;
   is_default?: boolean;
 }
 

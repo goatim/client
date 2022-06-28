@@ -265,11 +265,6 @@ import {
   UsePortfoliosParams,
   usePortfolios,
   useCurrentWalletPortfolios,
-  PortfolioBody,
-  useCreatePortfolio,
-  UpdatePortfolioVariables,
-  useUpdatePortfolio,
-  useDeletePortfolio,
 } from './trading/portfolios/api';
 import Quotation from './trading/quotations/model';
 import Ranking, { RankingPeriod } from './trading/rankings/model';
@@ -296,6 +291,18 @@ import {
   useDeleteRank,
 } from './trading/ranks/api';
 import Score from './trading/scores/model';
+import Stock, { StockType } from './trading/stocks/model';
+import {
+  useStock,
+  StockList,
+  UseStocksParams,
+  useStocks,
+  CreateStockBody,
+  useCreateStock,
+  UpdateStockBody,
+  UpdateStockVariables,
+  useUpdateStock,
+} from './trading/stocks/api';
 import Transaction from './trading/transactions/model';
 import {
   useTransaction,
@@ -609,8 +616,6 @@ export type {
   Portfolio,
   PortfolioList,
   UsePortfoliosParams,
-  PortfolioBody,
-  UpdatePortfolioVariables,
   Quotation,
   Ranking,
   RankingPeriod,
@@ -623,6 +628,13 @@ export type {
   RankBody,
   UpdateRankVariables,
   Score,
+  Stock,
+  StockType,
+  StockList,
+  UseStocksParams,
+  CreateStockBody,
+  UpdateStockBody,
+  UpdateStockVariables,
   Transaction,
   TransactionList,
   UseTransactionsParams,
@@ -650,9 +662,6 @@ export {
   usePortfolio,
   usePortfolios,
   useCurrentWalletPortfolios,
-  useCreatePortfolio,
-  useUpdatePortfolio,
-  useDeletePortfolio,
   useRanking,
   useRankings,
   useCreateRanking,
@@ -663,6 +672,10 @@ export {
   useCreateRank,
   useUpdateRank,
   useDeleteRank,
+  useStock,
+  useStocks,
+  useCreateStock,
+  useUpdateStock,
   useTransaction,
   useTransactions,
 };

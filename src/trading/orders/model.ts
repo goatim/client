@@ -10,7 +10,7 @@ export default interface Order extends Model {
   asset?: Asset | string;
   type?: OrderType;
   price_limit?: number;
-  quantity?: number;
+  nb_shares?: number;
   is_cancelled?: boolean;
   error?: string;
   booster?: Booster | string;

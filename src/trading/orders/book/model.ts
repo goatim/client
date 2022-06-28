@@ -1,6 +1,6 @@
 interface AggregatedOrders {
   nb_orders?: number;
-  total_quantity?: number;
+  total_shares?: number;
   price_limit?: number;
 }
 

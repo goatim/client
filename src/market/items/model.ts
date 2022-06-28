@@ -6,7 +6,7 @@ export type ItemType = 'order' | 'booster' | 'pack';
 
 export interface OrderItem {
   name?: string;
-  quantity?: number;
+  nb_shares?: number;
   order_type?: OrderType;
   asset?: Asset | string;
   price_limit?: number;

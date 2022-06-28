@@ -9,5 +9,5 @@ export default interface Transaction extends Model {
   price?: number;
   asset_quotation_gain?: number;
   asset_quotation_variation?: number;
-  quantity?: number;
+  nb_shares?: number;
 }

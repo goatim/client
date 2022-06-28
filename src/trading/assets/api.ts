@@ -40,7 +40,6 @@ export function useAssets(params?: UseAssetsParams): UseQueryResult<AssetList> {
 export interface AssetBody extends RequestBody {
   name?: string | null;
   entity?: string | null;
-  quotation?: number;
 }
 
 export function useCreateAsset(): UseMutationResult<Asset, unknown, AssetBody> {

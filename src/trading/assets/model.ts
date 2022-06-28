@@ -11,7 +11,7 @@ export default interface Asset extends Model {
   name?: string;
   description?: string;
   slug?: string;
-  shares?: number;
+  total_shares?: number;
   last_dividend?: number;
   quotation?: number;
   session_variation?: number;
