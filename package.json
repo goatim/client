@@ -48,6 +48,7 @@
     "@babel/eslint-parser": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
+    "@cezembre/forms": "^1.7.0",
     "@release-it/conventional-changelog": "^5.0.0",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^22.0.0",

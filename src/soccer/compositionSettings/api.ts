@@ -16,7 +16,7 @@ export function useCompositionSetting(id?: string): UseQueryResult<CompositionSe
   });
 }
 
-export type CompositionSettingList = PaginatedList<'compositions_settings', CompositionSetting>;
+export type CompositionSettingList = PaginatedList<'composition_settings', CompositionSetting>;
 
 export function useCompositionSettings(): UseQueryResult<CompositionSettingList> {
   const api = useApi();
