@@ -73,7 +73,7 @@ export function useUpdateStock(): UseMutationResult<Stock, unknown, UpdateStockV
   const queryClient = useQueryClient();
   return useMutation<Stock, unknown, UpdateStockVariables>(
     async ({ id, ...body }: UpdateStockVariables) => {
-      const { data } = await api.put<Stock>(`/stocks/${body}`, body);
+      const { data } = await api.put<Stock>(`/stocks/${id}`, body);
       return data;
     },
     {
