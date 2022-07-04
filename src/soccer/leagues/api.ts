@@ -22,9 +22,7 @@ export function useLeague(id?: string): UseQueryResult<League> {
 
 export type LeagueList = PaginatedList<'leagues', League>;
 
-export interface GetLeaguesParams extends RequestParams {
-  expand?: string;
-}
+export type GetLeaguesParams = RequestParams;
 
 export function useLeagues(params?: GetLeaguesParams): UseQueryResult<LeagueList> {
   const api = useApi();

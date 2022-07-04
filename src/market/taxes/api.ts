@@ -20,7 +20,6 @@ export type TaxList = PaginatedList<'taxes', Tax>;
 
 export interface GetTaxesParams extends RequestParams {
   tags?: string;
-  expand?: string;
 }
 
 export function useTaxes(params?: GetTaxesParams): UseQueryResult<TaxList> {

@@ -31,7 +31,6 @@ export interface GetPlayersParams extends RequestParams {
   match?: string;
   composition?: string;
   position?: string;
-  expand?: string;
   search?: string;
 }
 

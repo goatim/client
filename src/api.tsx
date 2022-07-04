@@ -73,7 +73,9 @@ export function isApiError(error: unknown): boolean {
   );
 }
 
-export type RequestBody = { [key: string]: unknown };
+export interface RequestBody {
+  [key: string]: unknown;
+}
 
 export function buildRequestBody<B extends RequestBody = RequestBody>(body: B): FormData {
   const formData = new FormData();
@@ -108,7 +110,13 @@ export interface ApiConfig {
   bearerToken?: string | null;
 }
 
-export type RequestParams = { [key: string]: unknown };
+export interface RequestParams {
+  expand?: string;
+  'expand[]'?: string;
+  required_permissions?: string;
+  required_permissions_mode?: string;
+  [key: string]: unknown;
+}
 
 export function buildRequestConfig<RP extends RequestParams = RequestParams>(
   apiConfig?: ApiConfig,
