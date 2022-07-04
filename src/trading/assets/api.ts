@@ -27,6 +27,7 @@ export interface GetAssetsParams extends RequestParams {
   league?: string;
   club?: string;
   asset?: string;
+  search?: string;
 }
 
 export function useAssets(params?: GetAssetsParams): UseQueryResult<AssetList> {
