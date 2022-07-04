@@ -154,16 +154,16 @@ export function useAddCheckoutItem(
   );
 }
 
-export type UseUpdateCheckoutItem = CheckoutItemBody & { id: string };
+export type PutCheckoutItemVariables = CheckoutItemBody & { id: string };
 
 export function useUpdateCheckoutItem(
   checkoutKey = 'current',
-): UseMutationResult<Checkout, unknown, UseUpdateCheckoutItem> {
+): UseMutationResult<Checkout, unknown, PutCheckoutItemVariables> {
   const wallet = useCurrentWallet();
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Checkout, unknown, UseUpdateCheckoutItem>(
-    async ({ id, ...body }: UseUpdateCheckoutItem) => {
+  return useMutation<Checkout, unknown, PutCheckoutItemVariables>(
+    async ({ id, ...body }: PutCheckoutItemVariables) => {
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
       const { data } = await api.put<Checkout>(
         `/checkouts/${checkout?.token || 'current'}/items/${id}`,

@@ -18,12 +18,12 @@ export function useTax(id?: string): UseQueryResult<Tax> {
 
 export type TaxList = PaginatedList<'taxes', Tax>;
 
-export interface UseTaxesParams extends RequestParams {
+export interface GetTaxesParams extends RequestParams {
   tags?: string;
   expand?: string;
 }
 
-export function useTaxes(params?: UseTaxesParams): UseQueryResult<TaxList> {
+export function useTaxes(params?: GetTaxesParams): UseQueryResult<TaxList> {
   const api = useApi();
   return useQuery<TaxList>(['taxes', params], async () => {
     const { data } = await api.get<TaxList>('/taxes', params);

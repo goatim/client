@@ -24,13 +24,13 @@ export function useStock(id?: string): UseQueryResult<Stock> {
 
 export type StockList = PaginatedList<'stocks', Stock>;
 
-export interface UseStocksParams extends RequestParams {
+export interface GetStocksParams extends RequestParams {
   asset?: string;
   type?: StockType;
   tags?: string;
 }
 
-export function useStocks(params?: UseStocksParams): UseQueryResult<StockList> {
+export function useStocks(params?: GetStocksParams): UseQueryResult<StockList> {
   const api = useApi();
   return useQuery<StockList>(['stocks', params], async () => {
     const { data } = await api.get<StockList>('/stocks', params);

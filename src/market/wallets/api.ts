@@ -9,11 +9,11 @@ import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Wallet from './model';
 import { useFridayClient } from '../../client';
 
-export interface UseWalletParams extends RequestParams {
+export interface GetWalletParams extends RequestParams {
   ranking?: string;
 }
 
-export function useWallet(id?: string, params?: UseWalletParams): UseQueryResult<Wallet> {
+export function useWallet(id?: string, params?: GetWalletParams): UseQueryResult<Wallet> {
   const api = useApi();
   return useQuery<Wallet>(
     ['wallets', id],
@@ -27,23 +27,23 @@ export function useWallet(id?: string, params?: UseWalletParams): UseQueryResult
   );
 }
 
-export function useDefaultWallet(params?: UseWalletParams): UseQueryResult<Wallet> {
+export function useDefaultWallet(params?: GetWalletParams): UseQueryResult<Wallet> {
   return useWallet('default', params);
 }
 
-export function useCurrentWallet(params?: UseWalletParams): UseQueryResult<Wallet> {
+export function useCurrentWallet(params?: GetWalletParams): UseQueryResult<Wallet> {
   const { wallet } = useFridayClient();
   return useWallet(wallet || 'default', params);
 }
 
 export type WalletList = PaginatedList<'wallets', Wallet>;
 
-export interface UseWalletsParams extends RequestParams {
+export interface GetWalletsParams extends RequestParams {
   rank?: string;
   order?: string;
 }
 
-export function useWallets(params?: UseWalletsParams): UseQueryResult<WalletList> | undefined {
+export function useWallets(params?: GetWalletsParams): UseQueryResult<WalletList> | undefined {
   const api = useApi();
   return useQuery<WalletList>(['wallets', params], async () => {
     const { data } = await api.get<WalletList>('/wallets', params);

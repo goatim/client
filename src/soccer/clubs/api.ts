@@ -22,11 +22,11 @@ export function useClub(id?: string): UseQueryResult<Club> {
 
 export type ClubList = PaginatedList<'clubs', Club>;
 
-export interface UseClubsParams extends RequestParams {
+export interface GetClubsParams extends RequestParams {
   league?: string;
 }
 
-export function useClubs(params?: UseClubsParams): UseQueryResult<ClubList> {
+export function useClubs(params?: GetClubsParams): UseQueryResult<ClubList> {
   const api = useApi();
   return useQuery<ClubList>(['clubs', params], async () => {
     const { data } = await api.get<ClubList>('/clubs', params);

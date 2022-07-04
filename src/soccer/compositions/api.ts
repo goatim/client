@@ -11,19 +11,19 @@ import Player from '../players/model';
 import { useCurrentWallet } from '../../market/wallets/api';
 import Composition from './model';
 
-export interface UseCompositionParams extends RequestParams {
+export interface GetCompositionParams extends RequestParams {
   match?: string;
   wallet?: string;
 }
 
 export function useComposition(
   id = 'current',
-  params?: UseCompositionParams,
+  params?: GetCompositionParams,
 ): UseQueryResult<Composition> {
   const api = useApi();
   const wallet = useCurrentWallet();
 
-  const memoizedParams = useMemo<UseCompositionParams | undefined>(() => {
+  const memoizedParams = useMemo<GetCompositionParams | undefined>(() => {
     if (params?.wallet) {
       return params;
     }
@@ -93,13 +93,13 @@ export function useCreateComposition(
 
 export function useUpdateComposition(
   id = 'current',
-  params?: UseCompositionParams,
+  params?: GetCompositionParams,
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const wallet = useCurrentWallet();
   const api = useApi();
   const queryClient = useQueryClient();
 
-  const memoizedParams = useMemo<UseCompositionParams | undefined>(() => {
+  const memoizedParams = useMemo<GetCompositionParams | undefined>(() => {
     if (params?.wallet) {
       return params;
     }

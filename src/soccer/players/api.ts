@@ -25,25 +25,22 @@ export function usePlayer(id?: string): UseQueryResult<Player> {
 
 export type PlayerList = PaginatedList<'players', Player>;
 
-export interface UsePlayersParams extends RequestParams {
-  expand?: string;
-}
-
-export function usePlayers(params?: UsePlayersParams): UseQueryResult<PlayerList> {
-  const api = useApi();
-  return useQuery<PlayerList>(['players', params], async () => {
-    const { data } = await api.get<PlayerList>('/players', params);
-    return data;
-  });
-}
-
-export interface GetPlayersParams {
+export interface GetPlayersParams extends RequestParams {
   wallet?: string;
   composition_setting?: string;
   match?: string;
   composition?: string;
   position?: string;
   expand?: string;
+  search?: string;
+}
+
+export function usePlayers(params?: GetPlayersParams): UseQueryResult<PlayerList> {
+  const api = useApi();
+  return useQuery<PlayerList>(['players', params], async () => {
+    const { data } = await api.get<PlayerList>('/players', params);
+    return data;
+  });
 }
 
 export async function getPlayers(

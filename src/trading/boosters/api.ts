@@ -23,12 +23,12 @@ export function useBooster(id?: string): UseQueryResult<Booster> {
 
 export type BoosterList = PaginatedList<'boosters', Booster>;
 
-export interface UseBoostersParams extends RequestParams {
+export interface GetBoostersParams extends RequestParams {
   booster?: string;
   wallet?: string;
 }
 
-export function useBoosters(params?: UseBoostersParams): UseQueryResult<BoosterList> {
+export function useBoosters(params?: GetBoostersParams): UseQueryResult<BoosterList> {
   const api = useApi();
   return useQuery<BoosterList>(['boosters', params], async () => {
     const { data } = await api.get<BoosterList>('/boosters', params);
@@ -37,7 +37,7 @@ export function useBoosters(params?: UseBoostersParams): UseQueryResult<BoosterL
 }
 
 export function useCurrentWalletBoosters(
-  params: Omit<UseBoostersParams, 'wallet'>,
+  params: Omit<GetBoostersParams, 'wallet'>,
 ): UseQueryResult<BoosterList> {
   const wallet = useCurrentWallet();
   return useBoosters({ ...params, wallet: wallet.data?.id });

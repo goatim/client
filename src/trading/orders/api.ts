@@ -23,12 +23,12 @@ export function useOrder(id?: string): UseQueryResult<Order> {
 
 export type OrderList = PaginatedList<'orders', Order>;
 
-export interface UseOrdersParams extends RequestParams {
+export interface GetOrdersParams extends RequestParams {
   wallet?: string;
   order?: string;
 }
 
-export function useOrders(params?: UseOrdersParams): UseQueryResult<OrderList> {
+export function useOrders(params?: GetOrdersParams): UseQueryResult<OrderList> {
   const api = useApi();
   return useQuery<OrderList>(['orders', params], async () => {
     const { data } = await api.get<OrderList>('/orders', params);
@@ -37,7 +37,7 @@ export function useOrders(params?: UseOrdersParams): UseQueryResult<OrderList> {
 }
 
 export function useCurrentWalletOrders(
-  params?: Omit<UseOrdersParams, 'wallet'>,
+  params?: Omit<GetOrdersParams, 'wallet'>,
 ): UseQueryResult<OrderList> {
   const wallet = useCurrentWallet();
   return useOrders({

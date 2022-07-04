@@ -17,11 +17,11 @@ export function usePortfolio(id?: string): UseQueryResult<Portfolio> {
 
 export type PortfolioList = PaginatedList<'portfolios', Portfolio>;
 
-export interface UsePortfoliosParams extends RequestParams {
+export interface GetPortfoliosParams extends RequestParams {
   wallet?: string;
 }
 
-export function usePortfolios(params?: UsePortfoliosParams): UseQueryResult<PortfolioList> {
+export function usePortfolios(params?: GetPortfoliosParams): UseQueryResult<PortfolioList> {
   const api = useApi();
   return useQuery<PortfolioList>(['portfolios', params], async () => {
     const { data } = await api.get<PortfolioList>('/portfolios', params);
@@ -29,7 +29,7 @@ export function usePortfolios(params?: UsePortfoliosParams): UseQueryResult<Port
   });
 }
 
-export function useCurrentWalletPortfolios(params?: Omit<UsePortfoliosParams, 'wallet'>) {
+export function useCurrentWalletPortfolios(params?: Omit<GetPortfoliosParams, 'wallet'>) {
   const wallet = useCurrentWallet();
   return usePortfolios({ ...params, wallet: wallet.data?.id });
 }

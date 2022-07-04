@@ -70,7 +70,7 @@ import {
   useUpdateCheckout,
   useDeleteCheckout,
   useAddCheckoutItem,
-  UseUpdateCheckoutItem,
+  PutCheckoutItemVariables,
   useRemoveCheckoutItem,
   ConfirmCheckoutBody,
   CheckoutConfirmation,
@@ -81,7 +81,7 @@ import Tax from './market/taxes/model';
 import {
   useTax,
   TaxList,
-  UseTaxesParams,
+  GetTaxesParams,
   useTaxes,
   useVats,
   TaxBody,
@@ -91,7 +91,7 @@ import {
 } from './market/taxes/api';
 import Wallet, { WalletType } from './market/wallets/model';
 import {
-  UseWalletParams,
+  GetWalletParams,
   useWallet,
   useDefaultWallet,
   useCurrentWallet,
@@ -123,7 +123,7 @@ import Club from './soccer/clubs/model';
 import {
   useClub,
   ClubList,
-  UseClubsParams,
+  GetClubsParams,
   useClubs,
   ClubBody,
   useCreateClub,
@@ -135,7 +135,7 @@ import {
 } from './soccer/clubs/api';
 import Composition, { CompositionPosition } from './soccer/compositions/model';
 import {
-  UseCompositionParams,
+  GetCompositionParams,
   useComposition,
   CompositionList,
   useCompositions,
@@ -159,7 +159,7 @@ import League from './soccer/leagues/model';
 import {
   useLeague,
   LeagueList,
-  UseLeaguesParams,
+  GetLeaguesParams,
   useLeagues,
   LeagueBody,
   useCreateLeague,
@@ -172,7 +172,7 @@ import Match, { MatchStatus } from './soccer/matches/model';
 import {
   useMatch,
   MatchList,
-  UseMatchesParams,
+  GetMatchesParams,
   useMatches,
   useSpotlightMatches,
   MatchBody,
@@ -200,9 +200,8 @@ import Player, { PlayerPosition, PlayerSide } from './soccer/players/model';
 import {
   usePlayer,
   PlayerList,
-  UsePlayersParams,
-  usePlayers,
   GetPlayersParams,
+  usePlayers,
   getPlayers,
   PlayerBody,
   useCreatePlayer,
@@ -216,7 +215,7 @@ import Asset, { AssetType } from './trading/assets/model';
 import {
   useAsset,
   AssetList,
-  UseAssetsParams,
+  GetAssetsParams,
   useAssets,
   AssetBody,
   useCreateAsset,
@@ -230,7 +229,7 @@ import Booster from './trading/boosters/model';
 import {
   useBooster,
   BoosterList,
-  UseBoostersParams,
+  GetBoostersParams,
   useBoosters,
   useCurrentWalletBoosters,
   BoosterBody,
@@ -246,7 +245,7 @@ import Order, { OrderType } from './trading/orders/model';
 import {
   useOrder,
   OrderList,
-  UseOrdersParams,
+  GetOrdersParams,
   useOrders,
   useCurrentWalletOrders,
   OrderBody,
@@ -257,19 +256,19 @@ import {
 } from './trading/orders/api';
 import { OrderEvent, OrderMatchEventPayload } from './trading/orders/events';
 import OrderBook from './trading/orders/book/model';
-import { useOrderBook, UseOrderBookParams } from './trading/orders/book/api';
+import { useOrderBook, GetOrderBookParams } from './trading/orders/book/api';
 import Portfolio from './trading/portfolios/model';
 import {
   usePortfolio,
   PortfolioList,
-  UsePortfoliosParams,
+  GetPortfoliosParams,
   usePortfolios,
   useCurrentWalletPortfolios,
 } from './trading/portfolios/api';
 import Quotation from './trading/quotations/model';
 import Ranking, { RankingPeriod } from './trading/rankings/model';
 import {
-  UseRankingParams,
+  GetRankingParams,
   useRanking,
   RankingList,
   useRankings,
@@ -295,7 +294,7 @@ import Stock, { StockType } from './trading/stocks/model';
 import {
   useStock,
   StockList,
-  UseStocksParams,
+  GetStocksParams,
   useStocks,
   CreateStockBody,
   useCreateStock,
@@ -307,7 +306,7 @@ import Transaction from './trading/transactions/model';
 import {
   useTransaction,
   TransactionList,
-  UseTransactionsParams,
+  GetTransactionsParams,
   useTransactions,
 } from './trading/transactions/api';
 import {
@@ -420,7 +419,7 @@ export type {
   CheckoutList,
   CheckoutItemBody,
   CheckoutBody,
-  UseUpdateCheckoutItem,
+  PutCheckoutItemVariables,
   ConfirmCheckoutBody,
   CheckoutConfirmation,
   Item,
@@ -430,12 +429,12 @@ export type {
   PackItem,
   Tax,
   TaxList,
-  UseTaxesParams,
+  GetTaxesParams,
   TaxBody,
   UpdateTaxVariables,
   Wallet,
   WalletType,
-  UseWalletParams,
+  GetWalletParams,
   WalletBody,
   UpdateWalletVariables,
   AddWalletPictureBody,
@@ -494,14 +493,14 @@ export { usePaymentMethods, useAddCreditCard };
 export type {
   Club,
   ClubList,
-  UseClubsParams,
+  GetClubsParams,
   ClubBody,
   UpdateClubVariables,
   AddClubPictureBody,
   AddClubPictureVariables,
   Composition,
   CompositionPosition,
-  UseCompositionParams,
+  GetCompositionParams,
   CompositionList,
   CompositionPositionBody,
   CompositionBody,
@@ -512,14 +511,14 @@ export type {
   UpdateCompositionSettingVariables,
   League,
   LeagueList,
-  UseLeaguesParams,
+  GetLeaguesParams,
   LeagueBody,
   AddLeaguePictureBody,
   AddLeaguePictureVariables,
   Match,
   MatchStatus,
   MatchList,
-  UseMatchesParams,
+  GetMatchesParams,
   MatchBody,
   UpdateMatchVariables,
   AddMatchPictureBody,
@@ -535,7 +534,6 @@ export type {
   PlayerPosition,
   PlayerSide,
   PlayerList,
-  UsePlayersParams,
   GetPlayersParams,
   PlayerBody,
   UpdatePlayerVariables,
@@ -590,14 +588,14 @@ export type {
   Asset,
   AssetType,
   AssetList,
-  UseAssetsParams,
+  GetAssetsParams,
   AssetBody,
   UpdateAssetVariables,
   AddAssetPictureBody,
   AddAssetPictureVariables,
   Booster,
   BoosterList,
-  UseBoostersParams,
+  GetBoostersParams,
   BoosterBody,
   UpdateBoosterVariables,
   BoosterInUse,
@@ -606,20 +604,20 @@ export type {
   Order,
   OrderType,
   OrderList,
-  UseOrdersParams,
+  GetOrdersParams,
   OrderBody,
   UpdateOrderVariables,
   OrderBook,
-  UseOrderBookParams,
+  GetOrderBookParams,
   OrderEvent,
   OrderMatchEventPayload,
   Portfolio,
   PortfolioList,
-  UsePortfoliosParams,
+  GetPortfoliosParams,
   Quotation,
   Ranking,
   RankingPeriod,
-  UseRankingParams,
+  GetRankingParams,
   RankingList,
   RankingBody,
   UpdateRankingVariables,
@@ -631,13 +629,13 @@ export type {
   Stock,
   StockType,
   StockList,
-  UseStocksParams,
+  GetStocksParams,
   CreateStockBody,
   UpdateStockBody,
   UpdateStockVariables,
   Transaction,
   TransactionList,
-  UseTransactionsParams,
+  GetTransactionsParams,
 };
 
 export {

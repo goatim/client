@@ -8,11 +8,11 @@ import {
 import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Ranking, { RankingPeriod } from './model';
 
-export interface UseRankingParams extends RequestParams {
+export interface GetRankingParams extends RequestParams {
   expand?: string;
 }
 
-export function useRanking(id?: string, params?: UseRankingParams): UseQueryResult<Ranking> {
+export function useRanking(id?: string, params?: GetRankingParams): UseQueryResult<Ranking> {
   const api = useApi();
   return useQuery<Ranking>(
     ['rankings', id, params],

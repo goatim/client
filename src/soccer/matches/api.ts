@@ -18,11 +18,11 @@ export function useMatch(id?: string): UseQueryResult<Match> {
 
 export type MatchList = PaginatedList<'matches', Match>;
 
-export interface UseMatchesParams extends RequestParams {
+export interface GetMatchesParams extends RequestParams {
   spotlight?: boolean;
 }
 
-export function useMatches(params?: UseMatchesParams): UseQueryResult<MatchList> {
+export function useMatches(params?: GetMatchesParams): UseQueryResult<MatchList> {
   const api = useApi();
   return useQuery(['matches', params], async () => {
     const { data } = await api.get('/matches', params);

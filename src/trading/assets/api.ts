@@ -22,14 +22,14 @@ export function useAsset(id?: string): UseQueryResult<Asset> {
 
 export type AssetList = PaginatedList<'assets', Asset>;
 
-export interface UseAssetsParams extends RequestParams {
+export interface GetAssetsParams extends RequestParams {
   type?: AssetType;
   league?: string;
   club?: string;
   asset?: string;
 }
 
-export function useAssets(params?: UseAssetsParams): UseQueryResult<AssetList> {
+export function useAssets(params?: GetAssetsParams): UseQueryResult<AssetList> {
   const api = useApi();
   return useQuery<AssetList>(['assets', params], async () => {
     const { data } = await api.get<AssetList>('/assets', params);

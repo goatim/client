@@ -18,11 +18,11 @@ export function useTransaction(id?: string): UseQueryResult<Transaction> {
 
 export type TransactionList = PaginatedList<'transactions', Transaction>;
 
-export interface UseTransactionsParams extends RequestParams {
+export interface GetTransactionsParams extends RequestParams {
   order?: string;
 }
 
-export function useTransactions(params?: UseTransactionsParams): UseQueryResult<TransactionList> {
+export function useTransactions(params?: GetTransactionsParams): UseQueryResult<TransactionList> {
   const api = useApi();
   return useQuery<TransactionList>(['transactions', params], async () => {
     const { data } = await api.get<TransactionList>('/transactions', params);

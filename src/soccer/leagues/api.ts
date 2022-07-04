@@ -22,11 +22,11 @@ export function useLeague(id?: string): UseQueryResult<League> {
 
 export type LeagueList = PaginatedList<'leagues', League>;
 
-export interface UseLeaguesParams extends RequestParams {
+export interface GetLeaguesParams extends RequestParams {
   expand?: string;
 }
 
-export function useLeagues(params?: UseLeaguesParams): UseQueryResult<LeagueList> {
+export function useLeagues(params?: GetLeaguesParams): UseQueryResult<LeagueList> {
   const api = useApi();
   return useQuery<LeagueList>(['leagues', params], async () => {
     const { data } = await api.get<LeagueList>('/leagues', params);
