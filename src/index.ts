@@ -290,7 +290,7 @@ import {
   useDeleteRank,
 } from './trading/ranks/api';
 import Score from './trading/scores/model';
-import Stock, { StockType } from './trading/stocks/model';
+import Stock from './trading/stocks/model';
 import {
   useStock,
   StockList,
@@ -302,6 +302,31 @@ import {
   UpdateStockVariables,
   useUpdateStock,
 } from './trading/stocks/api';
+import ShareBulk from './trading/shareBulks/model';
+import MinifiedShareBulk from './trading/shareBulks/minified';
+import PackFactory from './trading/packFactories/model';
+import {
+  usePackFactory,
+  PackFactoryList,
+  GetPackFactoriesParams,
+  usePackFactories,
+  PackFactoryBody,
+  useCreatePackFactory,
+  UpdatePackFactoryVariables,
+  useUpdatePackFactory,
+} from './trading/packFactories/api';
+import Pack from './trading/packs/model';
+import {
+  usePack,
+  PackList,
+  GetPacksParams,
+  usePacks,
+  CreatePackBody,
+  useCreatePack,
+  UpdatePackBody,
+  UpdatePackVariables,
+  useUpdatePack,
+} from './trading/packs/api';
 import Transaction from './trading/transactions/model';
 import {
   useTransaction,
@@ -627,7 +652,19 @@ export type {
   UpdateRankVariables,
   Score,
   Stock,
-  StockType,
+  ShareBulk,
+  MinifiedShareBulk,
+  PackFactory,
+  PackFactoryList,
+  GetPackFactoriesParams,
+  PackFactoryBody,
+  UpdatePackFactoryVariables,
+  Pack,
+  PackList,
+  GetPacksParams,
+  CreatePackBody,
+  UpdatePackBody,
+  UpdatePackVariables,
   StockList,
   GetStocksParams,
   CreateStockBody,
@@ -674,6 +711,14 @@ export {
   useStocks,
   useCreateStock,
   useUpdateStock,
+  usePackFactory,
+  usePackFactories,
+  useCreatePackFactory,
+  useUpdatePackFactory,
+  usePack,
+  usePacks,
+  useCreatePack,
+  useUpdatePack,
   useTransaction,
   useTransactions,
 };
