@@ -143,7 +143,6 @@ export function buildRequestConfig<RP extends RequestParams = RequestParams>(
 }
 
 function parseError(error: unknown): ApiError {
-  console.log('Parse error !');
   if (!error) {
     return new ApiError('Unknown error');
   }
@@ -151,7 +150,6 @@ function parseError(error: unknown): ApiError {
     if ('response' in error && (error as AxiosError).response) {
       const { response } = error as AxiosError<ApiErrorData>;
       if (response?.data) {
-        console.log('Response error', response.data);
         return new ApiError({ ...response.data, status: response.status });
       }
     }
@@ -163,7 +161,7 @@ function parseError(error: unknown): ApiError {
   return new ApiError('Unknown error');
 }
 
-export function apiGet<D = unknown, RP extends RequestParams = RequestParams>(
+export async function apiGet<D = unknown, RP extends RequestParams = RequestParams>(
   url: string,
   apiConfig?: ApiConfig,
   params?: RP,
@@ -171,13 +169,13 @@ export function apiGet<D = unknown, RP extends RequestParams = RequestParams>(
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    return axios.get<D>((apiConfig?.host || '') + url, config);
+    return await axios.get<D>((apiConfig?.host || '') + url, config);
   } catch (error: unknown) {
     throw parseError(error);
   }
 }
 
-export function apiPost<
+export async function apiPost<
   D = unknown,
   RB extends RequestBody = RequestBody,
   RP extends RequestParams = RequestParams,
@@ -185,16 +183,13 @@ export function apiPost<
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    console.log('API Post ...');
-    return axios.post<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
+    return await axios.post<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
   } catch (error: unknown) {
-    console.log('API Post: Catch error !');
-    console.log(error);
     throw parseError(error);
   }
 }
 
-export function apiPut<
+export async function apiPut<
   D = unknown,
   RB extends RequestBody = RequestBody,
   RP extends RequestParams = RequestParams,
@@ -202,13 +197,13 @@ export function apiPut<
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    return axios.put<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
+    return await axios.put<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
   } catch (error: unknown) {
     throw parseError(error);
   }
 }
 
-export function apiDelete<D = unknown, RP extends RequestParams = RequestParams>(
+export async function apiDelete<D = unknown, RP extends RequestParams = RequestParams>(
   url: string,
   apiConfig?: ApiConfig,
   params?: RP,
@@ -216,7 +211,7 @@ export function apiDelete<D = unknown, RP extends RequestParams = RequestParams>
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    return axios.delete<D>((apiConfig?.host || '') + url, config);
+    return await axios.delete<D>((apiConfig?.host || '') + url, config);
   } catch (error: unknown) {
     throw parseError(error);
   }

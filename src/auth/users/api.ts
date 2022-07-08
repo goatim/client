@@ -56,11 +56,9 @@ export function useCreateUser(
   const queryClient = useQueryClient();
   return useMutation<User, unknown, UserBody>(
     async (body: UserBody) => {
-      console.log('Post user');
       const { data } = await api.post<User>('/users', body, {
         create_session: createSession,
       });
-      console.log('Success !');
       return data;
     },
     {
