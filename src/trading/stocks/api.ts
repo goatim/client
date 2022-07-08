@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useApi, PaginatedList, RequestParams, RequestBody } from '../../api';
-import Stock, { StockType } from './model';
+import Stock from './model';
 
 export function useStock(id?: string): UseQueryResult<Stock> {
   const api = useApi();
@@ -26,7 +26,6 @@ export type StockList = PaginatedList<'stocks', Stock>;
 
 export interface GetStocksParams extends RequestParams {
   asset?: string;
-  type?: StockType;
   tags?: string;
 }
 
@@ -40,7 +39,6 @@ export function useStocks(params?: GetStocksParams): UseQueryResult<StockList> {
 
 export interface CreateStockBody extends RequestBody {
   asset?: string;
-  type?: string;
   tags?: string;
   initial_shares?: string;
 }
@@ -62,7 +60,6 @@ export function useCreateStock(): UseMutationResult<Stock, unknown, CreateStockB
 }
 
 export interface UpdateStockBody extends RequestBody {
-  type?: string;
   tags?: string;
 }
 
