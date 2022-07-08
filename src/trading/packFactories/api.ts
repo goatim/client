@@ -39,12 +39,12 @@ export function usePackFactories(params?: GetPackFactoriesParams): UseQueryResul
 }
 
 export interface PackFactoryBody extends RequestBody {
-  name?: string;
-  description?: string;
-  tags?: string;
-  stock_tags?: string;
-  odds?: string;
-  breakdown?: string;
+  name?: string | null;
+  description?: string | null;
+  tags?: string | null;
+  stock_tags?: string | null;
+  odds?: string | null;
+  breakdown?: string | null;
   margin?: number;
 }
 

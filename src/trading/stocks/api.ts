@@ -38,9 +38,9 @@ export function useStocks(params?: GetStocksParams): UseQueryResult<StockList> {
 }
 
 export interface CreateStockBody extends RequestBody {
-  asset?: string;
-  tags?: string;
-  initial_shares?: string;
+  asset?: string | null;
+  tags?: string | null;
+  initial_shares?: number;
 }
 
 export function useCreateStock(): UseMutationResult<Stock, unknown, CreateStockBody> {
@@ -60,7 +60,7 @@ export function useCreateStock(): UseMutationResult<Stock, unknown, CreateStockB
 }
 
 export interface UpdateStockBody extends RequestBody {
-  tags?: string;
+  tags?: string | null;
 }
 
 export type UpdateStockVariables = UpdateStockBody & { id: string };

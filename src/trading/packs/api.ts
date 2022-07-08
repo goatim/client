@@ -38,12 +38,12 @@ export function usePacks(params?: GetPacksParams): UseQueryResult<PackList> {
 }
 
 export interface CreatePackBody extends RequestBody {
-  wallet?: string;
-  share_bulks?: string;
-  tags?: string;
+  wallet?: string | null;
+  share_bulks?: string | null;
+  tags?: string | null;
   seen?: boolean;
-  title?: string;
-  message?: string;
+  title?: string | null;
+  message?: string | null;
 }
 
 export function useCreatePack(): UseMutationResult<Pack, unknown, CreatePackBody> {
@@ -64,8 +64,8 @@ export function useCreatePack(): UseMutationResult<Pack, unknown, CreatePackBody
 
 export interface UpdatePackBody extends RequestBody {
   seen?: boolean;
-  title?: string;
-  message?: string;
+  title?: string | null;
+  message?: string | null;
 }
 
 export type UpdatePackVariables = UpdatePackBody & { id: string };
