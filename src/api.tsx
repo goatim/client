@@ -185,8 +185,11 @@ export function apiPost<
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
+    console.log('API Post ...');
     return axios.post<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
   } catch (error: unknown) {
+    console.log('API Post: Catch error !');
+    console.log(error);
     throw parseError(error);
   }
 }
