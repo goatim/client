@@ -143,6 +143,7 @@ export function buildRequestConfig<RP extends RequestParams = RequestParams>(
 }
 
 function parseError(error: unknown): ApiError {
+  console.log('Parse error !');
   if (!error) {
     return new ApiError('Unknown error');
   }
@@ -150,6 +151,7 @@ function parseError(error: unknown): ApiError {
     if ('response' in error && (error as AxiosError).response) {
       const { response } = error as AxiosError<ApiErrorData>;
       if (response?.data) {
+        console.log('Response error', response.data);
         return new ApiError({ ...response.data, status: response.status });
       }
     }
@@ -211,7 +213,7 @@ export function apiDelete<D = unknown, RP extends RequestParams = RequestParams>
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    return axios.get<D>((apiConfig?.host || '') + url, config);
+    return axios.delete<D>((apiConfig?.host || '') + url, config);
   } catch (error: unknown) {
     throw parseError(error);
   }
@@ -293,12 +295,6 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
   const [apiConfig, setApiConfig] = useState<ApiConfig | undefined>(
     persistConfig ? hydrateConfig(config) : config,
   );
-
-  // useEffect(() => {
-  //   if (persistConfig) {
-  //     setApiConfig(hydrateConfig(config));
-  //   }
-  // }, [config, persistConfig]);
 
   const setConfig = useCallback(
     (_config: ApiConfig) => {
