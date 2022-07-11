@@ -3,6 +3,7 @@ import Wallet from '../../market/wallets/model';
 import PackFactory from '../packFactories/model';
 import ShareBulk from '../shareBulks/model';
 import MinifiedShareBulk from '../shareBulks/minified';
+import { Image } from '../../medias/image';
 
 export default interface Pack extends Model {
   factory?: PackFactory | string;
@@ -14,4 +15,5 @@ export default interface Pack extends Model {
   message?: string;
   targeted_valuation?: number;
   valuation?: number;
+  icon?: Image;
 }
