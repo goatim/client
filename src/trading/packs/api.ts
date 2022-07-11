@@ -25,8 +25,10 @@ export function usePack(id?: string): UseQueryResult<Pack> {
 export type PackList = PaginatedList<'packs', Pack>;
 
 export interface GetPacksParams extends RequestParams {
-  asset?: string;
+  seen?: boolean;
+  wallet?: string;
   tags?: string[] | string;
+  asset?: string;
 }
 
 export function usePacks(params?: GetPacksParams): UseQueryResult<PackList> {
