@@ -314,6 +314,9 @@ import {
   useCreatePackFactory,
   UpdatePackFactoryVariables,
   useUpdatePackFactory,
+  AddPackFactoryPictureBody,
+  AddPackFactoryPictureVariables,
+  useAddPackFactoryIcon,
 } from './trading/packFactories/api';
 import Pack from './trading/packs/model';
 import {
@@ -659,6 +662,8 @@ export type {
   GetPackFactoriesParams,
   PackFactoryBody,
   UpdatePackFactoryVariables,
+  AddPackFactoryPictureBody,
+  AddPackFactoryPictureVariables,
   Pack,
   PackList,
   GetPacksParams,
@@ -715,6 +720,7 @@ export {
   usePackFactories,
   useCreatePackFactory,
   useUpdatePackFactory,
+  useAddPackFactoryIcon,
   usePack,
   usePacks,
   useCreatePack,

@@ -46,6 +46,8 @@ export interface PackFactoryBody extends RequestBody {
   odds?: string | null;
   breakdown?: string | null;
   margin?: number;
+  title?: string;
+  message?: string;
 }
 
 export function useCreatePackFactory(): UseMutationResult<PackFactory, unknown, PackFactoryBody> {
@@ -76,6 +78,30 @@ export function useUpdatePackFactory(): UseMutationResult<
   return useMutation<PackFactory, unknown, UpdatePackFactoryVariables>(
     async ({ id, ...body }: UpdatePackFactoryVariables) => {
       const { data } = await api.put<PackFactory>(`/pack_factories/${id}`, body);
+      return data;
+    },
+    {
+      onSuccess(packFactory: PackFactory) {
+        queryClient.setQueryData(['pack_factories', packFactory.id], packFactory);
+      },
+    },
+  );
+}
+
+export type AddPackFactoryPictureBody = { icon: File };
+
+export type AddPackFactoryPictureVariables = AddPackFactoryPictureBody & { id: string };
+
+export function useAddPackFactoryIcon(): UseMutationResult<
+  PackFactory,
+  unknown,
+  AddPackFactoryPictureVariables
+> {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  return useMutation<PackFactory, unknown, AddPackFactoryPictureVariables>(
+    async ({ id, icon }: AddPackFactoryPictureVariables) => {
+      const { data } = await api.post<PackFactory>(`/pack_factories/${id}/icon`, { icon });
       return data;
     },
     {
