@@ -12,4 +12,6 @@ export default interface Pack extends Model {
   seen?: boolean;
   title?: string;
   message?: string;
+  targeted_valuation?: number;
+  valuation?: number;
 }
