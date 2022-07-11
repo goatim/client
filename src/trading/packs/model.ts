@@ -16,4 +16,7 @@ export default interface Pack extends Model {
   targeted_valuation?: number;
   valuation?: number;
   icon?: Image;
+  resolved_icon?: Image;
+  resolved_title?: string;
+  resolved_message?: string;
 }

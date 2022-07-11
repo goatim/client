@@ -1,0 +1,15 @@
+export const translations = {
+  goalkeeper: 'Gardien',
+  fullback: 'Défenseur',
+  center_back: 'Défenseur central',
+  sweeper: 'Libéro',
+  wing_back: 'Ailier arrière',
+  center_midfield: 'Milieu central',
+  defensive_midfield: 'Milieu défensif',
+  attacking_midfield: 'Milieu offensif',
+  wide_midfield: 'Milieu latéral',
+  center_forward: 'Attaquant central',
+  winger: 'Ailier',
+  second_striker: 'Second butteur',
+  striker: 'Butteur',
+};

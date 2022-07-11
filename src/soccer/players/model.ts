@@ -28,6 +28,6 @@ export default interface Player extends Model {
   description?: string;
   position?: PlayerPosition;
   side?: PlayerSide;
-  textual_position?: string;
   number?: number;
+  resolved_position?: string;
 }
