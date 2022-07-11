@@ -13,7 +13,7 @@ export default interface PackFactory extends Model {
   odds?: PackFactoryOdds | string;
   breakdown?: number[];
   margin?: number;
-  title?: number;
-  message?: number;
+  title?: string;
+  message?: string;
   icon?: Image;
 }
