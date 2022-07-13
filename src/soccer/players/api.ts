@@ -129,3 +129,21 @@ export function useAddPlayerIllustration(): UseMutationResult<
     },
   );
 }
+
+export type AddPlayerBulkBody = { bulk: File };
+
+export type AddPlayerBulkResponse = { created: number };
+
+export function useAddPlayerBulk(): UseMutationResult<
+  AddPlayerBulkResponse,
+  unknown,
+  AddPlayerBulkBody
+> {
+  const api = useApi();
+  return useMutation<AddPlayerBulkResponse, unknown, AddPlayerBulkBody>(
+    async (body: AddPlayerBulkBody) => {
+      const { data } = await api.post<AddPlayerBulkResponse>('/players/bulk', body);
+      return data;
+    },
+  );
+}

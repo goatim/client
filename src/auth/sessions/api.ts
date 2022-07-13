@@ -18,7 +18,7 @@ export function useSession(id: string, onError?: () => void): UseQueryResult<Ses
     },
     {
       onError,
-      retry: false,
+      retry: false, // TODO: Conditional retry based on error
     },
   );
 }
