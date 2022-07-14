@@ -130,19 +130,19 @@ export function useAddPlayerIllustration(): UseMutationResult<
   );
 }
 
-export type AddPlayerBulkBody = { bulk: File };
+export type PostPlayerBulkBody = { bulk: File };
 
-export type AddPlayerBulkResponse = { created: number };
+export type PostPlayerBulkResponse = { created: number };
 
-export function useAddPlayerBulk(): UseMutationResult<
-  AddPlayerBulkResponse,
+export function usePostPlayerBulk(): UseMutationResult<
+  PostPlayerBulkResponse,
   unknown,
-  AddPlayerBulkBody
+  PostPlayerBulkBody
 > {
   const api = useApi();
-  return useMutation<AddPlayerBulkResponse, unknown, AddPlayerBulkBody>(
-    async (body: AddPlayerBulkBody) => {
-      const { data } = await api.post<AddPlayerBulkResponse>('/players/bulk', body);
+  return useMutation<PostPlayerBulkResponse, unknown, PostPlayerBulkBody>(
+    async (body: PostPlayerBulkBody) => {
+      const { data } = await api.post<PostPlayerBulkResponse>('/players/bulk', body);
       return data;
     },
   );

@@ -210,9 +210,9 @@ import {
   AddPlayerPictureBody,
   AddPlayerPictureVariables,
   useAddPlayerIllustration,
-  AddPlayerBulkBody,
-  AddPlayerBulkResponse,
-  useAddPlayerBulk,
+  PostPlayerBulkBody,
+  PostPlayerBulkResponse,
+  usePostPlayerBulk,
 } from './soccer/players/api';
 import Asset, { AssetType } from './trading/assets/model';
 import {
@@ -570,8 +570,8 @@ export type {
   UpdatePlayerVariables,
   AddPlayerPictureBody,
   AddPlayerPictureVariables,
-  AddPlayerBulkBody,
-  AddPlayerBulkResponse,
+  PostPlayerBulkBody,
+  PostPlayerBulkResponse,
 };
 
 export {
@@ -611,7 +611,7 @@ export {
   useCreatePlayer,
   useUpdatePlayer,
   useAddPlayerIllustration,
-  useAddPlayerBulk,
+  usePostPlayerBulk,
 };
 
 /**
