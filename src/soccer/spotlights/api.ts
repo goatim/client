@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { ListRequestParams, PaginatedList, RequestBody, useApi } from '../../api';
 import Spotlight from './model';
 
 export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
@@ -24,7 +24,7 @@ export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
 
 export type SpotlightList = PaginatedList<'spotlights', Spotlight>;
 
-export interface GetSpotlightsParams extends RequestParams {
+export interface GetSpotlightsParams extends ListRequestParams {
   tags?: string[] | string;
   club?: string;
   league?: string;
@@ -90,19 +90,19 @@ export function useUpdateSpotlight(): UseMutationResult<
   );
 }
 
-export type AddSpotlightPictureBody = { illustration: File };
+export type AddSpotlightIllustrationBody = { illustration: File };
 
-export type AddSpotlightPictureVariables = AddSpotlightPictureBody & { id: string };
+export type AddSpotlightIllustrationVariables = AddSpotlightIllustrationBody & { id: string };
 
 export function useAddSpotlightIllustration(): UseMutationResult<
   Spotlight,
   unknown,
-  AddSpotlightPictureVariables
+  AddSpotlightIllustrationVariables
 > {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Spotlight, unknown, AddSpotlightPictureVariables>(
-    async ({ id, illustration }: AddSpotlightPictureVariables) => {
+  return useMutation<Spotlight, unknown, AddSpotlightIllustrationVariables>(
+    async ({ id, illustration }: AddSpotlightIllustrationVariables) => {
       const { data } = await api.post<Spotlight>(`/spotlights/${id}/illustration`, {
         illustration,
       });

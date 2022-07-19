@@ -118,6 +118,12 @@ export interface RequestParams {
   [key: string]: unknown;
 }
 
+export interface ListRequestParams extends RequestParams {
+  order?: string;
+  limit?: string;
+  page?: string;
+}
+
 export function buildRequestConfig<RP extends RequestParams = RequestParams>(
   apiConfig?: ApiConfig,
   params?: RP,

@@ -214,6 +214,20 @@ import {
   PostPlayerBulkResponse,
   usePostPlayerBulk,
 } from './soccer/players/api';
+import Spotlight, { SpotlightType } from './soccer/spotlights/model';
+import {
+  useSpotlight,
+  SpotlightList,
+  GetSpotlightsParams,
+  useSpotlights,
+  SpotlightBody,
+  useCreateSpotlight,
+  UpdateSpotlightVariables,
+  useUpdateSpotlight,
+  AddSpotlightIllustrationBody,
+  AddSpotlightIllustrationVariables,
+  useAddSpotlightIllustration,
+} from './soccer/spotlights/api';
 import Asset, { AssetType } from './trading/assets/model';
 import {
   useAsset,
@@ -572,6 +586,14 @@ export type {
   AddPlayerPictureVariables,
   PostPlayerBulkBody,
   PostPlayerBulkResponse,
+  Spotlight,
+  SpotlightType,
+  SpotlightList,
+  GetSpotlightsParams,
+  SpotlightBody,
+  UpdateSpotlightVariables,
+  AddSpotlightIllustrationBody,
+  AddSpotlightIllustrationVariables,
 };
 
 export {
@@ -612,6 +634,11 @@ export {
   useUpdatePlayer,
   useAddPlayerIllustration,
   usePostPlayerBulk,
+  useSpotlight,
+  useSpotlights,
+  useCreateSpotlight,
+  useUpdateSpotlight,
+  useAddSpotlightIllustration,
 };
 
 /**
