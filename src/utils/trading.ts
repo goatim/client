@@ -9,40 +9,55 @@ export function formatPercentageVariation(variation = 0): string {
   return formatPercentage(variation);
 }
 
-export function resolveCurrency(amount = 0, smallestUnitFactor = 100): number {
+export function resolveCurrency(amount?: number, smallestUnitFactor = 100): number | undefined {
+  if (amount === undefined) {
+    return undefined;
+  }
   return amount / smallestUnitFactor;
 }
 
-export function adaptCurrency(amount = 0, smallestUnitFactor = 100): number {
+export function adaptCurrency(amount?: number, smallestUnitFactor = 100): number | undefined {
+  if (amount === undefined) {
+    return undefined;
+  }
   return Math.round(amount * smallestUnitFactor);
 }
 
 export function formatCurrency(
-  amount = 0,
+  amount?: number,
   smallestUnitFactor = 100,
   currency = 'EUR',
   locale = 'fr-FR',
 ): string {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(
-    resolveCurrency(amount, smallestUnitFactor),
-  );
+  const resolvedCurrency = resolveCurrency(amount, smallestUnitFactor);
+  if (resolvedCurrency === undefined) {
+    return '';
+  }
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(resolvedCurrency);
 }
 
 export const fridayCoinsSmallestUnitFactor = 1000;
 
-export function resolveFridayCoins(amount: number): number {
+export function resolveFridayCoins(amount?: number): number | undefined {
   return resolveCurrency(amount, fridayCoinsSmallestUnitFactor);
 }
 
-export function adaptFridayCoins(amount: number): number {
+export function adaptFridayCoins(amount: number): number | undefined {
   return adaptCurrency(amount, fridayCoinsSmallestUnitFactor);
 }
 
-export function formatFridayCoins(amount = 0, decimalDigits = 2): string {
-  return `${resolveFridayCoins(amount).toFixed(decimalDigits)} FDY`;
+export function formatFridayCoins(amount?: number, decimalDigits = 2): string {
+  const resolvedFridayCoins = resolveFridayCoins(amount);
+  if (resolvedFridayCoins === undefined) {
+    return '';
+  }
+  return `${resolvedFridayCoins.toFixed(decimalDigits)} FDY`;
 }
 
-export function formatFridayCoinsVariation(variation = 0, decimalDigits = 2): string {
+export function formatFridayCoinsVariation(variation?: number, decimalDigits = 2): string {
+  if (variation === undefined) {
+    return '';
+  }
   if (variation > 0) {
     return `+${formatFridayCoins(variation, decimalDigits)}`;
   }
