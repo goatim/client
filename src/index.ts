@@ -241,6 +241,8 @@ import {
   AddAssetPictureBody,
   AddAssetPictureVariables,
   useAddAssetIllustration,
+  useAssetQuotation,
+  useAssetQuotationHistory,
 } from './trading/assets/api';
 import Booster from './trading/boosters/model';
 import {
@@ -282,7 +284,7 @@ import {
   usePortfolios,
   useCurrentWalletPortfolios,
 } from './trading/portfolios/api';
-import Quotation from './trading/quotations/model';
+import Quotation, { QuotationDataPoint, QuotationHistory } from './trading/quotations/model';
 import Ranking, { RankingPeriod } from './trading/rankings/model';
 import {
   GetRankingParams,
@@ -676,6 +678,8 @@ export type {
   PortfolioList,
   GetPortfoliosParams,
   Quotation,
+  QuotationDataPoint,
+  QuotationHistory,
   Ranking,
   RankingPeriod,
   GetRankingParams,
@@ -719,6 +723,8 @@ export {
   useCreateAsset,
   useUpdateAsset,
   useAddAssetIllustration,
+  useAssetQuotation,
+  useAssetQuotationHistory,
   useBooster,
   useBoosters,
   useCurrentWalletBoosters,

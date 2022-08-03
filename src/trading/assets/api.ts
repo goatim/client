@@ -7,6 +7,7 @@ import {
 } from 'react-query';
 import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Asset, { AssetType } from './model';
+import Quotation, { QuotationHistory } from '../quotations/model';
 
 export function useAsset(id?: string): UseQueryResult<Asset> {
   const api = useApi();
@@ -98,5 +99,29 @@ export function useAddAssetIllustration(): UseMutationResult<
         queryClient.setQueryData(['assets', asset.id], asset);
       },
     },
+  );
+}
+
+export function useAssetQuotation(assetId?: string): UseQueryResult<Quotation> {
+  const api = useApi();
+  return useQuery<Quotation>(
+    ['assets', assetId, 'quotation'],
+    async () => {
+      const { data } = await api.get<Quotation>(`/assets/${assetId}/quotation`);
+      return data;
+    },
+    { enabled: !!assetId },
+  );
+}
+
+export function useAssetQuotationHistory(assetId?: string): UseQueryResult<QuotationHistory> {
+  const api = useApi();
+  return useQuery<QuotationHistory>(
+    ['assets', assetId, 'quotation_history'],
+    async () => {
+      const { data } = await api.get<QuotationHistory>(`/assets/${assetId}/quotation_history`);
+      return data;
+    },
+    { enabled: !!assetId },
   );
 }
