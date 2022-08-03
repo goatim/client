@@ -1,11 +1,11 @@
 export interface QuotationDataPoint {
-  t: string; // Time
-  o: number; // Opening
-  c: number; // Closing
-  h: number; // Highest
-  l: number; // Lowest
-  a: number; // Average
-  v: number; // Volume
+  t: number; // Time (Seconds)
+  o: number; // Opening (FDY)
+  c: number; // Closing (FDY)
+  h: number; // Highest (FDY)
+  l: number; // Lowest (FDY)
+  a: number; // Average (FDY)
+  v: number; // Volume (Shares)
 }
 
 export interface QuotationHistory {
