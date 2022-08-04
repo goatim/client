@@ -9,15 +9,19 @@ import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
 
-export function useAsset(id?: string): UseQueryResult<Asset> {
+export function useAsset(
+  assetId?: string,
+  params?: RequestParams,
+  initialData?: Asset,
+): UseQueryResult<Asset> {
   const api = useApi();
   return useQuery<Asset>(
-    ['assets', id],
+    ['assets', assetId],
     async () => {
-      const { data } = await api.get<Asset>(`/assets/${id}`);
+      const { data } = await api.get<Asset>(`/assets/${assetId}`, params);
       return data;
     },
-    { enabled: !!id },
+    { enabled: !!assetId, initialData },
   );
 }
 

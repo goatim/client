@@ -8,15 +8,19 @@ import {
 import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Club from './model';
 
-export function useClub(id?: string): UseQueryResult<Club> {
+export function useClub(
+  clubId?: string,
+  params?: RequestParams,
+  initialData?: Club,
+): UseQueryResult<Club> {
   const api = useApi();
   return useQuery<Club>(
-    ['clubs', id],
+    ['clubs', clubId],
     async () => {
-      const { data } = await api.get<Club>(`/clubs/${id}`);
+      const { data } = await api.get<Club>(`/clubs/${clubId}`, params);
       return data;
     },
-    { enabled: !!id },
+    { enabled: !!clubId, initialData },
   );
 }
 
