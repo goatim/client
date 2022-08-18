@@ -23,4 +23,5 @@ export default interface Wallet extends Model {
   boosters_gains?: number;
   dividends_gains?: number;
   total_gains?: number;
+  ethereum_address?: string;
 }

@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { ListRequestParams, PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
 import Wallet from './model';
 import { useFridayClient } from '../../client';
 
@@ -38,9 +38,8 @@ export function useCurrentWallet(params?: GetWalletParams): UseQueryResult<Walle
 
 export type WalletList = PaginatedList<'wallets', Wallet>;
 
-export interface GetWalletsParams extends RequestParams {
+export interface GetWalletsParams extends ListRequestParams {
   rank?: string;
-  order?: string;
 }
 
 export function useWallets(params?: GetWalletsParams): UseQueryResult<WalletList> | undefined {
@@ -56,6 +55,7 @@ export interface WalletBody extends RequestBody {
   name?: string | null;
   type?: string | null;
   is_default?: boolean;
+  ethereum_address?: string | null;
 }
 
 export function useCreateWallet(): UseMutationResult<Wallet, unknown, WalletBody> {
