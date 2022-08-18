@@ -104,6 +104,18 @@ import {
   AddWalletPictureVariables,
   useAddWalletPicture,
 } from './market/wallets/api';
+import Withdrawal, { WithdrawalStatus, WithdrawalCurrencyIso } from './market/withdrawals/model';
+import {
+  useWithdrawal,
+  WithdrawalList,
+  GetWithdrawalsParams,
+  useWithdrawals,
+  useCurrentWalletWithdrawals,
+  WithdrawalBody,
+  useCreateWithdrawal,
+  UpdateWithdrawalVariables,
+  useUpdateWithdrawal,
+} from './market/withdrawals/api';
 import PaymentIntent, {
   RedirectToUrl,
   AlipayHandleRedirect,
@@ -260,6 +272,17 @@ import {
 import BoosterInUse from './trading/boostersInUse/model';
 import BoosterInWallet from './trading/boostersInWallet/model';
 import Dividend from './trading/dividends/model';
+import Ipo, { IpoType } from './trading/ipos/model';
+import {
+  useIpo,
+  IpoList,
+  GetIposParams,
+  useIpos,
+  IpoBody,
+  useCreateIpo,
+  UpdateIpoVariables,
+  useUpdateIpo,
+} from './trading/ipos/api';
 import Order, { OrderType } from './trading/orders/model';
 import {
   useOrder,
@@ -486,6 +509,13 @@ export type {
   UpdateWalletVariables,
   AddWalletPictureBody,
   AddWalletPictureVariables,
+  Withdrawal,
+  WithdrawalStatus,
+  WithdrawalCurrencyIso,
+  WithdrawalList,
+  GetWithdrawalsParams,
+  WithdrawalBody,
+  UpdateWithdrawalVariables,
 };
 
 export {
@@ -509,6 +539,11 @@ export {
   useCreateWallet,
   useUpdateWallet,
   useAddWalletPicture,
+  useWithdrawal,
+  useWithdrawals,
+  useCurrentWalletWithdrawals,
+  useCreateWithdrawal,
+  useUpdateWithdrawal,
 };
 
 /**
@@ -664,6 +699,12 @@ export type {
   BoosterInUse,
   BoosterInWallet,
   Dividend,
+  Ipo,
+  IpoType,
+  IpoList,
+  GetIposParams,
+  IpoBody,
+  UpdateIpoVariables,
   Order,
   OrderType,
   OrderList,
@@ -731,6 +772,10 @@ export {
   useCreateBooster,
   useUpdateBooster,
   useDeleteBooster,
+  useIpo,
+  useIpos,
+  useCreateIpo,
+  useUpdateIpo,
   useOrder,
   useOrders,
   useCurrentWalletOrders,

@@ -9,14 +9,7 @@ import { ListRequestParams, PaginatedList, RequestBody, RequestParams, useApi } 
 import Withdrawal from './model';
 import { useCurrentWallet } from '../wallets/api';
 
-export interface GetWithdrawalParams extends RequestParams {
-  ranking?: string;
-}
-
-export function useWithdrawal(
-  id?: string,
-  params?: GetWithdrawalParams,
-): UseQueryResult<Withdrawal> {
+export function useWithdrawal(id?: string, params?: RequestParams): UseQueryResult<Withdrawal> {
   const api = useApi();
   return useQuery<Withdrawal>(
     ['withdrawals', id],
@@ -52,10 +45,9 @@ export function useCurrentWalletWithdrawals(params?: Omit<GetWithdrawalsParams, 
 }
 
 export interface WithdrawalBody extends RequestBody {
-  owner?: string | null;
-  name?: string | null;
-  type?: string | null;
-  is_default?: boolean;
+  wallet?: string | null;
+  amount_asked?: number | null;
+  currency_iso?: string | null;
 }
 
 export function useCreateWithdrawal(): UseMutationResult<Withdrawal, unknown, WithdrawalBody> {
