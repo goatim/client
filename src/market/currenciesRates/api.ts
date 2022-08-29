@@ -1,6 +1,8 @@
 import { useQuery, UseQueryResult } from 'react-query';
+import { useCallback } from 'react';
 import { ListRequestParams, PaginatedList, RequestParams, useApi } from '../../api';
 import CurrenciesRate from './model';
+import { adaptFridayCoins, resolveFridayCoins } from '../currencies/fridayCoins';
 
 export function useCurrenciesRate(
   id?: string,
@@ -31,4 +33,23 @@ export function useCurrenciesRates(
     const { data } = await api.get<CurrenciesRateList>('/currencies_rates', params);
     return data;
   });
+}
+
+export function useFridayCoinOverEtherConvertor(): (amount?: number) => number | undefined {
+  const fridayOverEther = useCurrenciesRate('FDY_ETH');
+  return useCallback(
+    (amount?: number) => {
+      const resolvedFridayCoins = resolveFridayCoins(amount);
+
+      if (resolvedFridayCoins === undefined) {
+        return undefined;
+      }
+
+      if (fridayOverEther.data?.rate !== undefined) {
+        return resolvedFridayCoins * fridayOverEther.data.rate;
+      }
+      return undefined;
+    },
+    [fridayOverEther.data?.rate],
+  );
 }

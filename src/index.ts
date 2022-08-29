@@ -97,6 +97,7 @@ import {
   CurrenciesRateList,
   GetCurrenciesRatesParams,
   useCurrenciesRates,
+  useFridayCoinOverEtherConvertor,
 } from './market/currenciesRates/api';
 import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './market/items/model';
 import Tax from './market/taxes/model';
@@ -557,6 +558,7 @@ export {
   useCurrencies,
   useCurrenciesRate,
   useCurrenciesRates,
+  useFridayCoinOverEtherConvertor,
   useCurrency,
   useCurrentCheckout,
   useCurrentWallet,
