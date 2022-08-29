@@ -48,6 +48,7 @@ export interface WithdrawalBody extends RequestBody {
   wallet?: string | null;
   amount_asked?: number | null;
   currency_iso?: string | null;
+  receiver_wallet?: string | null;
 }
 
 export function useCreateWithdrawal(): UseMutationResult<Withdrawal, unknown, WithdrawalBody> {
