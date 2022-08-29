@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useCallback } from 'react';
 import { ListRequestParams, PaginatedList, RequestParams, useApi } from '../../api';
 import CurrenciesRate from './model';
-import { adaptFridayCoins, resolveFridayCoins } from '../currencies/fridayCoins';
+import { resolveFridayCoins } from '../currencies/fridayCoins';
 
 export function useCurrenciesRate(
   id?: string,

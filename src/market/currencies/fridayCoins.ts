@@ -1,6 +1,6 @@
 import { adaptCurrency, resolveCurrency } from './adapters';
 
-export const fridayCoinsSmallestUnit = 0.0001;
+export const fridayCoinsSmallestUnit = 0.001;
 
 export function resolveFridayCoins(amount?: number): number | undefined {
   return resolveCurrency(amount, fridayCoinsSmallestUnit);
