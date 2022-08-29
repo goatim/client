@@ -57,8 +57,8 @@ import Address, {
 } from './geo/addresses/model';
 import City from './geo/cities/model';
 import Country from './geo/countries/model';
-import Currency from './geo/currencies/model';
 import Billing from './market/billings/model';
+import Capture, { CaptureStatus } from './market/captures/model';
 import Checkout from './market/checkouts/model';
 import {
   useCurrentCheckout,
@@ -76,6 +76,16 @@ import {
   CheckoutConfirmation,
   useConfirmCheckout,
 } from './market/checkouts/api';
+import Currency from './market/currencies/model';
+import { resolveCurrency, adaptCurrency, formatCurrency } from './market/currencies/adapters';
+import {
+  fridayCoinsSmallestUnit,
+  resolveFridayCoins,
+  adaptFridayCoins,
+  formatFridayCoins,
+  formatFridayCoinsVariation,
+} from './market/currencies/fridayCoins';
+import CurrenciesRate from './market/currenciesRates/model';
 import Item, { ItemType, OrderItem, BoosterItem, PackItem } from './market/items/model';
 import Tax from './market/taxes/model';
 import {
@@ -379,18 +389,7 @@ import {
   GetTransactionsParams,
   useTransactions,
 } from './trading/transactions/api';
-import {
-  formatPercentage,
-  formatPercentageVariation,
-  resolveCurrency,
-  adaptCurrency,
-  formatCurrency,
-  fridayCoinsSmallestUnitFactor,
-  resolveFridayCoins,
-  adaptFridayCoins,
-  formatFridayCoins,
-  formatFridayCoinsVariation,
-} from './utils/trading';
+import { formatPercentage, formatPercentageVariation } from './utils/adapters';
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
@@ -475,7 +474,7 @@ export type { Article, Paragraph };
  * Geo
  */
 
-export type { Address, MinifiedAddress, GeoLocation, City, Country, Currency };
+export type { Address, MinifiedAddress, GeoLocation, City, Country };
 
 export { serializeGeoLocation, parseGeoLocation, formatFullAddress };
 
@@ -485,6 +484,8 @@ export { serializeGeoLocation, parseGeoLocation, formatFullAddress };
 
 export type {
   Billing,
+  Capture,
+  CaptureStatus,
   Checkout,
   CheckoutList,
   CheckoutItemBody,
@@ -492,6 +493,8 @@ export type {
   PutCheckoutItemVariables,
   ConfirmCheckoutBody,
   CheckoutConfirmation,
+  Currency,
+  CurrenciesRate,
   Item,
   ItemType,
   OrderItem,
@@ -527,6 +530,14 @@ export {
   useAddCheckoutItem,
   useRemoveCheckoutItem,
   useConfirmCheckout,
+  resolveCurrency,
+  adaptCurrency,
+  formatCurrency,
+  fridayCoinsSmallestUnit,
+  resolveFridayCoins,
+  adaptFridayCoins,
+  formatFridayCoins,
+  formatFridayCoinsVariation,
   useTax,
   useTaxes,
   useVats,
@@ -823,20 +834,7 @@ export type { Notification };
  * Utils
  */
 
-export {
-  formatPercentage,
-  formatPercentageVariation,
-  resolveCurrency,
-  adaptCurrency,
-  formatCurrency,
-  fridayCoinsSmallestUnitFactor,
-  resolveFridayCoins,
-  adaptFridayCoins,
-  formatFridayCoins,
-  formatFridayCoinsVariation,
-  getUserPublicName,
-  unSlugify,
-};
+export { formatPercentage, formatPercentageVariation, getUserPublicName, unSlugify };
 
 /**
  * Client

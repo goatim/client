@@ -80,7 +80,7 @@ export function useUpdateUser(): UseMutationResult<User, unknown, UpdateUserVari
   const queryClient = useQueryClient();
   return useMutation<User, unknown, UpdateUserVariables>(
     async ({ id, ...body }: UpdateUserVariables) => {
-      const { data } = await api.put<User>(`/users/${body}`, body);
+      const { data } = await api.put<User>(`/users/${id}`, body);
       return data;
     },
     {
