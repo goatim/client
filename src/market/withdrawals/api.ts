@@ -46,7 +46,7 @@ export function useCurrentWalletWithdrawals(params?: Omit<GetWithdrawalsParams, 
 
 export interface WithdrawalBody extends RequestBody {
   wallet?: string | null;
-  amount_asked?: number | null;
+  amount?: number | null;
   currency_iso?: string | null;
   receiver_wallet?: string | null;
 }
