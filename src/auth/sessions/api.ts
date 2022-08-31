@@ -5,6 +5,7 @@ import {
   UseMutationResult,
   UseQueryResult,
 } from 'react-query';
+import { useCallback } from 'react';
 import Session from './model';
 import { RequestBody, useApi } from '../../api';
 
@@ -50,4 +51,13 @@ export function useSignIn(): UseMutationResult<Session, unknown, SignInBody> {
       },
     },
   );
+}
+
+export function useSignOut(): () => void {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  return useCallback(() => {
+    queryClient.setQueryData(['sessions', 'active'], null);
+    api.setBearerToken(null);
+  }, [api, queryClient]);
 }

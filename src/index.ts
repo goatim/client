@@ -31,7 +31,13 @@ import {
 } from './medias/image';
 import Permission, { PermissionLevel } from './auth/permissions/model';
 import Session from './auth/sessions/model';
-import { useSession, useActiveSession, SignInBody, useSignIn } from './auth/sessions/api';
+import {
+  useSession,
+  useActiveSession,
+  SignInBody,
+  useSignIn,
+  useSignOut,
+} from './auth/sessions/api';
 import User from './auth/users/model';
 import {
   useUser,
@@ -469,6 +475,7 @@ export {
   useSession,
   useActiveSession,
   useSignIn,
+  useSignOut,
   useUser,
   useMe,
   useUsers,
