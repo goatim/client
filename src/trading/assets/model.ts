@@ -15,7 +15,8 @@ export default interface Asset extends Model {
   total_shares?: number;
   last_dividend?: number;
   quotation?: number;
-  session_variation?: number;
+  midnight_quotation?: number;
+  day_variation?: number;
   player?: Player | string;
   club?: Club | string;
   league?: League | string;
