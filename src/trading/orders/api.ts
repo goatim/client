@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { ListRequestParams, PaginatedList, RequestBody, useApi } from '../../api';
 import Order, { OrderType } from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -23,9 +23,8 @@ export function useOrder(id?: string): UseQueryResult<Order> {
 
 export type OrderList = PaginatedList<'orders', Order>;
 
-export interface GetOrdersParams extends RequestParams {
+export interface GetOrdersParams extends ListRequestParams {
   wallet?: string;
-  order?: string;
 }
 
 export function useOrders(params?: GetOrdersParams): UseQueryResult<OrderList> {
@@ -98,9 +97,10 @@ export function useDeleteOrder(): UseMutationResult<string, unknown, string> {
       return id;
     },
     {
-      onSuccess(id: string) {
+      async onSuccess(id: string) {
         queryClient.removeQueries(['orders', id], { exact: true });
         // TODO : Remove in list
+        await queryClient.refetchQueries('orders');
       },
     },
   );
