@@ -130,7 +130,9 @@ export function useAddPlayerIllustration(): UseMutationResult<
   );
 }
 
-export type PostPlayerBulkBody = { bulk: File };
+export interface PostPlayerBulkBody extends RequestBody {
+  bulk: File;
+}
 
 export type PostPlayerBulkResponse = { created: number };
 

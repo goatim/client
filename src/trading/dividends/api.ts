@@ -85,9 +85,14 @@ export function useUpdateDividend(): UseMutationResult<Dividend, unknown, Update
   );
 }
 
-export type PostDividendBulkBody = { bulk: File };
+export interface PostDividendBulkBody extends RequestBody {
+  bulk: File;
+  physical_event?: string;
+}
 
-export type PostDividendBulkResponse = { created: number };
+export interface PostDividendBulkResponse {
+  created: number;
+}
 
 export function usePostDividendBulk(): UseMutationResult<
   PostDividendBulkResponse,
