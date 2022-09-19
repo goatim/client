@@ -65,7 +65,7 @@ export function useUpdateTax(): UseMutationResult<Tax, unknown, UpdateTaxVariabl
   const queryClient = useQueryClient();
   return useMutation<Tax, unknown, UpdateTaxVariables>(
     async ({ id, ...body }: UpdateTaxVariables) => {
-      const { data } = await api.put<Tax>(`/taxes/${body}`, body);
+      const { data } = await api.put<Tax>(`/taxes/${id}`, body);
       return data;
     },
     {

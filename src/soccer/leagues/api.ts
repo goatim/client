@@ -60,7 +60,7 @@ export function useUpdateLeague(): UseMutationResult<League, unknown, UpdateLeag
   const queryClient = useQueryClient();
   return useMutation<League, unknown, UpdateLeagueVariables>(
     async ({ id, ...body }: UpdateLeagueVariables) => {
-      const { data } = await api.put<League>(`/leagues/${body}`, body);
+      const { data } = await api.put<League>(`/leagues/${id}`, body);
       return data;
     },
     {

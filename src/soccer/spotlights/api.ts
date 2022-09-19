@@ -79,7 +79,7 @@ export function useUpdateSpotlight(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<Spotlight, unknown, UpdateSpotlightVariables>(
     async ({ id, ...body }: UpdateSpotlightVariables) => {
-      const { data } = await api.put<Spotlight>(`/spotlights/${body}`, body);
+      const { data } = await api.put<Spotlight>(`/spotlights/${id}`, body);
       return data;
     },
     {

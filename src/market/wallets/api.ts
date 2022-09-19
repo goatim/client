@@ -81,7 +81,7 @@ export function useUpdateWallet(): UseMutationResult<Wallet, unknown, UpdateWall
   const queryClient = useQueryClient();
   return useMutation<Wallet, unknown, UpdateWalletVariables>(
     async ({ id, ...body }: UpdateWalletVariables) => {
-      const { data } = await api.put<Wallet>(`/wallets/${body}`, body);
+      const { data } = await api.put<Wallet>(`/wallets/${id}`, body);
       return data;
     },
     {

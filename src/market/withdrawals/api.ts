@@ -78,7 +78,7 @@ export function useUpdateWithdrawal(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<Withdrawal, unknown, UpdateWithdrawalVariables>(
     async ({ id, ...body }: UpdateWithdrawalVariables) => {
-      const { data } = await api.put<Withdrawal>(`/withdrawals/${body}`, body);
+      const { data } = await api.put<Withdrawal>(`/withdrawals/${id}`, body);
       return data;
     },
     {

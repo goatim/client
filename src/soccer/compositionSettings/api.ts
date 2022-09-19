@@ -66,7 +66,7 @@ export function useUpdateCompositionSetting(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<CompositionSetting, unknown, UpdateCompositionSettingVariables>(
     async ({ id, ...body }: UpdateCompositionSettingVariables) => {
-      const { data } = await api.put<CompositionSetting>(`/composition_settings/${body}`, body);
+      const { data } = await api.put<CompositionSetting>(`/composition_settings/${id}`, body);
       return data;
     },
     {

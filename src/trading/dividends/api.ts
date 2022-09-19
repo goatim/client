@@ -17,7 +17,7 @@ export function useDividend(id?: string): UseQueryResult<Dividend> {
 }
 
 export interface GetDividendsQuery extends RequestQuery {
-  physical_event: string;
+  physical_event?: string;
 }
 
 export type DividendList = PaginatedList<'dividends', Dividend>;
@@ -78,7 +78,7 @@ export function useUpdateDividend(): UseMutationResult<Dividend, unknown, Update
   const queryClient = useQueryClient();
   return useMutation<Dividend, unknown, UpdateDividendVariables>(
     async ({ id, ...body }: UpdateDividendVariables) => {
-      const { data } = await api.put<Dividend>(`/dividends/${body}`, body);
+      const { data } = await api.put<Dividend>(`/dividends/${id}`, body);
       return data;
     },
     {

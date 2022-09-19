@@ -68,7 +68,7 @@ export function useUpdateClub(): UseMutationResult<Club, unknown, UpdateClubVari
   const queryClient = useQueryClient();
   return useMutation<Club, unknown, UpdateClubVariables>(
     async ({ id, ...body }: UpdateClubVariables) => {
-      const { data } = await api.put<Club>(`/clubs/${body}`, body);
+      const { data } = await api.put<Club>(`/clubs/${id}`, body);
       return data;
     },
     {

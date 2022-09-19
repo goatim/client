@@ -71,7 +71,7 @@ export function useUpdateAsset(): UseMutationResult<Asset, unknown, UpdateAssetV
   const queryClient = useQueryClient();
   return useMutation<Asset, unknown, UpdateAssetVariables>(
     async ({ id, ...body }: UpdateAssetVariables) => {
-      const { data } = await api.put<Asset>(`/assets/${body}`, body);
+      const { data } = await api.put<Asset>(`/assets/${id}`, body);
       return data;
     },
     {

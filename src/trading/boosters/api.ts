@@ -74,7 +74,7 @@ export function useUpdateBooster(): UseMutationResult<Booster, unknown, UpdateBo
   const queryClient = useQueryClient();
   return useMutation<Booster, unknown, UpdateBoosterVariables>(
     async ({ id, ...body }: UpdateBoosterVariables) => {
-      const { data } = await api.put<Booster>(`/boosters/${body}`, body);
+      const { data } = await api.put<Booster>(`/boosters/${id}`, body);
       return data;
     },
     {

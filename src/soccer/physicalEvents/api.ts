@@ -72,7 +72,7 @@ export function useUpdatePhysicalEvent(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<PhysicalEvent, unknown, UpdatePhysicalEventVariables>(
     async ({ id, ...body }: UpdatePhysicalEventVariables) => {
-      const { data } = await api.put<PhysicalEvent>(`/physical_events/${body}`, body);
+      const { data } = await api.put<PhysicalEvent>(`/physical_events/${id}`, body);
       return data;
     },
     {

@@ -77,7 +77,7 @@ export function useUpdateOrder(): UseMutationResult<Order, unknown, UpdateOrderV
   const queryClient = useQueryClient();
   return useMutation<Order, unknown, UpdateOrderVariables>(
     async ({ id, ...body }: UpdateOrderVariables) => {
-      const { data } = await api.put<Order>(`/orders/${body}`, body);
+      const { data } = await api.put<Order>(`/orders/${id}`, body);
       return data;
     },
     {

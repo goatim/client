@@ -61,7 +61,7 @@ export function useUpdateRank(): UseMutationResult<Rank, unknown, UpdateRankVari
   const queryClient = useQueryClient();
   return useMutation<Rank, unknown, UpdateRankVariables>(
     async ({ id, ...body }: UpdateRankVariables) => {
-      const { data } = await api.put<Rank>(`/ranks/${body}`, body);
+      const { data } = await api.put<Rank>(`/ranks/${id}`, body);
       return data;
     },
     {

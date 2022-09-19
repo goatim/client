@@ -80,7 +80,7 @@ export function useUpdateIpo(): UseMutationResult<Ipo, unknown, UpdateIpoVariabl
   const queryClient = useQueryClient();
   return useMutation<Ipo, unknown, UpdateIpoVariables>(
     async ({ id, ...body }: UpdateIpoVariables) => {
-      const { data } = await api.put<Ipo>(`/ipos/${body}`, body);
+      const { data } = await api.put<Ipo>(`/ipos/${id}`, body);
       return data;
     },
     {

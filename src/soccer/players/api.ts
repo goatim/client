@@ -95,7 +95,7 @@ export function useUpdatePlayer(): UseMutationResult<Player, unknown, UpdatePlay
   const queryClient = useQueryClient();
   return useMutation<Player, unknown, UpdatePlayerVariables>(
     async ({ id, ...body }: UpdatePlayerVariables) => {
-      const { data } = await api.put<Player>(`/players/${body}`, body);
+      const { data } = await api.put<Player>(`/players/${id}`, body);
       return data;
     },
     {

@@ -66,7 +66,7 @@ export function useUpdateMatch(): UseMutationResult<Match, unknown, UpdateMatchV
   const queryClient = useQueryClient();
   return useMutation<Match, unknown, UpdateMatchVariables>(
     async ({ id, ...body }: UpdateMatchVariables) => {
-      const { data } = await api.put<Match>(`/matches/${body}`, body);
+      const { data } = await api.put<Match>(`/matches/${id}`, body);
       return data;
     },
     {
