@@ -110,7 +110,7 @@ export interface ApiConfig {
   bearerToken?: string | null;
 }
 
-export interface RequestParams {
+export interface RequestQuery {
   expand?: string;
   'expand[]'?: string;
   required_permissions?: string;
@@ -118,15 +118,15 @@ export interface RequestParams {
   [key: string]: unknown;
 }
 
-export interface ListRequestParams extends RequestParams {
+export interface ListRequestQuery extends RequestQuery {
   order?: string;
   limit?: string;
   page?: string;
 }
 
-export function buildRequestConfig<RP extends RequestParams = RequestParams>(
+export function buildRequestConfig<RQ extends RequestQuery = RequestQuery>(
   apiConfig?: ApiConfig,
-  params?: RP,
+  query?: RQ,
 ): AxiosRequestConfig {
   const headers: AxiosRequestHeaders = {};
 
@@ -144,7 +144,7 @@ export function buildRequestConfig<RP extends RequestParams = RequestParams>(
 
   return {
     headers,
-    params,
+    params: query,
   };
 }
 
@@ -167,12 +167,12 @@ function parseError(error: unknown): ApiError {
   return new ApiError('Unknown error');
 }
 
-export async function apiGet<D = unknown, RP extends RequestParams = RequestParams>(
+export async function apiGet<D = unknown, RQ extends RequestQuery = RequestQuery>(
   url: string,
   apiConfig?: ApiConfig,
-  params?: RP,
+  query?: RQ,
 ): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RP>(apiConfig, params);
+  const config = buildRequestConfig<RQ>(apiConfig, query);
 
   try {
     return await axios.get<D>((apiConfig?.host || '') + url, config);
@@ -184,9 +184,9 @@ export async function apiGet<D = unknown, RP extends RequestParams = RequestPara
 export async function apiPost<
   D = unknown,
   RB extends RequestBody = RequestBody,
-  RP extends RequestParams = RequestParams,
->(url: string, body?: RB, apiConfig?: ApiConfig, params?: RP): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RP>(apiConfig, params);
+  RQ extends RequestQuery = RequestQuery,
+>(url: string, body?: RB, apiConfig?: ApiConfig, query?: RQ): Promise<AxiosResponse<D>> {
+  const config = buildRequestConfig<RQ>(apiConfig, query);
 
   try {
     return await axios.post<D>(
@@ -202,9 +202,9 @@ export async function apiPost<
 export async function apiPut<
   D = unknown,
   RB extends RequestBody = RequestBody,
-  RP extends RequestParams = RequestParams,
->(url: string, body?: RB, apiConfig?: ApiConfig, params?: RP): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RP>(apiConfig, params);
+  RQ extends RequestQuery = RequestQuery,
+>(url: string, body?: RB, apiConfig?: ApiConfig, query?: RQ): Promise<AxiosResponse<D>> {
+  const config = buildRequestConfig<RQ>(apiConfig, query);
 
   try {
     return await axios.put<D>(
@@ -217,12 +217,12 @@ export async function apiPut<
   }
 }
 
-export async function apiDelete<D = unknown, RP extends RequestParams = RequestParams>(
+export async function apiDelete<D = unknown, RQ extends RequestQuery = RequestQuery>(
   url: string,
   apiConfig?: ApiConfig,
-  params?: RP,
+  query?: RQ,
 ): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RP>(apiConfig, params);
+  const config = buildRequestConfig<RQ>(apiConfig, query);
 
   try {
     return await axios.delete<D>((apiConfig?.host || '') + url, config);
@@ -241,23 +241,23 @@ export interface ApiContext {
   setLocale(locale?: string | null): void;
   setBearerToken(bearerToken?: string | null): void;
 
-  get<D = unknown, RP extends RequestParams = RequestParams>(
+  get<D = unknown, RQ extends RequestQuery = RequestQuery>(
     route: string,
-    params?: RP,
+    query?: RQ,
   ): Promise<AxiosResponse<D>>;
-  post<D = unknown, RB extends RequestBody = RequestBody, RP extends RequestParams = RequestParams>(
+  post<D = unknown, RB extends RequestBody = RequestBody, RQ extends RequestQuery = RequestQuery>(
     route: string,
     body?: RB,
-    params?: RP,
+    query?: RQ,
   ): Promise<AxiosResponse<D>>;
-  put<D = unknown, RB extends RequestBody = RequestBody, RP extends RequestParams = RequestParams>(
+  put<D = unknown, RB extends RequestBody = RequestBody, RQ extends RequestQuery = RequestQuery>(
     route: string,
     body?: RB,
-    params?: RP,
+    query?: RQ,
   ): Promise<AxiosResponse<D>>;
-  delete<D = unknown, RP extends RequestParams = RequestParams>(
+  delete<D = unknown, RQ extends RequestQuery = RequestQuery>(
     route: string,
-    params?: RP,
+    query?: RQ,
   ): Promise<AxiosResponse<D>>;
 }
 
@@ -378,12 +378,12 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
       setApiKey,
       setLocale,
       setBearerToken,
-      get: (route: string, params?: RequestParams) => apiGet(route, apiConfig, params),
-      post: (route: string, body?: RequestBody, params?: RequestParams) =>
-        apiPost(route, body, apiConfig, params),
-      put: (route: string, body?: RequestBody, params?: RequestParams) =>
-        apiPut(route, body, apiConfig, params),
-      delete: (route: string, params?: RequestParams) => apiDelete(route, apiConfig, params),
+      get: (route: string, query?: RequestQuery) => apiGet(route, apiConfig, query),
+      post: (route: string, body?: RequestBody, query?: RequestQuery) =>
+        apiPost(route, body, apiConfig, query),
+      put: (route: string, body?: RequestBody, query?: RequestQuery) =>
+        apiPut(route, body, apiConfig, query),
+      delete: (route: string, query?: RequestQuery) => apiDelete(route, apiConfig, query),
     }),
     [apiConfig, setApiKey, setBearerToken, setConfig, setHost, setLocale],
   );

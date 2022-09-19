@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Tax from './model';
 
 export function useTax(id?: string): UseQueryResult<Tax> {
@@ -18,14 +18,14 @@ export function useTax(id?: string): UseQueryResult<Tax> {
 
 export type TaxList = PaginatedList<'taxes', Tax>;
 
-export interface GetTaxesParams extends RequestParams {
+export interface GetTaxesQuery extends RequestQuery {
   tags?: string;
 }
 
-export function useTaxes(params?: GetTaxesParams): UseQueryResult<TaxList> {
+export function useTaxes(query?: GetTaxesQuery): UseQueryResult<TaxList> {
   const api = useApi();
-  return useQuery<TaxList>(['taxes', params], async () => {
-    const { data } = await api.get<TaxList>('/taxes', params);
+  return useQuery<TaxList>(['taxes', query], async () => {
+    const { data } = await api.get<TaxList>('/taxes', query);
     return data;
   });
 }

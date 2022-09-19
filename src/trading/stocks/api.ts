@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, RequestParams, RequestBody } from '../../api';
+import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
 import Stock from './model';
 
 export function useStock(id?: string): UseQueryResult<Stock> {
@@ -24,15 +24,15 @@ export function useStock(id?: string): UseQueryResult<Stock> {
 
 export type StockList = PaginatedList<'stocks', Stock>;
 
-export interface GetStocksParams extends RequestParams {
+export interface GetStocksQuery extends RequestQuery {
   asset?: string;
   tags?: string;
 }
 
-export function useStocks(params?: GetStocksParams): UseQueryResult<StockList> {
+export function useStocks(query?: GetStocksQuery): UseQueryResult<StockList> {
   const api = useApi();
-  return useQuery<StockList>(['stocks', params], async () => {
-    const { data } = await api.get<StockList>('/stocks', params);
+  return useQuery<StockList>(['stocks', query], async () => {
+    const { data } = await api.get<StockList>('/stocks', query);
     return data;
   });
 }

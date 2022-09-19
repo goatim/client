@@ -5,16 +5,16 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestParams, PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Withdrawal from './model';
 import { useCurrentWallet } from '../wallets/api';
 
-export function useWithdrawal(id?: string, params?: RequestParams): UseQueryResult<Withdrawal> {
+export function useWithdrawal(id?: string, query?: RequestQuery): UseQueryResult<Withdrawal> {
   const api = useApi();
   return useQuery<Withdrawal>(
     ['withdrawals', id],
     async () => {
-      const { data } = await api.get<Withdrawal>(`/withdrawals/${id}`, params);
+      const { data } = await api.get<Withdrawal>(`/withdrawals/${id}`, query);
       return data;
     },
     {
@@ -25,23 +25,23 @@ export function useWithdrawal(id?: string, params?: RequestParams): UseQueryResu
 
 export type WithdrawalList = PaginatedList<'withdrawals', Withdrawal>;
 
-export interface GetWithdrawalsParams extends ListRequestParams {
+export interface GetWithdrawalsQuery extends ListRequestQuery {
   wallet?: string;
 }
 
 export function useWithdrawals(
-  params?: GetWithdrawalsParams,
+  query?: GetWithdrawalsQuery,
 ): UseQueryResult<WithdrawalList> | undefined {
   const api = useApi();
-  return useQuery<WithdrawalList>(['withdrawals', params], async () => {
-    const { data } = await api.get<WithdrawalList>('/withdrawals', params);
+  return useQuery<WithdrawalList>(['withdrawals', query], async () => {
+    const { data } = await api.get<WithdrawalList>('/withdrawals', query);
     return data;
   });
 }
 
-export function useCurrentWalletWithdrawals(params?: Omit<GetWithdrawalsParams, 'wallet'>) {
+export function useCurrentWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'wallet'>) {
   const wallet = useCurrentWallet();
-  return useWithdrawals({ ...params, wallet: wallet.data?.id });
+  return useWithdrawals({ ...query, wallet: wallet.data?.id });
 }
 
 export interface WithdrawalBody extends RequestBody {

@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, RequestParams, RequestBody } from '../../api';
+import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
 import PackFactory from './model';
 
 export function usePackFactory(id?: string): UseQueryResult<PackFactory> {
@@ -24,16 +24,16 @@ export function usePackFactory(id?: string): UseQueryResult<PackFactory> {
 
 export type PackFactoryList = PaginatedList<'pack_factories', PackFactory>;
 
-export interface GetPackFactoriesParams extends RequestParams {
+export interface GetPackFactoriesQuery extends RequestQuery {
   tags?: string[] | string;
   stock_tags?: string[] | string;
   margin?: string[] | string;
 }
 
-export function usePackFactories(params?: GetPackFactoriesParams): UseQueryResult<PackFactoryList> {
+export function usePackFactories(query?: GetPackFactoriesQuery): UseQueryResult<PackFactoryList> {
   const api = useApi();
-  return useQuery<PackFactoryList>(['pack_factories', params], async () => {
-    const { data } = await api.get<PackFactoryList>('/pack_factories', params);
+  return useQuery<PackFactoryList>(['pack_factories', query], async () => {
+    const { data } = await api.get<PackFactoryList>('/pack_factories', query);
     return data;
   });
 }

@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestParams, PaginatedList, RequestBody, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Spotlight from './model';
 
 export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
@@ -24,16 +24,16 @@ export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
 
 export type SpotlightList = PaginatedList<'spotlights', Spotlight>;
 
-export interface GetSpotlightsParams extends ListRequestParams {
+export interface GetSpotlightsQuery extends ListRequestQuery {
   tags?: string[] | string;
   club?: string;
   league?: string;
 }
 
-export function useSpotlights(params?: GetSpotlightsParams): UseQueryResult<SpotlightList> {
+export function useSpotlights(query?: GetSpotlightsQuery): UseQueryResult<SpotlightList> {
   const api = useApi();
-  return useQuery<SpotlightList>(['spotlights', params], async () => {
-    const { data } = await api.get<SpotlightList>('/spotlights', params);
+  return useQuery<SpotlightList>(['spotlights', query], async () => {
+    const { data } = await api.get<SpotlightList>('/spotlights', query);
     return data;
   });
 }

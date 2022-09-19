@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Match from './model';
 
 export function useMatch(id?: string): UseQueryResult<Match> {
@@ -18,14 +18,14 @@ export function useMatch(id?: string): UseQueryResult<Match> {
 
 export type MatchList = PaginatedList<'matches', Match>;
 
-export interface GetMatchesParams extends RequestParams {
+export interface GetMatchesQuery extends RequestQuery {
   spotlight?: boolean;
 }
 
-export function useMatches(params?: GetMatchesParams): UseQueryResult<MatchList> {
+export function useMatches(query?: GetMatchesQuery): UseQueryResult<MatchList> {
   const api = useApi();
-  return useQuery(['matches', params], async () => {
-    const { data } = await api.get('/matches', params);
+  return useQuery(['matches', query], async () => {
+    const { data } = await api.get('/matches', query);
     return data;
   });
 }

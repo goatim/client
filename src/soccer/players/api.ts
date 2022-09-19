@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { AxiosResponse } from 'axios';
-import { ApiContext, PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { ApiContext, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Player from './model';
 
 export function usePlayer(id?: string): UseQueryResult<Player> {
@@ -25,7 +25,7 @@ export function usePlayer(id?: string): UseQueryResult<Player> {
 
 export type PlayerList = PaginatedList<'players', Player>;
 
-export interface GetPlayersParams extends RequestParams {
+export interface GetPlayersQuery extends RequestQuery {
   wallet?: string;
   composition_setting?: string;
   match?: string;
@@ -34,10 +34,10 @@ export interface GetPlayersParams extends RequestParams {
   search?: string;
 }
 
-export function usePlayers(params?: GetPlayersParams): UseQueryResult<PlayerList> {
+export function usePlayers(query?: GetPlayersQuery): UseQueryResult<PlayerList> {
   const api = useApi();
-  return useQuery<PlayerList>(['players', params], async () => {
-    const { data } = await api.get<PlayerList>('/players', params);
+  return useQuery<PlayerList>(['players', query], async () => {
+    const { data } = await api.get<PlayerList>('/players', query);
     return data;
   });
 }
@@ -51,7 +51,7 @@ export async function getPlayers(
     match,
     composition,
     position,
-  }: GetPlayersParams,
+  }: GetPlayersQuery,
 ): Promise<AxiosResponse<PlayerList>> {
   return api.get<PlayerList>('/players', {
     wallet,

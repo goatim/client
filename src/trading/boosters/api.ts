@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Booster from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -23,24 +23,24 @@ export function useBooster(id?: string): UseQueryResult<Booster> {
 
 export type BoosterList = PaginatedList<'boosters', Booster>;
 
-export interface GetBoostersParams extends RequestParams {
+export interface GetBoostersQuery extends RequestQuery {
   booster?: string;
   wallet?: string;
 }
 
-export function useBoosters(params?: GetBoostersParams): UseQueryResult<BoosterList> {
+export function useBoosters(query?: GetBoostersQuery): UseQueryResult<BoosterList> {
   const api = useApi();
-  return useQuery<BoosterList>(['boosters', params], async () => {
-    const { data } = await api.get<BoosterList>('/boosters', params);
+  return useQuery<BoosterList>(['boosters', query], async () => {
+    const { data } = await api.get<BoosterList>('/boosters', query);
     return data;
   });
 }
 
 export function useCurrentWalletBoosters(
-  params: Omit<GetBoostersParams, 'wallet'>,
+  query: Omit<GetBoostersQuery, 'wallet'>,
 ): UseQueryResult<BoosterList> {
   const wallet = useCurrentWallet();
-  return useBoosters({ ...params, wallet: wallet.data?.id });
+  return useBoosters({ ...query, wallet: wallet.data?.id });
 }
 
 export interface BoosterBody extends RequestBody {

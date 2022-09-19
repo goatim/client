@@ -8,7 +8,7 @@ import {
   isApiError,
   RequestBody,
   buildRequestBody,
-  RequestParams,
+  RequestQuery,
   buildRequestConfig,
   apiGet,
   apiPost,
@@ -86,7 +86,7 @@ import Currency from './market/currencies/model';
 import {
   useCurrency,
   CurrencyList,
-  GetCurrenciesParams,
+  GetCurrenciesQuery,
   useCurrencies,
 } from './market/currencies/api';
 import { resolveCurrency, adaptCurrency, formatCurrency } from './market/currencies/adapters';
@@ -101,7 +101,7 @@ import CurrenciesRate from './market/currenciesRates/model';
 import {
   useCurrenciesRate,
   CurrenciesRateList,
-  GetCurrenciesRatesParams,
+  GetCurrenciesRatesQuery,
   useCurrenciesRates,
   useFridayCoinOverEtherConvertor,
 } from './market/currenciesRates/api';
@@ -110,7 +110,7 @@ import Tax from './market/taxes/model';
 import {
   useTax,
   TaxList,
-  GetTaxesParams,
+  GetTaxesQuery,
   useTaxes,
   useVats,
   TaxBody,
@@ -120,7 +120,7 @@ import {
 } from './market/taxes/api';
 import Wallet, { WalletType } from './market/wallets/model';
 import {
-  GetWalletParams,
+  GetWalletQuery,
   useWallet,
   useDefaultWallet,
   useCurrentWallet,
@@ -137,7 +137,7 @@ import Withdrawal, { WithdrawalStatus, WithdrawalCurrencyIso } from './market/wi
 import {
   useWithdrawal,
   WithdrawalList,
-  GetWithdrawalsParams,
+  GetWithdrawalsQuery,
   useWithdrawals,
   useCurrentWalletWithdrawals,
   WithdrawalBody,
@@ -164,7 +164,7 @@ import Club from './soccer/clubs/model';
 import {
   useClub,
   ClubList,
-  GetClubsParams,
+  GetClubsQuery,
   useClubs,
   ClubBody,
   useCreateClub,
@@ -176,7 +176,7 @@ import {
 } from './soccer/clubs/api';
 import Composition, { CompositionPosition } from './soccer/compositions/model';
 import {
-  GetCompositionParams,
+  GetCompositionQuery,
   useComposition,
   CompositionList,
   useCompositions,
@@ -200,7 +200,7 @@ import League from './soccer/leagues/model';
 import {
   useLeague,
   LeagueList,
-  GetLeaguesParams,
+  GetLeaguesQuery,
   useLeagues,
   LeagueBody,
   useCreateLeague,
@@ -213,7 +213,7 @@ import Match, { MatchStatus } from './soccer/matches/model';
 import {
   useMatch,
   MatchList,
-  GetMatchesParams,
+  GetMatchesQuery,
   useMatches,
   useSpotlightMatches,
   MatchBody,
@@ -241,7 +241,7 @@ import Player, { PlayerPosition, PlayerSide } from './soccer/players/model';
 import {
   usePlayer,
   PlayerList,
-  GetPlayersParams,
+  GetPlayersQuery,
   usePlayers,
   getPlayers,
   PlayerBody,
@@ -259,7 +259,7 @@ import Spotlight, { SpotlightType } from './soccer/spotlights/model';
 import {
   useSpotlight,
   SpotlightList,
-  GetSpotlightsParams,
+  GetSpotlightsQuery,
   useSpotlights,
   SpotlightBody,
   useCreateSpotlight,
@@ -273,7 +273,7 @@ import Asset, { AssetType } from './trading/assets/model';
 import {
   useAsset,
   AssetList,
-  GetAssetsParams,
+  GetAssetsQuery,
   useAssets,
   AssetBody,
   useCreateAsset,
@@ -289,7 +289,7 @@ import Booster from './trading/boosters/model';
 import {
   useBooster,
   BoosterList,
-  GetBoostersParams,
+  GetBoostersQuery,
   useBoosters,
   useCurrentWalletBoosters,
   BoosterBody,
@@ -317,7 +317,7 @@ import Ipo, { IpoType } from './trading/ipos/model';
 import {
   useIpo,
   IpoList,
-  GetIposParams,
+  GetIposQuery,
   useIpos,
   IpoBody,
   useCreateIpo,
@@ -328,7 +328,7 @@ import Order, { OrderType } from './trading/orders/model';
 import {
   useOrder,
   OrderList,
-  GetOrdersParams,
+  GetOrdersQuery,
   useOrders,
   useCurrentWalletOrders,
   OrderBody,
@@ -339,19 +339,19 @@ import {
 } from './trading/orders/api';
 import { OrderEvent, OrderMatchEventPayload } from './trading/orders/events';
 import OrderBook from './trading/orders/book/model';
-import { useOrderBook, GetOrderBookParams } from './trading/orders/book/api';
+import { useOrderBook, GetOrderBookQuery } from './trading/orders/book/api';
 import Portfolio from './trading/portfolios/model';
 import {
   usePortfolio,
   PortfolioList,
-  GetPortfoliosParams,
+  GetPortfoliosQuery,
   usePortfolios,
   useCurrentWalletPortfolios,
 } from './trading/portfolios/api';
 import Quotation, { QuotationDataPoint, QuotationHistory } from './trading/quotations/model';
 import Ranking, { RankingPeriod } from './trading/rankings/model';
 import {
-  GetRankingParams,
+  GetRankingQuery,
   useRanking,
   RankingList,
   useRankings,
@@ -377,7 +377,7 @@ import Stock from './trading/stocks/model';
 import {
   useStock,
   StockList,
-  GetStocksParams,
+  GetStocksQuery,
   useStocks,
   CreateStockBody,
   useCreateStock,
@@ -391,7 +391,7 @@ import PackFactory from './trading/packFactories/model';
 import {
   usePackFactory,
   PackFactoryList,
-  GetPackFactoriesParams,
+  GetPackFactoriesQuery,
   usePackFactories,
   PackFactoryBody,
   useCreatePackFactory,
@@ -405,7 +405,7 @@ import Pack from './trading/packs/model';
 import {
   usePack,
   PackList,
-  GetPacksParams,
+  GetPacksQuery,
   usePacks,
   CreatePackBody,
   useCreatePack,
@@ -417,7 +417,7 @@ import Transaction from './trading/transactions/model';
 import {
   useTransaction,
   TransactionList,
-  GetTransactionsParams,
+  GetTransactionsQuery,
   useTransactions,
 } from './trading/transactions/api';
 import { formatPercentage, formatPercentageVariation } from './utils/adapters';
@@ -453,7 +453,7 @@ export type {
   FormErrors,
   ApiErrorData,
   RequestBody,
-  RequestParams,
+  RequestQuery,
   ApiConfig,
   ApiContext,
 };
@@ -531,11 +531,11 @@ export type {
   CurrenciesRateList,
   Currency,
   CurrencyList,
-  GetCurrenciesParams,
-  GetCurrenciesRatesParams,
-  GetTaxesParams,
-  GetWalletParams,
-  GetWithdrawalsParams,
+  GetCurrenciesQuery,
+  GetCurrenciesRatesQuery,
+  GetTaxesQuery,
+  GetWalletQuery,
+  GetWithdrawalsQuery,
   Item,
   ItemType,
   OrderItem,
@@ -627,14 +627,14 @@ export { usePaymentMethods, useAddCreditCard };
 export type {
   Club,
   ClubList,
-  GetClubsParams,
+  GetClubsQuery,
   ClubBody,
   UpdateClubVariables,
   AddClubPictureBody,
   AddClubPictureVariables,
   Composition,
   CompositionPosition,
-  GetCompositionParams,
+  GetCompositionQuery,
   CompositionList,
   CompositionPositionBody,
   CompositionBody,
@@ -645,14 +645,14 @@ export type {
   UpdateCompositionSettingVariables,
   League,
   LeagueList,
-  GetLeaguesParams,
+  GetLeaguesQuery,
   LeagueBody,
   AddLeaguePictureBody,
   AddLeaguePictureVariables,
   Match,
   MatchStatus,
   MatchList,
-  GetMatchesParams,
+  GetMatchesQuery,
   MatchBody,
   UpdateMatchVariables,
   AddMatchPictureBody,
@@ -668,7 +668,7 @@ export type {
   PlayerPosition,
   PlayerSide,
   PlayerList,
-  GetPlayersParams,
+  GetPlayersQuery,
   PlayerBody,
   UpdatePlayerVariables,
   AddPlayerPictureBody,
@@ -678,7 +678,7 @@ export type {
   Spotlight,
   SpotlightType,
   SpotlightList,
-  GetSpotlightsParams,
+  GetSpotlightsQuery,
   SpotlightBody,
   UpdateSpotlightVariables,
   AddSpotlightIllustrationBody,
@@ -738,14 +738,14 @@ export type {
   Asset,
   AssetType,
   AssetList,
-  GetAssetsParams,
+  GetAssetsQuery,
   AssetBody,
   UpdateAssetVariables,
   AddAssetPictureBody,
   AddAssetPictureVariables,
   Booster,
   BoosterList,
-  GetBoostersParams,
+  GetBoostersQuery,
   BoosterBody,
   UpdateBoosterVariables,
   BoosterInUse,
@@ -758,28 +758,28 @@ export type {
   Ipo,
   IpoType,
   IpoList,
-  GetIposParams,
+  GetIposQuery,
   IpoBody,
   UpdateIpoVariables,
   Order,
   OrderType,
   OrderList,
-  GetOrdersParams,
+  GetOrdersQuery,
   OrderBody,
   UpdateOrderVariables,
   OrderBook,
-  GetOrderBookParams,
+  GetOrderBookQuery,
   OrderEvent,
   OrderMatchEventPayload,
   Portfolio,
   PortfolioList,
-  GetPortfoliosParams,
+  GetPortfoliosQuery,
   Quotation,
   QuotationDataPoint,
   QuotationHistory,
   Ranking,
   RankingPeriod,
-  GetRankingParams,
+  GetRankingQuery,
   RankingList,
   RankingBody,
   UpdateRankingVariables,
@@ -793,25 +793,25 @@ export type {
   MinifiedShareBulk,
   PackFactory,
   PackFactoryList,
-  GetPackFactoriesParams,
+  GetPackFactoriesQuery,
   PackFactoryBody,
   UpdatePackFactoryVariables,
   AddPackFactoryPictureBody,
   AddPackFactoryPictureVariables,
   Pack,
   PackList,
-  GetPacksParams,
+  GetPacksQuery,
   CreatePackBody,
   UpdatePackBody,
   UpdatePackVariables,
   StockList,
-  GetStocksParams,
+  GetStocksQuery,
   CreateStockBody,
   UpdateStockBody,
   UpdateStockVariables,
   Transaction,
   TransactionList,
-  GetTransactionsParams,
+  GetTransactionsQuery,
 };
 
 export {

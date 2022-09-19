@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import League from './model';
 
 export function useLeague(id?: string): UseQueryResult<League> {
@@ -22,12 +22,12 @@ export function useLeague(id?: string): UseQueryResult<League> {
 
 export type LeagueList = PaginatedList<'leagues', League>;
 
-export type GetLeaguesParams = RequestParams;
+export type GetLeaguesQuery = RequestQuery;
 
-export function useLeagues(params?: GetLeaguesParams): UseQueryResult<LeagueList> {
+export function useLeagues(query?: GetLeaguesQuery): UseQueryResult<LeagueList> {
   const api = useApi();
-  return useQuery<LeagueList>(['leagues', params], async () => {
-    const { data } = await api.get<LeagueList>('/leagues', params);
+  return useQuery<LeagueList>(['leagues', query], async () => {
+    const { data } = await api.get<LeagueList>('/leagues', query);
     return data;
   });
 }

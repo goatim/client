@@ -5,19 +5,19 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Club from './model';
 
 export function useClub(
   clubId?: string,
-  params?: RequestParams,
+  query?: RequestQuery,
   initialData?: Club,
 ): UseQueryResult<Club> {
   const api = useApi();
   return useQuery<Club>(
     ['clubs', clubId],
     async () => {
-      const { data } = await api.get<Club>(`/clubs/${clubId}`, params);
+      const { data } = await api.get<Club>(`/clubs/${clubId}`, query);
       return data;
     },
     { enabled: !!clubId, initialData },
@@ -26,14 +26,14 @@ export function useClub(
 
 export type ClubList = PaginatedList<'clubs', Club>;
 
-export interface GetClubsParams extends RequestParams {
+export interface GetClubsQuery extends RequestQuery {
   league?: string;
 }
 
-export function useClubs(params?: GetClubsParams): UseQueryResult<ClubList> {
+export function useClubs(query?: GetClubsQuery): UseQueryResult<ClubList> {
   const api = useApi();
-  return useQuery<ClubList>(['clubs', params], async () => {
-    const { data } = await api.get<ClubList>('/clubs', params);
+  return useQuery<ClubList>(['clubs', query], async () => {
+    const { data } = await api.get<ClubList>('/clubs', query);
     return data;
   });
 }

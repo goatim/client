@@ -1,18 +1,18 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { useCallback } from 'react';
-import { ListRequestParams, PaginatedList, RequestParams, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import CurrenciesRate from './model';
 import { resolveFridayCoins } from '../currencies/fridayCoins';
 
 export function useCurrenciesRate(
   id?: string,
-  params?: RequestParams,
+  query?: RequestQuery,
 ): UseQueryResult<CurrenciesRate> {
   const api = useApi();
   return useQuery<CurrenciesRate>(
     ['currencies_rates', id],
     async () => {
-      const { data } = await api.get<CurrenciesRate>(`/currencies_rates/${id}`, params);
+      const { data } = await api.get<CurrenciesRate>(`/currencies_rates/${id}`, query);
       return data;
     },
     {
@@ -23,14 +23,14 @@ export function useCurrenciesRate(
 
 export type CurrenciesRateList = PaginatedList<'currencies_rates', CurrenciesRate>;
 
-export type GetCurrenciesRatesParams = ListRequestParams;
+export type GetCurrenciesRatesQuery = ListRequestQuery;
 
 export function useCurrenciesRates(
-  params?: GetCurrenciesRatesParams,
+  query?: GetCurrenciesRatesQuery,
 ): UseQueryResult<CurrenciesRateList> | undefined {
   const api = useApi();
-  return useQuery<CurrenciesRateList>(['currencies_rates', params], async () => {
-    const { data } = await api.get<CurrenciesRateList>('/currencies_rates', params);
+  return useQuery<CurrenciesRateList>(['currencies_rates', query], async () => {
+    const { data } = await api.get<CurrenciesRateList>('/currencies_rates', query);
     return data;
   });
 }

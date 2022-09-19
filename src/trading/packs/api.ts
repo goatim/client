@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, RequestParams, RequestBody } from '../../api';
+import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
 import Pack from './model';
 
 export function usePack(id?: string): UseQueryResult<Pack> {
@@ -24,17 +24,17 @@ export function usePack(id?: string): UseQueryResult<Pack> {
 
 export type PackList = PaginatedList<'packs', Pack>;
 
-export interface GetPacksParams extends RequestParams {
+export interface GetPacksQuery extends RequestQuery {
   seen?: boolean;
   wallet?: string;
   tags?: string[] | string;
   asset?: string;
 }
 
-export function usePacks(params?: GetPacksParams): UseQueryResult<PackList> {
+export function usePacks(query?: GetPacksQuery): UseQueryResult<PackList> {
   const api = useApi();
-  return useQuery<PackList>(['packs', params], async () => {
-    const { data } = await api.get<PackList>('/packs', params);
+  return useQuery<PackList>(['packs', query], async () => {
+    const { data } = await api.get<PackList>('/packs', query);
     return data;
   });
 }

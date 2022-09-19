@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, RequestBody, PaginatedList } from '../../api';
+import { useApi, RequestBody, PaginatedList, RequestQuery } from '../../api';
 import PhysicalEvent, { PhysicalEventType } from './model';
 
 export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
@@ -16,12 +16,18 @@ export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
   });
 }
 
+export interface GetPhysicalEventsQuery extends RequestQuery {
+  match?: string;
+}
+
 export type PhysicalEventList = PaginatedList<'physical_events', PhysicalEvent>;
 
-export function usePhysicalEvents(): UseQueryResult<PhysicalEventList> {
+export function usePhysicalEvents(
+  query?: GetPhysicalEventsQuery,
+): UseQueryResult<PhysicalEventList> {
   const api = useApi();
-  return useQuery<PhysicalEventList>('physical_events', async () => {
-    const { data } = await api.get<PhysicalEventList>('/physical_events');
+  return useQuery<PhysicalEventList>(['physical_events', query], async () => {
+    const { data } = await api.get<PhysicalEventList>('/physical_events', query);
     return data;
   });
 }

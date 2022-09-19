@@ -5,17 +5,17 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Ranking, { RankingPeriod } from './model';
 
-export type GetRankingParams = RequestParams;
+export type GetRankingQuery = RequestQuery;
 
-export function useRanking(id?: string, params?: GetRankingParams): UseQueryResult<Ranking> {
+export function useRanking(id?: string, query?: GetRankingQuery): UseQueryResult<Ranking> {
   const api = useApi();
   return useQuery<Ranking>(
-    ['rankings', id, params],
+    ['rankings', id, query],
     async () => {
-      const { data } = await api.get<Ranking>(`/rankings/${id}`, params);
+      const { data } = await api.get<Ranking>(`/rankings/${id}`, query);
       return data;
     },
     { enabled: !!id },

@@ -6,35 +6,35 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useMemo } from 'react';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Player from '../players/model';
 import { useCurrentWallet } from '../../market/wallets/api';
 import Composition from './model';
 
-export interface GetCompositionParams extends RequestParams {
+export interface GetCompositionQuery extends RequestQuery {
   match?: string;
   wallet?: string;
 }
 
 export function useComposition(
   id = 'current',
-  params?: GetCompositionParams,
+  query?: GetCompositionQuery,
 ): UseQueryResult<Composition> {
   const api = useApi();
   const wallet = useCurrentWallet();
 
-  const memoizedParams = useMemo<GetCompositionParams | undefined>(() => {
-    if (params?.wallet) {
-      return params;
+  const memoizedQuery = useMemo<GetCompositionQuery | undefined>(() => {
+    if (query?.wallet) {
+      return query;
     }
     return {
-      ...params,
+      ...query,
       wallet: wallet.data?.id,
     };
-  }, [params, wallet.data?.id]);
+  }, [query, wallet.data?.id]);
 
-  return useQuery<Composition>(['compositions', id, memoizedParams], async () => {
-    const { data } = await api.get<Composition>(`/compositions/${id}`, memoizedParams);
+  return useQuery<Composition>(['compositions', id, memoizedQuery], async () => {
+    const { data } = await api.get<Composition>(`/compositions/${id}`, memoizedQuery);
     return data;
   });
 }
@@ -93,21 +93,21 @@ export function useCreateComposition(
 
 export function useUpdateComposition(
   id = 'current',
-  params?: GetCompositionParams,
+  query?: GetCompositionQuery,
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const wallet = useCurrentWallet();
   const api = useApi();
   const queryClient = useQueryClient();
 
-  const memoizedParams = useMemo<GetCompositionParams | undefined>(() => {
-    if (params?.wallet) {
-      return params;
+  const memoizedQuery = useMemo<GetCompositionQuery | undefined>(() => {
+    if (query?.wallet) {
+      return query;
     }
     return {
-      ...params,
+      ...query,
       wallet: wallet.data?.id,
     };
-  }, [params, wallet.data?.id]);
+  }, [query, wallet.data?.id]);
 
   return useMutation<Composition, unknown, CompositionBody>(
     async (body: CompositionBody) => {
@@ -117,12 +117,12 @@ export function useUpdateComposition(
         saneBody.wallet = wallet.data?.id;
       }
 
-      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody, memoizedParams);
+      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody, memoizedQuery);
       return data;
     },
     {
       onSuccess(composition: Composition) {
-        queryClient.setQueryData<Composition>(['compositions', id, memoizedParams], composition);
+        queryClient.setQueryData<Composition>(['compositions', id, memoizedQuery], composition);
       },
     },
   );

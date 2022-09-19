@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestParams, PaginatedList, RequestBody, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Order, { OrderType } from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -23,24 +23,24 @@ export function useOrder(id?: string): UseQueryResult<Order> {
 
 export type OrderList = PaginatedList<'orders', Order>;
 
-export interface GetOrdersParams extends ListRequestParams {
+export interface GetOrdersQuery extends ListRequestQuery {
   wallet?: string;
 }
 
-export function useOrders(params?: GetOrdersParams): UseQueryResult<OrderList> {
+export function useOrders(query?: GetOrdersQuery): UseQueryResult<OrderList> {
   const api = useApi();
-  return useQuery<OrderList>(['orders', params], async () => {
-    const { data } = await api.get<OrderList>('/orders', params);
+  return useQuery<OrderList>(['orders', query], async () => {
+    const { data } = await api.get<OrderList>('/orders', query);
     return data;
   });
 }
 
 export function useCurrentWalletOrders(
-  params?: Omit<GetOrdersParams, 'wallet'>,
+  query?: Omit<GetOrdersQuery, 'wallet'>,
 ): UseQueryResult<OrderList> {
   const wallet = useCurrentWallet();
   return useOrders({
-    ...params,
+    ...query,
     wallet: wallet.data?.id || 'default',
   });
 }

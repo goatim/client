@@ -6,19 +6,19 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Ipo, { IpoType } from './model';
 
 export function useIpo(
   ipoId?: string,
-  params?: RequestParams,
+  query?: RequestQuery,
   initialData?: Ipo,
 ): UseQueryResult<Ipo> {
   const api = useApi();
   return useQuery<Ipo>(
     ['ipos', ipoId],
     async () => {
-      const { data } = await api.get<Ipo>(`/ipos/${ipoId}`, params);
+      const { data } = await api.get<Ipo>(`/ipos/${ipoId}`, query);
       return data;
     },
     { enabled: !!ipoId, initialData },
@@ -27,19 +27,19 @@ export function useIpo(
 
 export type IpoList = PaginatedList<'ipos', Ipo>;
 
-export interface GetIposParams extends RequestParams {
+export interface GetIposQuery extends RequestQuery {
   asset?: string;
 }
 
 export function useIpos(
-  params?: GetIposParams,
+  query?: GetIposQuery,
   options?: UseQueryOptions<IpoList>,
 ): UseQueryResult<IpoList> {
   const api = useApi();
   return useQuery<IpoList>(
-    ['ipos', params],
+    ['ipos', query],
     async () => {
-      const { data } = await api.get<IpoList>('/ipos', params);
+      const { data } = await api.get<IpoList>('/ipos', query);
       return data;
     },
     options,

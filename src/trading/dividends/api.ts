@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, RequestBody, PaginatedList } from '../../api';
+import { useApi, RequestBody, PaginatedList, RequestQuery } from '../../api';
 import Dividend, { DividendType } from './model';
 
 export function useDividend(id?: string): UseQueryResult<Dividend> {
@@ -16,12 +16,16 @@ export function useDividend(id?: string): UseQueryResult<Dividend> {
   });
 }
 
+export interface GetDividendsQuery extends RequestQuery {
+  physical_event: string;
+}
+
 export type DividendList = PaginatedList<'dividends', Dividend>;
 
-export function useDividends(): UseQueryResult<DividendList> {
+export function useDividends(query?: GetDividendsQuery): UseQueryResult<DividendList> {
   const api = useApi();
-  return useQuery<DividendList>('dividends', async () => {
-    const { data } = await api.get<DividendList>('/dividends');
+  return useQuery<DividendList>(['dividends', query], async () => {
+    const { data } = await api.get<DividendList>('/dividends', query);
     return data;
   });
 }

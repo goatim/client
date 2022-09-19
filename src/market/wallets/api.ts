@@ -5,20 +5,20 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestParams, PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Wallet from './model';
 import { useFridayClient } from '../../client';
 
-export interface GetWalletParams extends RequestParams {
+export interface GetWalletQuery extends RequestQuery {
   ranking?: string;
 }
 
-export function useWallet(id?: string, params?: GetWalletParams): UseQueryResult<Wallet> {
+export function useWallet(id?: string, query?: GetWalletQuery): UseQueryResult<Wallet> {
   const api = useApi();
   return useQuery<Wallet>(
     ['wallets', id],
     async () => {
-      const { data } = await api.get<Wallet>(`/wallets/${id}`, params);
+      const { data } = await api.get<Wallet>(`/wallets/${id}`, query);
       return data;
     },
     {
@@ -27,25 +27,25 @@ export function useWallet(id?: string, params?: GetWalletParams): UseQueryResult
   );
 }
 
-export function useDefaultWallet(params?: GetWalletParams): UseQueryResult<Wallet> {
-  return useWallet('default', params);
+export function useDefaultWallet(query?: GetWalletQuery): UseQueryResult<Wallet> {
+  return useWallet('default', query);
 }
 
-export function useCurrentWallet(params?: GetWalletParams): UseQueryResult<Wallet> {
+export function useCurrentWallet(query?: GetWalletQuery): UseQueryResult<Wallet> {
   const { wallet } = useFridayClient();
-  return useWallet(wallet || 'default', params);
+  return useWallet(wallet || 'default', query);
 }
 
 export type WalletList = PaginatedList<'wallets', Wallet>;
 
-export interface GetWalletsParams extends ListRequestParams {
+export interface GetWalletsQuery extends ListRequestQuery {
   rank?: string;
 }
 
-export function useWallets(params?: GetWalletsParams): UseQueryResult<WalletList> | undefined {
+export function useWallets(query?: GetWalletsQuery): UseQueryResult<WalletList> | undefined {
   const api = useApi();
-  return useQuery<WalletList>(['wallets', params], async () => {
-    const { data } = await api.get<WalletList>('/wallets', params);
+  return useQuery<WalletList>(['wallets', query], async () => {
+    const { data } = await api.get<WalletList>('/wallets', query);
     return data;
   });
 }

@@ -1,20 +1,20 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { RequestParams, useApi } from '../../../api';
+import { RequestQuery, useApi } from '../../../api';
 import OrdersBook from './model';
 
-export interface GetOrderBookParams extends RequestParams {
+export interface GetOrderBookQuery extends RequestQuery {
   asset?: string;
   limit?: number;
 }
 
-export function useOrderBook(params: GetOrderBookParams): UseQueryResult<OrdersBook> {
+export function useOrderBook(query: GetOrderBookQuery): UseQueryResult<OrdersBook> {
   const api = useApi();
   return useQuery<OrdersBook>(
-    ['orders', 'book', params],
+    ['orders', 'book', query],
     async () => {
-      const { data } = await api.get<OrdersBook>('/order_book', params);
+      const { data } = await api.get<OrdersBook>('/order_book', query);
       return data;
     },
-    { enabled: !!params?.asset },
+    { enabled: !!query?.asset },
   );
 }

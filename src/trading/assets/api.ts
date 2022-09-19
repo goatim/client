@@ -5,20 +5,20 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestParams, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
 
 export function useAsset(
   assetId?: string,
-  params?: RequestParams,
+  query?: RequestQuery,
   initialData?: Asset,
 ): UseQueryResult<Asset> {
   const api = useApi();
   return useQuery<Asset>(
     ['assets', assetId],
     async () => {
-      const { data } = await api.get<Asset>(`/assets/${assetId}`, params);
+      const { data } = await api.get<Asset>(`/assets/${assetId}`, query);
       return data;
     },
     { enabled: !!assetId, initialData },
@@ -27,7 +27,7 @@ export function useAsset(
 
 export type AssetList = PaginatedList<'assets', Asset>;
 
-export interface GetAssetsParams extends RequestParams {
+export interface GetAssetsQuery extends RequestQuery {
   type?: AssetType;
   league?: string;
   club?: string;
@@ -35,10 +35,10 @@ export interface GetAssetsParams extends RequestParams {
   search?: string;
 }
 
-export function useAssets(params?: GetAssetsParams): UseQueryResult<AssetList> {
+export function useAssets(query?: GetAssetsQuery): UseQueryResult<AssetList> {
   const api = useApi();
-  return useQuery<AssetList>(['assets', params], async () => {
-    const { data } = await api.get<AssetList>('/assets', params);
+  return useQuery<AssetList>(['assets', query], async () => {
+    const { data } = await api.get<AssetList>('/assets', query);
     return data;
   });
 }

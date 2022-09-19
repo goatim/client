@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { useApi, PaginatedList, RequestParams } from '../../api';
+import { useApi, PaginatedList, RequestQuery } from '../../api';
 import Transaction from './model';
 
 export function useTransaction(id?: string): UseQueryResult<Transaction> {
@@ -18,14 +18,14 @@ export function useTransaction(id?: string): UseQueryResult<Transaction> {
 
 export type TransactionList = PaginatedList<'transactions', Transaction>;
 
-export interface GetTransactionsParams extends RequestParams {
+export interface GetTransactionsQuery extends RequestQuery {
   order?: string;
 }
 
-export function useTransactions(params?: GetTransactionsParams): UseQueryResult<TransactionList> {
+export function useTransactions(query?: GetTransactionsQuery): UseQueryResult<TransactionList> {
   const api = useApi();
-  return useQuery<TransactionList>(['transactions', params], async () => {
-    const { data } = await api.get<TransactionList>('/transactions', params);
+  return useQuery<TransactionList>(['transactions', query], async () => {
+    const { data } = await api.get<TransactionList>('/transactions', query);
     return data;
   });
 }
