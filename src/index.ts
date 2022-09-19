@@ -235,7 +235,7 @@ import {
   useUpdatePhysicalEvent,
   AddPhysicalEventPictureBody,
   AddPhysicalEventPictureVariables,
-  useAddPhysicalEventIcon,
+  useAddPhysicalEventPicture,
 } from './soccer/physicalEvents/api';
 import Player, { PlayerPosition, PlayerSide } from './soccer/players/model';
 import {
@@ -301,6 +301,18 @@ import {
 import BoosterInUse from './trading/boostersInUse/model';
 import BoosterInWallet from './trading/boostersInWallet/model';
 import Dividend from './trading/dividends/model';
+import {
+  useDividend,
+  DividendList,
+  useDividends,
+  DividendBody,
+  useCreateDividend,
+  useDistributeDividend,
+  useUpdateDividend,
+  PostDividendBulkBody,
+  PostDividendBulkResponse,
+  usePostDividendBulk,
+} from './trading/dividends/api';
 import Ipo, { IpoType } from './trading/ipos/model';
 import {
   useIpo,
@@ -703,7 +715,7 @@ export {
   usePhysicalEvents,
   useCreatePhysicalEvent,
   useUpdatePhysicalEvent,
-  useAddPhysicalEventIcon,
+  useAddPhysicalEventPicture,
   usePlayer,
   usePlayers,
   getPlayers,
@@ -739,6 +751,10 @@ export type {
   BoosterInUse,
   BoosterInWallet,
   Dividend,
+  DividendList,
+  DividendBody,
+  PostDividendBulkBody,
+  PostDividendBulkResponse,
   Ipo,
   IpoType,
   IpoList,
@@ -812,6 +828,12 @@ export {
   useCreateBooster,
   useUpdateBooster,
   useDeleteBooster,
+  useDividend,
+  useDividends,
+  useCreateDividend,
+  useDistributeDividend,
+  useUpdateDividend,
+  usePostDividendBulk,
   useIpo,
   useIpos,
   useCreateIpo,

@@ -1,10 +1,10 @@
-export function formatPercentage(percentage = 0): string {
-  return `${(percentage / 100).toFixed(2)}%`;
+export function formatPercentage(percentage?: number, fractionDigits = 2): string {
+  return `${((percentage || 0) * 100).toFixed(fractionDigits)}%`;
 }
 
-export function formatPercentageVariation(variation = 0): string {
-  if (variation > 0) {
-    return `+${formatPercentage(variation)}`;
+export function formatPercentageVariation(variation?: number, fractionDigits = 2): string {
+  if (variation && variation > 0) {
+    return `+${formatPercentage(variation, fractionDigits)}`;
   }
-  return formatPercentage(variation);
+  return formatPercentage(variation, fractionDigits);
 }

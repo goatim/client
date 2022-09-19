@@ -185,11 +185,15 @@ export async function apiPost<
   D = unknown,
   RB extends RequestBody = RequestBody,
   RP extends RequestParams = RequestParams,
->(url: string, body: RB, apiConfig?: ApiConfig, params?: RP): Promise<AxiosResponse<D>> {
+>(url: string, body?: RB, apiConfig?: ApiConfig, params?: RP): Promise<AxiosResponse<D>> {
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    return await axios.post<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
+    return await axios.post<D>(
+      (apiConfig?.host || '') + url,
+      body ? buildRequestBody<RB>(body) : undefined,
+      config,
+    );
   } catch (error: unknown) {
     throw parseError(error);
   }
@@ -199,11 +203,15 @@ export async function apiPut<
   D = unknown,
   RB extends RequestBody = RequestBody,
   RP extends RequestParams = RequestParams,
->(url: string, body: RB, apiConfig?: ApiConfig, params?: RP): Promise<AxiosResponse<D>> {
+>(url: string, body?: RB, apiConfig?: ApiConfig, params?: RP): Promise<AxiosResponse<D>> {
   const config = buildRequestConfig<RP>(apiConfig, params);
 
   try {
-    return await axios.put<D>((apiConfig?.host || '') + url, buildRequestBody<RB>(body), config);
+    return await axios.put<D>(
+      (apiConfig?.host || '') + url,
+      body ? buildRequestBody<RB>(body) : undefined,
+      config,
+    );
   } catch (error: unknown) {
     throw parseError(error);
   }
@@ -239,12 +247,12 @@ export interface ApiContext {
   ): Promise<AxiosResponse<D>>;
   post<D = unknown, RB extends RequestBody = RequestBody, RP extends RequestParams = RequestParams>(
     route: string,
-    body: RB,
+    body?: RB,
     params?: RP,
   ): Promise<AxiosResponse<D>>;
   put<D = unknown, RB extends RequestBody = RequestBody, RP extends RequestParams = RequestParams>(
     route: string,
-    body: RB,
+    body?: RB,
     params?: RP,
   ): Promise<AxiosResponse<D>>;
   delete<D = unknown, RP extends RequestParams = RequestParams>(
@@ -371,9 +379,9 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
       setLocale,
       setBearerToken,
       get: (route: string, params?: RequestParams) => apiGet(route, apiConfig, params),
-      post: (route: string, body: RequestBody, params?: RequestParams) =>
+      post: (route: string, body?: RequestBody, params?: RequestParams) =>
         apiPost(route, body, apiConfig, params),
-      put: (route: string, body: RequestBody, params?: RequestParams) =>
+      put: (route: string, body?: RequestBody, params?: RequestParams) =>
         apiPut(route, body, apiConfig, params),
       delete: (route: string, params?: RequestParams) => apiDelete(route, apiConfig, params),
     }),

@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useApi, RequestBody, PaginatedList } from '../../api';
-import PhysicalEvent from './model';
+import PhysicalEvent, { PhysicalEventType } from './model';
 
 export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
   const api = useApi();
@@ -27,8 +27,12 @@ export function usePhysicalEvents(): UseQueryResult<PhysicalEventList> {
 }
 
 export interface PhysicalEventBody extends RequestBody {
+  type?: PhysicalEventType;
   name?: string | null;
   description?: string | null;
+  beginning?: string | null;
+  end?: string | null;
+  parent_event?: string | null;
 }
 
 export function useCreatePhysicalEvent(): UseMutationResult<
@@ -77,7 +81,7 @@ export type AddPhysicalEventPictureBody = { icon: File };
 
 export type AddPhysicalEventPictureVariables = AddPhysicalEventPictureBody & { id: string };
 
-export function useAddPhysicalEventIcon(): UseMutationResult<
+export function useAddPhysicalEventPicture(): UseMutationResult<
   PhysicalEvent,
   unknown,
   AddPhysicalEventPictureVariables
@@ -86,7 +90,7 @@ export function useAddPhysicalEventIcon(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<PhysicalEvent, unknown, AddPhysicalEventPictureVariables>(
     async ({ id, icon }: AddPhysicalEventPictureVariables) => {
-      const { data } = await api.post<PhysicalEvent>(`/physical_events/${id}/icon`, { icon });
+      const { data } = await api.post<PhysicalEvent>(`/physical_events/${id}/picture`, { icon });
       return data;
     },
     {

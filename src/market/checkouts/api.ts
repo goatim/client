@@ -51,6 +51,8 @@ export interface CheckoutItemBody extends RequestBody {
 export interface CheckoutBody extends RequestBody {
   items?: CheckoutItemBody[] | string;
   wallet?: string;
+  expiration?: string;
+  payment_method?: string;
 }
 
 export function useCreateCheckout(
