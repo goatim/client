@@ -43,8 +43,8 @@ export function useComposition(
 export interface GetCompositionsQuery extends RequestQuery {
   match?: string;
   wallet?: string;
-  is_valid?: string;
-  is_active?: string;
+  is_valid?: boolean;
+  is_active?: boolean;
 }
 
 export type CompositionList = PaginatedList<'compositions', Composition>;
