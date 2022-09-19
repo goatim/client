@@ -5,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { UseQueryOptions } from 'react-query/types/react/types';
 import { useApi, RequestBody, PaginatedList, RequestQuery } from '../../api';
 import Dividend, { DividendType } from './model';
 
@@ -22,7 +23,10 @@ export interface GetDividendsQuery extends RequestQuery {
 
 export type DividendList = PaginatedList<'dividends', Dividend>;
 
-export function useDividends(query?: GetDividendsQuery): UseQueryResult<DividendList> {
+export function useDividends(
+  query?: GetDividendsQuery,
+  options?: UseQueryOptions<DividendList>,
+): UseQueryResult<DividendList> {
   const api = useApi();
   return useQuery<DividendList>(['dividends', query], async () => {
     const { data } = await api.get<DividendList>('/dividends', query);

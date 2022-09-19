@@ -6,6 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useMemo } from 'react';
+import { UseQueryOptions } from 'react-query/types/react/types';
 import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Player from '../players/model';
 import { useCurrentWallet } from '../../market/wallets/api';
@@ -48,12 +49,19 @@ export interface GetCompositionsQuery extends RequestQuery {
 
 export type CompositionList = PaginatedList<'compositions', Composition>;
 
-export function useCompositions(query?: GetCompositionsQuery): UseQueryResult<CompositionList> {
+export function useCompositions(
+  query?: GetCompositionsQuery,
+  options?: UseQueryOptions<CompositionList>,
+): UseQueryResult<CompositionList> {
   const api = useApi();
-  return useQuery<CompositionList>(['compositions', query], async () => {
-    const { data } = await api.get<CompositionList>('/compositions', query);
-    return data;
-  });
+  return useQuery<CompositionList>(
+    ['compositions', query],
+    async () => {
+      const { data } = await api.get<CompositionList>('/compositions', query);
+      return data;
+    },
+    options,
+  );
 }
 
 export interface CompositionPositionBody extends RequestBody {

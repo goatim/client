@@ -5,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Order, { OrderType } from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
@@ -27,12 +28,19 @@ export interface GetOrdersQuery extends ListRequestQuery {
   wallet?: string;
 }
 
-export function useOrders(query?: GetOrdersQuery): UseQueryResult<OrderList> {
+export function useOrders(
+  query?: GetOrdersQuery,
+  options?: UseQueryOptions<OrderList>,
+): UseQueryResult<OrderList> {
   const api = useApi();
-  return useQuery<OrderList>(['orders', query], async () => {
-    const { data } = await api.get<OrderList>('/orders', query);
-    return data;
-  });
+  return useQuery<OrderList>(
+    ['orders', query],
+    async () => {
+      const { data } = await api.get<OrderList>('/orders', query);
+      return data;
+    },
+    options,
+  );
 }
 
 export function useCurrentWalletOrders(

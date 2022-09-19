@@ -5,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { UseQueryOptions } from 'react-query/types/react/types';
 import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
@@ -35,12 +36,19 @@ export interface GetAssetsQuery extends RequestQuery {
   search?: string;
 }
 
-export function useAssets(query?: GetAssetsQuery): UseQueryResult<AssetList> {
+export function useAssets(
+  query?: GetAssetsQuery,
+  options?: UseQueryOptions<AssetList>,
+): UseQueryResult<AssetList> {
   const api = useApi();
-  return useQuery<AssetList>(['assets', query], async () => {
-    const { data } = await api.get<AssetList>('/assets', query);
-    return data;
-  });
+  return useQuery<AssetList>(
+    ['assets', query],
+    async () => {
+      const { data } = await api.get<AssetList>('/assets', query);
+      return data;
+    },
+    options,
+  );
 }
 
 export interface AssetBody extends RequestBody {
