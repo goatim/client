@@ -39,12 +39,16 @@ export function useComposition(
   });
 }
 
+export interface GetCompositionsQuery extends RequestQuery {
+  match?: string;
+}
+
 export type CompositionList = PaginatedList<'compositions', Composition>;
 
-export function useCompositions(): UseQueryResult<CompositionList> {
+export function useCompositions(query?: GetCompositionsQuery): UseQueryResult<CompositionList> {
   const api = useApi();
-  return useQuery<CompositionList>('compositions', async () => {
-    const { data } = await api.get<CompositionList>('/compositions');
+  return useQuery<CompositionList>(['compositions', query], async () => {
+    const { data } = await api.get<CompositionList>('/compositions', query);
     return data;
   });
 }
