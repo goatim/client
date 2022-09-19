@@ -18,6 +18,7 @@ export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
 
 export interface GetPhysicalEventsQuery extends RequestQuery {
   match?: string;
+  composition?: string;
 }
 
 export type PhysicalEventList = PaginatedList<'physical_events', PhysicalEvent>;
