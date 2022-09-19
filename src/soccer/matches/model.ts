@@ -1,6 +1,5 @@
-import { Model, PaginatedList } from '../../api';
+import { Model } from '../../api';
 import Wallet from '../../market/wallets/model';
-import Composition from '../compositions/model';
 import { Image } from '../../medias/image';
 
 export type MatchStatus = 'planned' | 'ongoing' | 'passed' | 'cancelled';
@@ -15,5 +14,4 @@ export default interface Match extends Model {
   is_public?: boolean;
   status?: MatchStatus;
   icon?: Image;
-  compositions?: PaginatedList<'compositions', Composition>;
 }
