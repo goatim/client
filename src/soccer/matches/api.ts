@@ -6,8 +6,10 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
+import { DateTime } from 'luxon';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
-import Match from './model';
+import Match, { MatchStatus } from './model';
 
 export function useMatch(id?: string): UseQueryResult<Match> {
   const api = useApi();
@@ -15,6 +17,47 @@ export function useMatch(id?: string): UseQueryResult<Match> {
     const { data } = await api.get<Match>(`/matches/${id}`);
     return data;
   });
+}
+
+export function useMatchLiveStatus(
+  beginning?: DateTime | string,
+  end?: DateTime | string,
+  initialStatus?: MatchStatus,
+): MatchStatus | undefined {
+  const timeout = useRef<NodeJS.Timeout | null>(null);
+
+  const resolvedBeginning = useMemo<DateTime | undefined>(
+    () => (typeof beginning === 'string' ? DateTime.fromISO(beginning) : beginning),
+    [beginning],
+  );
+
+  const resolvedEnd = useMemo<DateTime | undefined>(
+    () => (typeof end === 'string' ? DateTime.fromISO(end) : end),
+    [end],
+  );
+
+  const [liveStatus, setLiveStatus] = useState<MatchStatus | undefined>(initialStatus);
+
+  const resolveStatus = useCallback(() => {
+    if (initialStatus === 'cancelled') {
+      return;
+    }
+    if (resolvedBeginning && DateTime.now() < resolvedBeginning) {
+      setLiveStatus('planned');
+    } else if (resolvedEnd && DateTime.now() < resolvedEnd) {
+      setLiveStatus('ongoing');
+    } else {
+      setLiveStatus('passed');
+    }
+    timeout.current = setTimeout(resolveStatus, 1000);
+  }, [initialStatus, resolvedEnd, resolvedBeginning]);
+
+  useEffect(() => {
+    resolveStatus();
+    return () => (timeout.current ? clearTimeout(timeout.current) : undefined);
+  }, [resolveStatus]);
+
+  return liveStatus;
 }
 
 export type MatchList = PaginatedList<'matches', Match>;
