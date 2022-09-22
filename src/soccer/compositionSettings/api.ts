@@ -32,7 +32,7 @@ export interface CompositionSettingBody extends RequestBody {
   is_default?: boolean;
 }
 
-export function useCreateCompositionSetting(): UseMutationResult<
+export function usePostCompositionSetting(): UseMutationResult<
   CompositionSetting,
   unknown,
   CompositionSettingBody
@@ -55,17 +55,17 @@ export function useCreateCompositionSetting(): UseMutationResult<
   );
 }
 
-export type UpdateCompositionSettingVariables = CompositionSettingBody & { id: string };
+export type PutCompositionSettingVariables = CompositionSettingBody & { id: string };
 
-export function useUpdateCompositionSetting(): UseMutationResult<
+export function usePutCompositionSetting(): UseMutationResult<
   CompositionSetting,
   unknown,
-  UpdateCompositionSettingVariables
+  PutCompositionSettingVariables
 > {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<CompositionSetting, unknown, UpdateCompositionSettingVariables>(
-    async ({ id, ...body }: UpdateCompositionSettingVariables) => {
+  return useMutation<CompositionSetting, unknown, PutCompositionSettingVariables>(
+    async ({ id, ...body }: PutCompositionSettingVariables) => {
       const { data } = await api.put<CompositionSetting>(`/composition_settings/${id}`, body);
       return data;
     },

@@ -43,7 +43,7 @@ export interface PhysicalEventBody extends RequestBody {
   parent_event?: string | null;
 }
 
-export function useCreatePhysicalEvent(): UseMutationResult<
+export function usePostPhysicalEvent(): UseMutationResult<
   PhysicalEvent,
   unknown,
   PhysicalEventBody
@@ -63,17 +63,17 @@ export function useCreatePhysicalEvent(): UseMutationResult<
   );
 }
 
-export type UpdatePhysicalEventVariables = PhysicalEventBody & { id: string };
+export type PutPhysicalEventVariables = PhysicalEventBody & { id: string };
 
-export function useUpdatePhysicalEvent(): UseMutationResult<
+export function usePutPhysicalEvent(): UseMutationResult<
   PhysicalEvent,
   unknown,
-  UpdatePhysicalEventVariables
+  PutPhysicalEventVariables
 > {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<PhysicalEvent, unknown, UpdatePhysicalEventVariables>(
-    async ({ id, ...body }: UpdatePhysicalEventVariables) => {
+  return useMutation<PhysicalEvent, unknown, PutPhysicalEventVariables>(
+    async ({ id, ...body }: PutPhysicalEventVariables) => {
       const { data } = await api.put<PhysicalEvent>(`/physical_events/${id}`, body);
       return data;
     },

@@ -50,7 +50,7 @@ export interface PackFactoryBody extends RequestBody {
   message?: string;
 }
 
-export function useCreatePackFactory(): UseMutationResult<PackFactory, unknown, PackFactoryBody> {
+export function usePostPackFactory(): UseMutationResult<PackFactory, unknown, PackFactoryBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<PackFactory, unknown, PackFactoryBody>(
@@ -66,17 +66,17 @@ export function useCreatePackFactory(): UseMutationResult<PackFactory, unknown, 
   );
 }
 
-export type UpdatePackFactoryVariables = PackFactoryBody & { id: string };
+export type PutPackFactoryVariables = PackFactoryBody & { id: string };
 
-export function useUpdatePackFactory(): UseMutationResult<
+export function usePutPackFactory(): UseMutationResult<
   PackFactory,
   unknown,
-  UpdatePackFactoryVariables
+  PutPackFactoryVariables
 > {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<PackFactory, unknown, UpdatePackFactoryVariables>(
-    async ({ id, ...body }: UpdatePackFactoryVariables) => {
+  return useMutation<PackFactory, unknown, PutPackFactoryVariables>(
+    async ({ id, ...body }: PutPackFactoryVariables) => {
       const { data } = await api.put<PackFactory>(`/pack_factories/${id}`, body);
       return data;
     },

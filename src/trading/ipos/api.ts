@@ -57,7 +57,7 @@ export interface IpoBody extends RequestBody {
   description?: string | null;
 }
 
-export function useCreateIpo(): UseMutationResult<Ipo, unknown, IpoBody> {
+export function usePostIpo(): UseMutationResult<Ipo, unknown, IpoBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Ipo, unknown, IpoBody>(
@@ -73,13 +73,13 @@ export function useCreateIpo(): UseMutationResult<Ipo, unknown, IpoBody> {
   );
 }
 
-export type UpdateIpoVariables = IpoBody & { id: string };
+export type PutIpoVariables = IpoBody & { id: string };
 
-export function useUpdateIpo(): UseMutationResult<Ipo, unknown, UpdateIpoVariables> {
+export function usePutIpo(): UseMutationResult<Ipo, unknown, PutIpoVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Ipo, unknown, UpdateIpoVariables>(
-    async ({ id, ...body }: UpdateIpoVariables) => {
+  return useMutation<Ipo, unknown, PutIpoVariables>(
+    async ({ id, ...body }: PutIpoVariables) => {
       const { data } = await api.put<Ipo>(`/ipos/${id}`, body);
       return data;
     },

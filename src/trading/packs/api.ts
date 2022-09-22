@@ -39,7 +39,7 @@ export function usePacks(query?: GetPacksQuery): UseQueryResult<PackList> {
   });
 }
 
-export interface CreatePackBody extends RequestBody {
+export interface PostPackBody extends RequestBody {
   wallet?: string | null;
   share_bulks?: string | null;
   tags?: string | null;
@@ -48,11 +48,11 @@ export interface CreatePackBody extends RequestBody {
   message?: string | null;
 }
 
-export function useCreatePack(): UseMutationResult<Pack, unknown, CreatePackBody> {
+export function usePostPack(): UseMutationResult<Pack, unknown, PostPackBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Pack, unknown, CreatePackBody>(
-    async (body: CreatePackBody) => {
+  return useMutation<Pack, unknown, PostPackBody>(
+    async (body: PostPackBody) => {
       const { data } = await api.post<Pack>('/packs', body);
       return data;
     },
@@ -64,19 +64,19 @@ export function useCreatePack(): UseMutationResult<Pack, unknown, CreatePackBody
   );
 }
 
-export interface UpdatePackBody extends RequestBody {
+export interface PutPackBody extends RequestBody {
   seen?: boolean;
   title?: string | null;
   message?: string | null;
 }
 
-export type UpdatePackVariables = UpdatePackBody & { id: string };
+export type PutPackVariables = PutPackBody & { id: string };
 
-export function useUpdatePack(): UseMutationResult<Pack, unknown, UpdatePackVariables> {
+export function usePutPack(): UseMutationResult<Pack, unknown, PutPackVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Pack, unknown, UpdatePackVariables>(
-    async ({ id, ...body }: UpdatePackVariables) => {
+  return useMutation<Pack, unknown, PutPackVariables>(
+    async ({ id, ...body }: PutPackVariables) => {
       const { data } = await api.put<Pack>(`/packs/${id}`, body);
       return data;
     },

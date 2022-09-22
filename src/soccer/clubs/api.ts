@@ -45,7 +45,7 @@ export interface ClubBody extends RequestBody {
   league?: string | null;
 }
 
-export function useCreateClub(): UseMutationResult<Club, unknown, ClubBody> {
+export function usePostClub(): UseMutationResult<Club, unknown, ClubBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Club, unknown, ClubBody>(
@@ -61,13 +61,13 @@ export function useCreateClub(): UseMutationResult<Club, unknown, ClubBody> {
   );
 }
 
-export type UpdateClubVariables = ClubBody & { id: string };
+export type PutClubVariables = ClubBody & { id: string };
 
-export function useUpdateClub(): UseMutationResult<Club, unknown, UpdateClubVariables> {
+export function usePutClub(): UseMutationResult<Club, unknown, PutClubVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Club, unknown, UpdateClubVariables>(
-    async ({ id, ...body }: UpdateClubVariables) => {
+  return useMutation<Club, unknown, PutClubVariables>(
+    async ({ id, ...body }: PutClubVariables) => {
       const { data } = await api.put<Club>(`/clubs/${id}`, body);
       return data;
     },

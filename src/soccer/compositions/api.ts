@@ -78,7 +78,7 @@ export interface CompositionBody extends RequestBody {
   is_active?: boolean;
 }
 
-export function useCreateComposition(
+export function usePostComposition(
   compositionKey?: string,
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const api = useApi();
@@ -106,7 +106,7 @@ export function useCreateComposition(
   );
 }
 
-export function useUpdateComposition(
+export function usePutComposition(
   id = 'current',
   query?: GetCompositionQuery,
 ): UseMutationResult<Composition, unknown, CompositionBody> {

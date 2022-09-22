@@ -37,7 +37,7 @@ export interface LeagueBody extends RequestBody {
   description?: string | null;
 }
 
-export function useCreateLeague(): UseMutationResult<League, unknown, LeagueBody> {
+export function usePostLeague(): UseMutationResult<League, unknown, LeagueBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<League, unknown, LeagueBody>(
@@ -53,13 +53,13 @@ export function useCreateLeague(): UseMutationResult<League, unknown, LeagueBody
   );
 }
 
-export type UpdateLeagueVariables = LeagueBody & { id: string };
+export type PutLeagueVariables = LeagueBody & { id: string };
 
-export function useUpdateLeague(): UseMutationResult<League, unknown, UpdateLeagueVariables> {
+export function usePutLeague(): UseMutationResult<League, unknown, PutLeagueVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<League, unknown, UpdateLeagueVariables>(
-    async ({ id, ...body }: UpdateLeagueVariables) => {
+  return useMutation<League, unknown, PutLeagueVariables>(
+    async ({ id, ...body }: PutLeagueVariables) => {
       const { data } = await api.put<League>(`/leagues/${id}`, body);
       return data;
     },

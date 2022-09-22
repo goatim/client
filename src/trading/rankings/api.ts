@@ -41,7 +41,7 @@ export interface RankingBody extends RequestBody {
   is_default?: boolean;
 }
 
-export function useCreateRanking(): UseMutationResult<Ranking, unknown, RankingBody> {
+export function usePostRanking(): UseMutationResult<Ranking, unknown, RankingBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Ranking, unknown, RankingBody>(
@@ -57,13 +57,13 @@ export function useCreateRanking(): UseMutationResult<Ranking, unknown, RankingB
   );
 }
 
-export type UpdateRankingVariables = RankingBody & { id: string };
+export type PutRankingVariables = RankingBody & { id: string };
 
-export function useUpdateRanking(): UseMutationResult<Ranking, unknown, UpdateRankingVariables> {
+export function usePutRanking(): UseMutationResult<Ranking, unknown, PutRankingVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Ranking, unknown, UpdateRankingVariables>(
-    async ({ id, ...body }: UpdateRankingVariables) => {
+  return useMutation<Ranking, unknown, PutRankingVariables>(
+    async ({ id, ...body }: PutRankingVariables) => {
       const { data } = await api.put<Ranking>(`/rankings/${id}`, body);
       return data;
     },

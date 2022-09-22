@@ -41,7 +41,7 @@ export interface DividendBody extends RequestBody {
   percentage?: string | null;
 }
 
-export function useCreateDividend(): UseMutationResult<Dividend, unknown, DividendBody> {
+export function usePostDividend(): UseMutationResult<Dividend, unknown, DividendBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Dividend, unknown, DividendBody>(
@@ -75,13 +75,13 @@ export function useDistributeDividend(
   );
 }
 
-export type UpdateDividendVariables = DividendBody & { id: string };
+export type PutDividendVariables = DividendBody & { id: string };
 
-export function useUpdateDividend(): UseMutationResult<Dividend, unknown, UpdateDividendVariables> {
+export function usePutDividend(): UseMutationResult<Dividend, unknown, PutDividendVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Dividend, unknown, UpdateDividendVariables>(
-    async ({ id, ...body }: UpdateDividendVariables) => {
+  return useMutation<Dividend, unknown, PutDividendVariables>(
+    async ({ id, ...body }: PutDividendVariables) => {
       const { data } = await api.put<Dividend>(`/dividends/${id}`, body);
       return data;
     },

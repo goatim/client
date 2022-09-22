@@ -51,7 +51,7 @@ export interface WithdrawalBody extends RequestBody {
   receiver_wallet?: string | null;
 }
 
-export function useCreateWithdrawal(): UseMutationResult<Withdrawal, unknown, WithdrawalBody> {
+export function usePostWithdrawal(): UseMutationResult<Withdrawal, unknown, WithdrawalBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Withdrawal, unknown, WithdrawalBody>(
@@ -67,17 +67,13 @@ export function useCreateWithdrawal(): UseMutationResult<Withdrawal, unknown, Wi
   );
 }
 
-export type UpdateWithdrawalVariables = WithdrawalBody & { id: string };
+export type PutWithdrawalVariables = WithdrawalBody & { id: string };
 
-export function useUpdateWithdrawal(): UseMutationResult<
-  Withdrawal,
-  unknown,
-  UpdateWithdrawalVariables
-> {
+export function usePutWithdrawal(): UseMutationResult<Withdrawal, unknown, PutWithdrawalVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Withdrawal, unknown, UpdateWithdrawalVariables>(
-    async ({ id, ...body }: UpdateWithdrawalVariables) => {
+  return useMutation<Withdrawal, unknown, PutWithdrawalVariables>(
+    async ({ id, ...body }: PutWithdrawalVariables) => {
       const { data } = await api.put<Withdrawal>(`/withdrawals/${id}`, body);
       return data;
     },

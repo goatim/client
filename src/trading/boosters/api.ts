@@ -51,7 +51,7 @@ export interface BoosterBody extends RequestBody {
   leverage?: number;
 }
 
-export function useCreateBooster(): UseMutationResult<Booster, unknown, BoosterBody> {
+export function usePostBooster(): UseMutationResult<Booster, unknown, BoosterBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Booster, unknown, BoosterBody>(
@@ -67,13 +67,13 @@ export function useCreateBooster(): UseMutationResult<Booster, unknown, BoosterB
   );
 }
 
-export type UpdateBoosterVariables = BoosterBody & { id: string };
+export type PutBoosterVariables = BoosterBody & { id: string };
 
-export function useUpdateBooster(): UseMutationResult<Booster, unknown, UpdateBoosterVariables> {
+export function usePutBooster(): UseMutationResult<Booster, unknown, PutBoosterVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Booster, unknown, UpdateBoosterVariables>(
-    async ({ id, ...body }: UpdateBoosterVariables) => {
+  return useMutation<Booster, unknown, PutBoosterVariables>(
+    async ({ id, ...body }: PutBoosterVariables) => {
       const { data } = await api.put<Booster>(`/boosters/${id}`, body);
       return data;
     },

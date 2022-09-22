@@ -52,7 +52,7 @@ export interface SpotlightBody extends RequestBody {
   secondary_assets?: string;
 }
 
-export function useCreateSpotlight(): UseMutationResult<Spotlight, unknown, SpotlightBody> {
+export function usePostSpotlight(): UseMutationResult<Spotlight, unknown, SpotlightBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Spotlight, unknown, SpotlightBody>(
@@ -68,17 +68,13 @@ export function useCreateSpotlight(): UseMutationResult<Spotlight, unknown, Spot
   );
 }
 
-export type UpdateSpotlightVariables = SpotlightBody & { id: string };
+export type PutSpotlightVariables = SpotlightBody & { id: string };
 
-export function useUpdateSpotlight(): UseMutationResult<
-  Spotlight,
-  unknown,
-  UpdateSpotlightVariables
-> {
+export function usePutSpotlight(): UseMutationResult<Spotlight, unknown, PutSpotlightVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Spotlight, unknown, UpdateSpotlightVariables>(
-    async ({ id, ...body }: UpdateSpotlightVariables) => {
+  return useMutation<Spotlight, unknown, PutSpotlightVariables>(
+    async ({ id, ...body }: PutSpotlightVariables) => {
       const { data } = await api.put<Spotlight>(`/spotlights/${id}`, body);
       return data;
     },

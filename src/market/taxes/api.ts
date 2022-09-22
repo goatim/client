@@ -42,7 +42,7 @@ export interface TaxBody extends RequestBody {
   percentage?: number;
 }
 
-export function useCreateTax(): UseMutationResult<Tax, unknown, TaxBody> {
+export function usePostTax(): UseMutationResult<Tax, unknown, TaxBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Tax, unknown, TaxBody>(
@@ -58,13 +58,13 @@ export function useCreateTax(): UseMutationResult<Tax, unknown, TaxBody> {
   );
 }
 
-export type UpdateTaxVariables = TaxBody & { id: string };
+export type PutTaxVariables = TaxBody & { id: string };
 
-export function useUpdateTax(): UseMutationResult<Tax, unknown, UpdateTaxVariables> {
+export function usePutTax(): UseMutationResult<Tax, unknown, PutTaxVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Tax, unknown, UpdateTaxVariables>(
-    async ({ id, ...body }: UpdateTaxVariables) => {
+  return useMutation<Tax, unknown, PutTaxVariables>(
+    async ({ id, ...body }: PutTaxVariables) => {
       const { data } = await api.put<Tax>(`/taxes/${id}`, body);
       return data;
     },

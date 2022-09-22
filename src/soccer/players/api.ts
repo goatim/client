@@ -72,7 +72,7 @@ export interface PlayerBody extends RequestBody {
   number?: number;
 }
 
-export function useCreatePlayer(): UseMutationResult<Player, unknown, PlayerBody> {
+export function usePostPlayer(): UseMutationResult<Player, unknown, PlayerBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Player, unknown, PlayerBody>(
@@ -88,13 +88,13 @@ export function useCreatePlayer(): UseMutationResult<Player, unknown, PlayerBody
   );
 }
 
-export type UpdatePlayerVariables = PlayerBody & { id: string };
+export type PutPlayerVariables = PlayerBody & { id: string };
 
-export function useUpdatePlayer(): UseMutationResult<Player, unknown, UpdatePlayerVariables> {
+export function usePutPlayer(): UseMutationResult<Player, unknown, PutPlayerVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Player, unknown, UpdatePlayerVariables>(
-    async ({ id, ...body }: UpdatePlayerVariables) => {
+  return useMutation<Player, unknown, PutPlayerVariables>(
+    async ({ id, ...body }: PutPlayerVariables) => {
       const { data } = await api.put<Player>(`/players/${id}`, body);
       return data;
     },

@@ -56,7 +56,7 @@ export interface AssetBody extends RequestBody {
   entity?: string | null;
 }
 
-export function useCreateAsset(): UseMutationResult<Asset, unknown, AssetBody> {
+export function usePostAsset(): UseMutationResult<Asset, unknown, AssetBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Asset, unknown, AssetBody>(
@@ -72,13 +72,13 @@ export function useCreateAsset(): UseMutationResult<Asset, unknown, AssetBody> {
   );
 }
 
-export type UpdateAssetVariables = AssetBody & { id: string };
+export type PutAssetVariables = AssetBody & { id: string };
 
-export function useUpdateAsset(): UseMutationResult<Asset, unknown, UpdateAssetVariables> {
+export function usePutAsset(): UseMutationResult<Asset, unknown, PutAssetVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Asset, unknown, UpdateAssetVariables>(
-    async ({ id, ...body }: UpdateAssetVariables) => {
+  return useMutation<Asset, unknown, PutAssetVariables>(
+    async ({ id, ...body }: PutAssetVariables) => {
       const { data } = await api.put<Asset>(`/assets/${id}`, body);
       return data;
     },

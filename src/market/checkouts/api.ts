@@ -55,7 +55,7 @@ export interface CheckoutBody extends RequestBody {
   payment_method?: string;
 }
 
-export function useCreateCheckout(
+export function usePostCheckout(
   checkoutKey = 'current',
 ): UseMutationResult<Checkout, unknown, CheckoutBody> {
   const wallet = useCurrentWallet();
@@ -81,7 +81,7 @@ export function useCreateCheckout(
   );
 }
 
-export function useUpdateCheckout(
+export function usePutCheckout(
   checkoutKey = 'current',
 ): UseMutationResult<Checkout, unknown, CheckoutBody> {
   const wallet = useCurrentWallet();
@@ -158,7 +158,7 @@ export function useAddCheckoutItem(
 
 export type PutCheckoutItemVariables = CheckoutItemBody & { id: string };
 
-export function useUpdateCheckoutItem(
+export function usePutCheckoutItem(
   checkoutKey = 'current',
 ): UseMutationResult<Checkout, unknown, PutCheckoutItemVariables> {
   const wallet = useCurrentWallet();

@@ -48,7 +48,7 @@ export interface UserBody extends RequestBody {
   locale?: string | null;
 }
 
-export function useCreateUser(
+export function usePostUser(
   createSession?: boolean,
   userKey?: string,
 ): UseMutationResult<User, unknown, UserBody> {
@@ -73,13 +73,13 @@ export function useCreateUser(
   );
 }
 
-export type UpdateUserVariables = UserBody & { id: string };
+export type PutUserVariables = UserBody & { id: string };
 
-export function useUpdateUser(): UseMutationResult<User, unknown, UpdateUserVariables> {
+export function usePutUser(): UseMutationResult<User, unknown, PutUserVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<User, unknown, UpdateUserVariables>(
-    async ({ id, ...body }: UpdateUserVariables) => {
+  return useMutation<User, unknown, PutUserVariables>(
+    async ({ id, ...body }: PutUserVariables) => {
       const { data } = await api.put<User>(`/users/${id}`, body);
       return data;
     },

@@ -37,17 +37,17 @@ export function useStocks(query?: GetStocksQuery): UseQueryResult<StockList> {
   });
 }
 
-export interface CreateStockBody extends RequestBody {
+export interface PostStockBody extends RequestBody {
   asset?: string | null;
   tags?: string | null;
   initial_shares?: number;
 }
 
-export function useCreateStock(): UseMutationResult<Stock, unknown, CreateStockBody> {
+export function usePostStock(): UseMutationResult<Stock, unknown, PostStockBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Stock, unknown, CreateStockBody>(
-    async (body: CreateStockBody) => {
+  return useMutation<Stock, unknown, PostStockBody>(
+    async (body: PostStockBody) => {
       const { data } = await api.post<Stock>('/stocks', body);
       return data;
     },
@@ -59,17 +59,17 @@ export function useCreateStock(): UseMutationResult<Stock, unknown, CreateStockB
   );
 }
 
-export interface UpdateStockBody extends RequestBody {
+export interface PutStockBody extends RequestBody {
   tags?: string | null;
 }
 
-export type UpdateStockVariables = UpdateStockBody & { id: string };
+export type PutStockVariables = PutStockBody & { id: string };
 
-export function useUpdateStock(): UseMutationResult<Stock, unknown, UpdateStockVariables> {
+export function usePutStock(): UseMutationResult<Stock, unknown, PutStockVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Stock, unknown, UpdateStockVariables>(
-    async ({ id, ...body }: UpdateStockVariables) => {
+  return useMutation<Stock, unknown, PutStockVariables>(
+    async ({ id, ...body }: PutStockVariables) => {
       const { data } = await api.put<Stock>(`/stocks/${id}`, body);
       return data;
     },

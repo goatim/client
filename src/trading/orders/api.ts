@@ -62,7 +62,7 @@ export interface OrderBody extends RequestBody {
   is_cancelled?: boolean;
 }
 
-export function useCreateOrder(): UseMutationResult<Order, unknown, OrderBody> {
+export function usePostOrder(): UseMutationResult<Order, unknown, OrderBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Order, unknown, OrderBody>(
@@ -78,13 +78,13 @@ export function useCreateOrder(): UseMutationResult<Order, unknown, OrderBody> {
   );
 }
 
-export type UpdateOrderVariables = OrderBody & { id: string };
+export type PutOrderVariables = OrderBody & { id: string };
 
-export function useUpdateOrder(): UseMutationResult<Order, unknown, UpdateOrderVariables> {
+export function usePutOrder(): UseMutationResult<Order, unknown, PutOrderVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Order, unknown, UpdateOrderVariables>(
-    async ({ id, ...body }: UpdateOrderVariables) => {
+  return useMutation<Order, unknown, PutOrderVariables>(
+    async ({ id, ...body }: PutOrderVariables) => {
       const { data } = await api.put<Order>(`/orders/${id}`, body);
       return data;
     },

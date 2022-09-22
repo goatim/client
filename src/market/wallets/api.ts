@@ -58,7 +58,7 @@ export interface WalletBody extends RequestBody {
   ethereum_address?: string | null;
 }
 
-export function useCreateWallet(): UseMutationResult<Wallet, unknown, WalletBody> {
+export function usePostWallet(): UseMutationResult<Wallet, unknown, WalletBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Wallet, unknown, WalletBody>(
@@ -74,13 +74,13 @@ export function useCreateWallet(): UseMutationResult<Wallet, unknown, WalletBody
   );
 }
 
-export type UpdateWalletVariables = WalletBody & { id: string };
+export type PutWalletVariables = WalletBody & { id: string };
 
-export function useUpdateWallet(): UseMutationResult<Wallet, unknown, UpdateWalletVariables> {
+export function usePutWallet(): UseMutationResult<Wallet, unknown, PutWalletVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Wallet, unknown, UpdateWalletVariables>(
-    async ({ id, ...body }: UpdateWalletVariables) => {
+  return useMutation<Wallet, unknown, PutWalletVariables>(
+    async ({ id, ...body }: PutWalletVariables) => {
       const { data } = await api.put<Wallet>(`/wallets/${id}`, body);
       return data;
     },

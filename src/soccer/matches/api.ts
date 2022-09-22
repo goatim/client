@@ -94,7 +94,7 @@ export interface MatchBody extends RequestBody {
   status?: string | null;
 }
 
-export function useCreateMatch(): UseMutationResult<Match, unknown, MatchBody> {
+export function usePostMatch(): UseMutationResult<Match, unknown, MatchBody> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Match, unknown, MatchBody>(
@@ -110,13 +110,13 @@ export function useCreateMatch(): UseMutationResult<Match, unknown, MatchBody> {
   );
 }
 
-export type UpdateMatchVariables = MatchBody & { id: string };
+export type PutMatchVariables = MatchBody & { id: string };
 
-export function useUpdateMatch(): UseMutationResult<Match, unknown, UpdateMatchVariables> {
+export function usePutMatch(): UseMutationResult<Match, unknown, PutMatchVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Match, unknown, UpdateMatchVariables>(
-    async ({ id, ...body }: UpdateMatchVariables) => {
+  return useMutation<Match, unknown, PutMatchVariables>(
+    async ({ id, ...body }: PutMatchVariables) => {
       const { data } = await api.put<Match>(`/matches/${id}`, body);
       return data;
     },

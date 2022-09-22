@@ -44,7 +44,7 @@ export interface UserEventBody extends RequestBody {
   code?: string | null;
 }
 
-export function useCreateUserEvent(
+export function usePostUserEvent(
   initialBody?: UserEventBody,
 ): UseMutationResult<UserEvent, unknown, UserEventBody | undefined> {
   const api = useApi();
