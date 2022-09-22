@@ -34,7 +34,7 @@ export function useUserEvents(query?: UserEventsQuery): UseQueryResult<UserEvent
 export function useDoesUserEventExists(query?: UserEventsQuery): UseQueryResult<boolean> {
   const api = useApi();
   return useQuery<boolean>(['user_events', 'exists', query], async () => {
-    const { data } = await api.get<boolean>('/user_events/exists', query);
+    const { data } = await api.get<boolean>('/user_events/any/exists', query);
     return data;
   });
 }
