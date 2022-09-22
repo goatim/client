@@ -39,6 +39,16 @@ import {
   useSignOut,
 } from './auth/sessions/api';
 import User from './auth/users/model';
+import UserEvent from './auth/userEvents/model';
+import {
+  useUserEvent,
+  UserEventsQuery,
+  UserEventList,
+  useUserEvents,
+  useDoesUserEventExists,
+  UserEventBody,
+  useCreateUserEvent,
+} from './auth/userEvents/api';
 import {
   useUser,
   useMe,
@@ -426,6 +436,7 @@ import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification from './notifications/model';
+import { OnboardingUserEvents } from './onboarding/userEvents';
 
 /**
  * State
@@ -481,6 +492,10 @@ export type {
   UpdateUserVariables,
   AddUserPictureBody,
   AddUserPictureVariables,
+  UserEvent,
+  UserEventsQuery,
+  UserEventList,
+  UserEventBody,
 };
 
 export {
@@ -495,6 +510,10 @@ export {
   useCreateUser,
   useUpdateUser,
   useAddUserPicture,
+  useUserEvent,
+  useUserEvents,
+  useDoesUserEventExists,
+  useCreateUserEvent,
 };
 
 /**
@@ -882,6 +901,12 @@ export {
  */
 
 export type { Notification };
+
+/**
+ * Onboarding
+ */
+
+export { OnboardingUserEvents };
 
 /**
  * Utils
