@@ -2,7 +2,6 @@ import env, { Env, NativeEnv } from './env';
 import {
   Model,
   PaginatedList,
-  FormErrors,
   ApiErrorData,
   ApiError,
   isApiError,
@@ -462,7 +461,6 @@ export {
 export type {
   Model,
   PaginatedList,
-  FormErrors,
   ApiErrorData,
   RequestBody,
   RequestQuery,

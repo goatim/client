@@ -34,7 +34,8 @@
   "peerDependencies": {
     "luxon": ">=2.0.0",
     "react": ">=17.0.2",
-    "react-query": ">=3.0.0"
+    "react-query": ">=3.0.0",
+    "@cezembre/forms": ">=1.7.0"
   },
   "dependencies": {
     "axios": "^0.27.2",

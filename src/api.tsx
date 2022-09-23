@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosRespon
 import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
 import httpStatus from 'http-status';
 import base64 from 'base-64';
+import { FormErrors } from '@cezembre/forms';
 
 export interface Model {
   id: string;
@@ -20,10 +21,6 @@ export type PaginatedList<N extends string, D = unknown> = {
   next_page?: number;
   previous_page?: number;
 };
-
-export interface FormErrors {
-  [field: string]: string;
-}
 
 export interface ApiErrorData<FE extends FormErrors = FormErrors> {
   status?: number;
