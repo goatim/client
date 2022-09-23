@@ -41,6 +41,7 @@ export interface UserBody extends RequestBody {
   gender?: string | null;
   first_name?: string | null;
   last_name?: string | null;
+  pseudo?: string | null;
   phone?: string | null;
   birthday?: string | null;
   address?: string | null;
