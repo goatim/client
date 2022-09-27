@@ -436,6 +436,8 @@ import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification from './notifications/model';
 import { OnboardingUserEvents } from './onboarding/userEvents';
+import Search, { SearchResultType, SearchResult } from './search/model';
+import { SearchQuery, useSearch } from './search/api';
 
 /**
  * State
@@ -905,6 +907,14 @@ export type { Notification };
  */
 
 export { OnboardingUserEvents };
+
+/**
+ * Search
+ */
+
+export type { Search, SearchResultType, SearchResult, SearchQuery };
+
+export { useSearch };
 
 /**
  * Utils
