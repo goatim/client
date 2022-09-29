@@ -102,9 +102,9 @@ export function buildRequestBody<B extends RequestBody = RequestBody>(body: B): 
 
 export interface ApiConfig {
   host?: string | null;
-  apiKey?: string | null;
+  api_key?: string | null;
   locale?: string | null;
-  bearerToken?: string | null;
+  bearer_token?: string | null;
 }
 
 export interface RequestQuery {
@@ -127,12 +127,12 @@ export function buildRequestConfig<RQ extends RequestQuery = RequestQuery>(
 ): AxiosRequestConfig {
   const headers: AxiosRequestHeaders = {};
 
-  if (apiConfig?.apiKey) {
-    headers['X-Api-Key'] = apiConfig.apiKey;
+  if (apiConfig?.api_key) {
+    headers['X-Api-Key'] = apiConfig.api_key;
   }
 
-  if (apiConfig?.bearerToken) {
-    headers.Authorization = `Bearer ${apiConfig.bearerToken}`;
+  if (apiConfig?.bearer_token) {
+    headers.Authorization = `Bearer ${apiConfig.bearer_token}`;
   }
 
   if (apiConfig?.locale) {
@@ -331,7 +331,7 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
   const setApiKey = useCallback(
     (apiKey: string | null) => {
       setApiConfig((oldConfig) => {
-        const newConfig: ApiConfig = { ...oldConfig, apiKey };
+        const newConfig: ApiConfig = { ...oldConfig, api_key: apiKey };
         if (persistConfig) {
           storeConfig(newConfig);
         }
@@ -357,7 +357,7 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
   const setBearerToken = useCallback(
     (bearerToken: string | null) => {
       setApiConfig((oldConfig) => {
-        const newConfig: ApiConfig = { ...oldConfig, bearerToken };
+        const newConfig: ApiConfig = { ...oldConfig, bearer_token: bearerToken };
         if (persistConfig) {
           storeConfig(newConfig);
         }

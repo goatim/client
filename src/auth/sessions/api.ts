@@ -45,6 +45,7 @@ export function useActiveSession(): UseQueryResult<Session> {
           api.setBearerToken(null);
         }
       },
+      enabled: !!api.config?.bearer_token,
     },
   );
 }
