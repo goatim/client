@@ -3,7 +3,7 @@ import { useApi, ListRequestQuery } from '../api';
 import Search from './model';
 
 export interface SearchQuery extends ListRequestQuery {
-  query: string;
+  q: string;
   types?: string;
 }
 
