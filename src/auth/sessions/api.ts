@@ -6,29 +6,47 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useCallback } from 'react';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
 import Session from './model';
-import { RequestBody, useApi } from '../../api';
+import { ApiError, RequestBody, RequestQuery, useApi } from '../../api';
 
-export function useSession(id: string, onError?: () => void): UseQueryResult<Session> {
+export interface UseSessionQuery extends RequestQuery {
+  auto_refresh?: boolean;
+}
+
+export function useSession(
+  id: string,
+  query?: UseSessionQuery,
+  options?: UseQueryOptions<Session, ApiError | AxiosError>,
+): UseQueryResult<Session, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Session>(
+  return useQuery<Session, ApiError | AxiosError>(
     ['sessions', id],
     async () => {
-      const { data } = await api.get<Session>(`/sessions/${id}`);
+      const { data } = await api.get<Session>(`/sessions/${id}`, query);
       return data;
     },
     {
-      onError,
-      retry: false, // TODO: Conditional retry based on error
+      ...options,
     },
   );
 }
 
 export function useActiveSession(): UseQueryResult<Session> {
   const api = useApi();
-  return useSession('active', () => {
-    api.setBearerToken(null);
-  });
+  return useSession(
+    'active',
+    { auto_refresh: true },
+    {
+      retry: false,
+      onError: (error) => {
+        if (error.code === 'invalid_bearer_token') {
+          api.setBearerToken(null);
+        }
+      },
+    },
+  );
 }
 
 export interface SignInBody extends RequestBody {
