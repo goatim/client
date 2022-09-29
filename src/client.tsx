@@ -20,9 +20,10 @@ export function useFridayClient(): FridayClientContext {
   return context;
 }
 
-export interface Props
-  extends Omit<ApiConfig, 'apiKey' | 'bearerToken'>,
-    Required<Pick<ApiConfig, 'apiKey'>> {
+export interface Props {
+  apiKey: string;
+  host?: string;
+  locale?: string;
   children: ReactElement;
 }
 
@@ -45,7 +46,7 @@ export default function FridayClient({
   const apiConfig = useMemo<ApiConfig>(() => {
     return {
       host,
-      apiKey,
+      api_key: apiKey,
       locale,
     };
   }, [apiKey, host, locale]);
