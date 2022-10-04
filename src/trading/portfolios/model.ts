@@ -1,7 +1,7 @@
 import { Model } from '../../api';
 import Wallet from '../../market/wallets/model';
 import Asset from '../assets/model';
-import BoosterInUse from '../boosters/model';
+import Booster from '../boosters/model';
 
 export default interface Portfolio extends Model {
   wallet?: Wallet | string;
@@ -15,5 +15,5 @@ export default interface Portfolio extends Model {
   dividends_gains?: number;
   total_gains?: number;
   total_variations?: number;
-  boosters?: BoosterInUse[];
+  boosters?: Booster[];
 }

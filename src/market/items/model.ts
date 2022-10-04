@@ -1,6 +1,7 @@
 import Asset from '../../trading/assets/model';
-import Booster from '../../trading/boosterFactories/model';
+import BoosterFactory from '../../trading/boosterFactories/model';
 import { OrderType } from '../../trading/orders/model';
+import PackFactory from '../../trading/packFactories/model';
 
 export type ItemType = 'order' | 'booster' | 'pack';
 
@@ -10,7 +11,7 @@ export interface OrderItem {
   order_type?: OrderType;
   asset?: Asset | string;
   price_limit?: number;
-  booster?: Booster | string;
+  booster_factory?: BoosterFactory | string;
   unit_price?: number;
   unit_vat?: number;
   total_price?: number;
@@ -20,7 +21,7 @@ export interface OrderItem {
 export interface BoosterItem {
   name?: string;
   quantity?: number;
-  booster?: Booster | string;
+  booster_factory?: BoosterFactory | string;
   unit_price?: number;
   unit_vat?: number;
   total_price?: number;
@@ -31,7 +32,7 @@ export interface BoosterItem {
 export interface PackItem {
   name?: string;
   quantity?: number;
-  // pack?: SerializedPack | string;
+  pack?: PackFactory | string;
   unit_price?: number;
   unit_vat?: number;
   total_price?: number;

@@ -1,7 +1,7 @@
 import { Model } from '../../api';
 import Asset from '../assets/model';
 import Wallet from '../../market/wallets/model';
-import Booster from '../boosterFactories/model';
+import Booster from '../boosters/model';
 
 export type OrderType = 'buy' | 'sell';
 
