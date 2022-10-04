@@ -1,6 +1,4 @@
 node_modules
-build
 dist
-static
-example
 rollup.config.js
+.idea

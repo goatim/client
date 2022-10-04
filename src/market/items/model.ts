@@ -1,5 +1,5 @@
 import Asset from '../../trading/assets/model';
-import Booster from '../../trading/boosters/model';
+import Booster from '../../trading/boosterFactories/model';
 import { OrderType } from '../../trading/orders/model';
 
 export type ItemType = 'order' | 'booster' | 'pack';

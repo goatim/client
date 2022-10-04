@@ -1,12 +1,20 @@
 import { Model } from '../../api';
-import Tax from '../../market/taxes/model';
+import Portfolio from '../portfolios/model';
+import Wallet from '../../market/wallets/model';
+import Order from '../orders/model';
+import BoosterFactory from '../boosterFactories/model';
 
 export default interface Booster extends Model {
-  name?: string;
-  slug?: string;
-  description?: string;
-  price?: number;
-  vat?: Tax | string;
+  factory?: BoosterFactory | string;
+  wallet?: Wallet | string;
+  order?: Order | string;
+  portfolio?: Portfolio | string;
   leverage?: number;
-  nb_in_wallet?: number;
+  duration?: number;
+  start_quotation?: number;
+  stop_quotation?: number;
+  gains?: number;
+  variation?: number;
+  expiration?: string;
+  stopped_at?: string;
 }

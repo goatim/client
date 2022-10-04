@@ -24,8 +24,9 @@ export function useBooster(id?: string): UseQueryResult<Booster> {
 export type BoosterList = PaginatedList<'boosters', Booster>;
 
 export interface GetBoostersQuery extends RequestQuery {
-  booster?: string;
   wallet?: string;
+  order?: string | null;
+  portfolio?: string | null;
 }
 
 export function useBoosters(query?: GetBoostersQuery): UseQueryResult<BoosterList> {
@@ -44,11 +45,11 @@ export function useCurrentWalletBoosters(
 }
 
 export interface BoosterBody extends RequestBody {
-  name?: string | null;
-  description?: string | null;
-  price?: number;
-  vat?: string | null;
+  wallet?: string | null;
+  order?: string | null;
+  portfolio?: string | null;
   leverage?: number;
+  duration?: number;
 }
 
 export function usePostBooster(): UseMutationResult<Booster, unknown, BoosterBody> {

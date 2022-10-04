@@ -296,6 +296,19 @@ import {
   useAssetQuotation,
   useAssetQuotationHistory,
 } from './trading/assets/api';
+import BoosterFactory from './trading/boosterFactories/model';
+import {
+  useBoosterFactory,
+  BoosterFactoryList,
+  GetBoosterFactoriesQuery,
+  useBoosterFactories,
+  useCurrentWalletBoosterFactories,
+  BoosterFactoryBody,
+  usePostBoosterFactory,
+  PutBoosterFactoryVariables,
+  usePutBoosterFactory,
+  useDeleteBoosterFactory,
+} from './trading/boosterFactories/api';
 import Booster from './trading/boosters/model';
 import {
   useBooster,
@@ -309,8 +322,6 @@ import {
   usePutBooster,
   useDeleteBooster,
 } from './trading/boosters/api';
-import BoosterInUse from './trading/boostersInUse/model';
-import BoosterInWallet from './trading/boostersInWallet/model';
 import Dividend from './trading/dividends/model';
 import {
   useDividend,
@@ -766,13 +777,16 @@ export type {
   PutAssetVariables,
   AddAssetPictureBody,
   AddAssetPictureVariables,
+  BoosterFactory,
+  BoosterFactoryList,
+  GetBoosterFactoriesQuery,
+  BoosterFactoryBody,
+  PutBoosterFactoryVariables,
   Booster,
   BoosterList,
   GetBoostersQuery,
   BoosterBody,
   PutBoosterVariables,
-  BoosterInUse,
-  BoosterInWallet,
   Dividend,
   DividendList,
   DividendBody,
@@ -845,6 +859,12 @@ export {
   useAddAssetIllustration,
   useAssetQuotation,
   useAssetQuotationHistory,
+  useBoosterFactory,
+  useBoosterFactories,
+  useCurrentWalletBoosterFactories,
+  usePostBoosterFactory,
+  usePutBoosterFactory,
+  useDeleteBoosterFactory,
   useBooster,
   useBoosters,
   useCurrentWalletBoosters,
