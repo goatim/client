@@ -8,7 +8,6 @@ export interface Model {
   id: string;
   creation?: string;
   last_update?: string;
-  [key: string]: unknown;
 }
 
 export type PaginatedList<N extends string, D = unknown> = {
