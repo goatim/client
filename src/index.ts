@@ -107,6 +107,13 @@ import {
   formatFridayCoins,
   formatFridayCoinsVariation,
 } from './market/currencies/fridayCoins';
+import {
+  eurosSmallestUnit,
+  resolveEuros,
+  adaptEuros,
+  formatEuros,
+  formatEurosVariation,
+} from './market/currencies/euros';
 import CurrenciesRate from './market/currenciesRates/model';
 import {
   useCurrenciesRate,
@@ -592,12 +599,16 @@ export type {
 
 export {
   adaptCurrency,
-  adaptFridayCoins,
   formatCurrency,
+  resolveCurrency,
+  fridayCoinsSmallestUnit,
+  adaptFridayCoins,
   formatFridayCoins,
   formatFridayCoinsVariation,
-  fridayCoinsSmallestUnit,
-  resolveCurrency,
+  eurosSmallestUnit,
+  adaptEuros,
+  formatEuros,
+  formatEurosVariation,
   resolveFridayCoins,
   useAddCheckoutItem,
   useAddWalletPicture,
