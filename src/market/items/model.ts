@@ -32,7 +32,7 @@ export interface BoosterItem {
 export interface PackItem {
   name?: string;
   quantity?: number;
-  pack?: PackFactory | string;
+  pack_factory?: PackFactory | string;
   unit_price?: number;
   unit_vat?: number;
   total_price?: number;
