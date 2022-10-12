@@ -31,7 +31,7 @@ import {
 import Permission, { PermissionLevel } from './auth/permissions/model';
 import Session from './auth/sessions/model';
 import {
-  UseSessionQuery,
+  GetSessionQuery,
   useSession,
   useActiveSession,
   SignInBody,
@@ -500,7 +500,7 @@ export { resolveRatio, calcHeight, calcWidth };
  */
 
 export type {
-  UseSessionQuery,
+  GetSessionQuery,
   Permission,
   Session,
   SignInBody,

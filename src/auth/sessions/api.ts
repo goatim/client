@@ -9,22 +9,22 @@ import { useCallback } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import Session from './model';
-import { ApiError, RequestBody, RequestQuery, useApi } from '../../api';
+import { ApiError, useApi } from '../../api';
 
-export interface UseSessionQuery {
+export interface GetSessionQuery {
   auto_refresh?: boolean;
 }
 
 export function useSession(
   id: string,
-  query?: UseSessionQuery,
+  query?: GetSessionQuery,
   options?: UseQueryOptions<Session, ApiError | AxiosError>,
 ): UseQueryResult<Session, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<Session, ApiError | AxiosError>(
     ['sessions', id],
     async () => {
-      const { data } = await api.get<Session>(`/sessions/${id}`, query);
+      const { data } = await api.get<Session, GetSessionQuery>(`/sessions/${id}`, query);
       return data;
     },
     {
@@ -60,7 +60,7 @@ export function useSignIn(): UseMutationResult<Session, unknown, SignInBody> {
   const queryClient = useQueryClient();
   return useMutation<Session, unknown, SignInBody>(
     async (body: SignInBody) => {
-      const { data } = await api.post<Session>('/sessions', body);
+      const { data } = await api.post<Session, SignInBody>('/sessions', body);
       return data;
     },
     {
