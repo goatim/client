@@ -32,6 +32,6 @@ export default interface PaymentIntent {
   id?: string;
   amount?: number;
   status?: PaymentIntentStatus;
-  next_action?: PaymentIntent;
+  next_action?: PaymentIntentNextAction;
   client_secret?: string;
 }
