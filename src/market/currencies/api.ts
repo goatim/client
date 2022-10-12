@@ -25,7 +25,7 @@ export function useCurrencies(
 ): UseQueryResult<CurrencyList> | undefined {
   const api = useApi();
   return useQuery<CurrencyList>(['currencies', query], async () => {
-    const { data } = await api.get<CurrencyList>('/currencies', query);
+    const { data } = await api.get<CurrencyList, GetCurrenciesQuery>('/currencies', query);
     return data;
   });
 }

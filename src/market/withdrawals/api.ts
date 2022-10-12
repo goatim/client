@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import Withdrawal from './model';
 import { useCurrentWallet } from '../wallets/api';
 
@@ -44,7 +44,7 @@ export function useCurrentWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'w
   return useWithdrawals({ ...query, wallet: wallet.data?.id });
 }
 
-export interface WithdrawalBody extends RequestBody {
+export interface WithdrawalBody {
   wallet?: string | null;
   amount?: number | null;
   currency_iso?: string | null;
@@ -56,7 +56,7 @@ export function usePostWithdrawal(): UseMutationResult<Withdrawal, unknown, With
   const queryClient = useQueryClient();
   return useMutation<Withdrawal, unknown, WithdrawalBody>(
     async (body: WithdrawalBody) => {
-      const { data } = await api.post<Withdrawal>('/withdrawals', body);
+      const { data } = await api.post<Withdrawal, WithdrawalBody>('/withdrawals', body);
       return data;
     },
     {
@@ -74,7 +74,7 @@ export function usePutWithdrawal(): UseMutationResult<Withdrawal, unknown, PutWi
   const queryClient = useQueryClient();
   return useMutation<Withdrawal, unknown, PutWithdrawalVariables>(
     async ({ id, ...body }: PutWithdrawalVariables) => {
-      const { data } = await api.put<Withdrawal>(`/withdrawals/${id}`, body);
+      const { data } = await api.put<Withdrawal, WithdrawalBody>(`/withdrawals/${id}`, body);
       return data;
     },
     {

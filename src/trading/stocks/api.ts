@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery } from '../../api';
 import Stock from './model';
 
 export function useStock(id?: string): UseQueryResult<Stock> {
@@ -24,7 +24,7 @@ export function useStock(id?: string): UseQueryResult<Stock> {
 
 export type StockList = PaginatedList<'stocks', Stock>;
 
-export interface GetStocksQuery extends RequestQuery {
+export interface GetStocksQuery extends ListRequestQuery {
   asset?: string;
   tags?: string;
 }
@@ -37,7 +37,7 @@ export function useStocks(query?: GetStocksQuery): UseQueryResult<StockList> {
   });
 }
 
-export interface PostStockBody extends RequestBody {
+export interface PostStockBody {
   asset?: string | null;
   tags?: string | null;
   initial_shares?: number;
@@ -48,7 +48,7 @@ export function usePostStock(): UseMutationResult<Stock, unknown, PostStockBody>
   const queryClient = useQueryClient();
   return useMutation<Stock, unknown, PostStockBody>(
     async (body: PostStockBody) => {
-      const { data } = await api.post<Stock>('/stocks', body);
+      const { data } = await api.post<Stock, PostStockBody>('/stocks', body);
       return data;
     },
     {
@@ -59,7 +59,7 @@ export function usePostStock(): UseMutationResult<Stock, unknown, PostStockBody>
   );
 }
 
-export interface PutStockBody extends RequestBody {
+export interface PutStockBody {
   tags?: string | null;
 }
 
@@ -70,7 +70,7 @@ export function usePutStock(): UseMutationResult<Stock, unknown, PutStockVariabl
   const queryClient = useQueryClient();
   return useMutation<Stock, unknown, PutStockVariables>(
     async ({ id, ...body }: PutStockVariables) => {
-      const { data } = await api.put<Stock>(`/stocks/${id}`, body);
+      const { data } = await api.put<Stock, PostStockBody>(`/stocks/${id}`, body);
       return data;
     },
     {

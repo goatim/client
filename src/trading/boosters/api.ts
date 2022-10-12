@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Booster from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -23,10 +23,10 @@ export function useBooster(id?: string): UseQueryResult<Booster> {
 
 export type BoosterList = PaginatedList<'boosters', Booster>;
 
-export interface GetBoostersQuery extends RequestQuery {
+export interface GetBoostersQuery extends ListRequestQuery {
   wallet?: string;
-  order?: string | null;
-  portfolio?: string | null;
+  order?: string;
+  portfolio?: string;
 }
 
 export function useBoosters(query?: GetBoostersQuery): UseQueryResult<BoosterList> {
@@ -44,7 +44,7 @@ export function useCurrentWalletBoosters(
   return useBoosters({ ...query, wallet: wallet.data?.id });
 }
 
-export interface BoosterBody extends RequestBody {
+export interface BoosterBody {
   wallet?: string | null;
   order?: string | null;
   portfolio?: string | null;
@@ -57,7 +57,7 @@ export function usePostBooster(): UseMutationResult<Booster, unknown, BoosterBod
   const queryClient = useQueryClient();
   return useMutation<Booster, unknown, BoosterBody>(
     async (body: BoosterBody) => {
-      const { data } = await api.post<Booster>('/boosters', body);
+      const { data } = await api.post<Booster, BoosterBody>('/boosters', body);
       return data;
     },
     {
@@ -75,7 +75,7 @@ export function usePutBooster(): UseMutationResult<Booster, unknown, PutBoosterV
   const queryClient = useQueryClient();
   return useMutation<Booster, unknown, PutBoosterVariables>(
     async ({ id, ...body }: PutBoosterVariables) => {
-      const { data } = await api.put<Booster>(`/boosters/${id}`, body);
+      const { data } = await api.put<Booster, BoosterBody>(`/boosters/${id}`, body);
       return data;
     },
     {

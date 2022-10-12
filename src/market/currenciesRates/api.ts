@@ -30,7 +30,10 @@ export function useCurrenciesRates(
 ): UseQueryResult<CurrenciesRateList> | undefined {
   const api = useApi();
   return useQuery<CurrenciesRateList>(['currencies_rates', query], async () => {
-    const { data } = await api.get<CurrenciesRateList>('/currencies_rates', query);
+    const { data } = await api.get<CurrenciesRateList, GetCurrenciesRatesQuery>(
+      '/currencies_rates',
+      query,
+    );
     return data;
   });
 }

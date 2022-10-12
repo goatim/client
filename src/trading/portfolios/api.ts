@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Portfolio from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -17,7 +17,7 @@ export function usePortfolio(id?: string): UseQueryResult<Portfolio> {
 
 export type PortfolioList = PaginatedList<'portfolios', Portfolio>;
 
-export interface GetPortfoliosQuery extends RequestQuery {
+export interface GetPortfoliosQuery extends ListRequestQuery {
   wallet?: string;
 }
 

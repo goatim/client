@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import User from './model';
-import { PaginatedList, RequestBody, useApi } from '../../api';
+import { PaginatedList, useApi } from '../../api';
 
 export function useUser(id?: string): UseQueryResult<User> {
   const api = useApi();
@@ -36,7 +36,7 @@ export function useUsers(): UseQueryResult<UserList> {
   });
 }
 
-export interface UserBody extends RequestBody {
+export interface UserBody {
   email?: string | null;
   gender?: string | null;
   first_name?: string | null;
@@ -49,6 +49,10 @@ export interface UserBody extends RequestBody {
   locale?: string | null;
 }
 
+export interface PostUserQuery {
+  create_session?: boolean;
+}
+
 export function usePostUser(
   createSession?: boolean,
   userKey?: string,
@@ -57,7 +61,7 @@ export function usePostUser(
   const queryClient = useQueryClient();
   return useMutation<User, unknown, UserBody>(
     async (body: UserBody) => {
-      const { data } = await api.post<User>('/users', body, {
+      const { data } = await api.post<User, UserBody, PostUserQuery>('/users', body, {
         create_session: createSession,
       });
       return data;
@@ -81,7 +85,7 @@ export function usePutUser(): UseMutationResult<User, unknown, PutUserVariables>
   const queryClient = useQueryClient();
   return useMutation<User, unknown, PutUserVariables>(
     async ({ id, ...body }: PutUserVariables) => {
-      const { data } = await api.put<User>(`/users/${id}`, body);
+      const { data } = await api.put<User, UserBody>(`/users/${id}`, body);
       return data;
     },
     {

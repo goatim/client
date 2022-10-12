@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { useMemo } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import Player from '../players/model';
 import { useCurrentWallet } from '../../market/wallets/api';
 import Composition from './model';
@@ -40,7 +40,7 @@ export function useComposition(
   });
 }
 
-export interface GetCompositionsQuery extends RequestQuery {
+export interface GetCompositionsQuery extends ListRequestQuery {
   match?: string;
   wallet?: string;
   is_valid?: boolean;
@@ -64,12 +64,12 @@ export function useCompositions(
   );
 }
 
-export interface CompositionPositionBody extends RequestBody {
+export interface CompositionPositionBody {
   id: string;
   player: Player | string | null;
 }
 
-export interface CompositionBody extends RequestBody {
+export interface CompositionBody {
   match?: string | null;
   wallet?: string | null;
   setting?: string | null;
@@ -95,7 +95,7 @@ export function usePostComposition(
       if (!body.wallet) {
         body.wallet = wallet.data?.id;
       }
-      const { data } = await api.post<Composition>('/compositions', saneBody);
+      const { data } = await api.post<Composition, CompositionBody>('/compositions', saneBody);
       return data;
     },
     {
@@ -132,7 +132,11 @@ export function usePutComposition(
         saneBody.wallet = wallet.data?.id;
       }
 
-      const { data } = await api.put<Composition>(`/compositions/${id}`, saneBody, memoizedQuery);
+      const { data } = await api.put<Composition, CompositionBody>(
+        `/compositions/${id}`,
+        saneBody,
+        memoizedQuery,
+      );
       return data;
     },
     {
@@ -143,13 +147,17 @@ export function usePutComposition(
   );
 }
 
+export interface DeleteCompositionQuery {
+  wallet?: string;
+}
+
 export function useDeleteComposition(id = 'current'): UseMutationResult<void, unknown, void> {
   const wallet = useCurrentWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<void, unknown, void>(
     async () => {
-      await api.delete<void>(`/checkouts/${id}`, {
+      await api.delete<void, DeleteCompositionQuery>(`/checkouts/${id}`, {
         wallet: wallet.data?.id,
       });
     },

@@ -164,10 +164,8 @@ import {
 } from './market/withdrawals/api';
 import PaymentIntent, {
   RedirectToUrl,
-  AlipayHandleRedirect,
-  OxxoDisplayDetails,
-  NextActionType,
-  NextAction,
+  PaymentIntentNextActionType,
+  PaymentIntentNextAction,
   PaymentIntentStatus,
 } from './payment/intents/model';
 import PaymentMethod, { CardBrands, Card, MinifiedPaymentMethod } from './payment/methods/model';
@@ -606,6 +604,7 @@ export {
   formatFridayCoins,
   formatFridayCoinsVariation,
   eurosSmallestUnit,
+  resolveEuros,
   adaptEuros,
   formatEuros,
   formatEurosVariation,
@@ -649,10 +648,8 @@ export {
 export type {
   PaymentIntent,
   RedirectToUrl,
-  AlipayHandleRedirect,
-  OxxoDisplayDetails,
-  NextActionType,
-  NextAction,
+  PaymentIntentNextActionType,
+  PaymentIntentNextAction,
   PaymentIntentStatus,
   PaymentMethod,
   CardBrands,

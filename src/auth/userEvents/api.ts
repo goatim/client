@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
 import UserEvent from './model';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { PaginatedList, RequestQuery, useApi } from '../../api';
 
 export function useUserEvent(id?: string): UseQueryResult<UserEvent> {
   const api = useApi();
@@ -26,7 +26,7 @@ export type UserEventList = PaginatedList<'user_events', UserEvent>;
 export function useUserEvents(query?: UserEventsQuery): UseQueryResult<UserEventList> {
   const api = useApi();
   return useQuery<UserEventList>(['user_events', query], async () => {
-    const { data } = await api.get<UserEventList>('/user_events', query);
+    const { data } = await api.get<UserEventList, UserEventsQuery>('/user_events', query);
     return data;
   });
 }
@@ -39,7 +39,7 @@ export function useDoesUserEventExists(query?: UserEventsQuery): UseQueryResult<
   });
 }
 
-export interface UserEventBody extends RequestBody {
+export interface UserEventBody {
   user?: string | null;
   code?: string | null;
 }

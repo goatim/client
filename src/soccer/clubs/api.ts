@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import Club from './model';
 
 export function useClub(
@@ -26,7 +26,7 @@ export function useClub(
 
 export type ClubList = PaginatedList<'clubs', Club>;
 
-export interface GetClubsQuery extends RequestQuery {
+export interface GetClubsQuery extends ListRequestQuery {
   league?: string;
 }
 
@@ -38,7 +38,7 @@ export function useClubs(query?: GetClubsQuery): UseQueryResult<ClubList> {
   });
 }
 
-export interface ClubBody extends RequestBody {
+export interface ClubBody {
   name?: string | null;
   short_name?: string | null;
   description?: string | null;
@@ -50,7 +50,7 @@ export function usePostClub(): UseMutationResult<Club, unknown, ClubBody> {
   const queryClient = useQueryClient();
   return useMutation<Club, unknown, ClubBody>(
     async (body: ClubBody) => {
-      const { data } = await api.post<Club>('/clubs', body);
+      const { data } = await api.post<Club, ClubBody>('/clubs', body);
       return data;
     },
     {
@@ -68,7 +68,7 @@ export function usePutClub(): UseMutationResult<Club, unknown, PutClubVariables>
   const queryClient = useQueryClient();
   return useMutation<Club, unknown, PutClubVariables>(
     async ({ id, ...body }: PutClubVariables) => {
-      const { data } = await api.put<Club>(`/clubs/${id}`, body);
+      const { data } = await api.put<Club, ClubBody>(`/clubs/${id}`, body);
       return data;
     },
     {

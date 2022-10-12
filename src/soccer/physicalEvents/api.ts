@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, RequestBody, PaginatedList, RequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery } from '../../api';
 import PhysicalEvent, { PhysicalEventType } from './model';
 
 export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
@@ -16,7 +16,7 @@ export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
   });
 }
 
-export interface GetPhysicalEventsQuery extends RequestQuery {
+export interface GetPhysicalEventsQuery extends ListRequestQuery {
   match?: string;
   composition?: string;
   wallet?: string;
@@ -34,7 +34,7 @@ export function usePhysicalEvents(
   });
 }
 
-export interface PhysicalEventBody extends RequestBody {
+export interface PhysicalEventBody {
   type?: PhysicalEventType;
   name?: string | null;
   description?: string | null;
@@ -52,7 +52,7 @@ export function usePostPhysicalEvent(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<PhysicalEvent, unknown, PhysicalEventBody>(
     async (body: PhysicalEventBody) => {
-      const { data } = await api.post<PhysicalEvent>('/physical_events', body);
+      const { data } = await api.post<PhysicalEvent, PhysicalEventBody>('/physical_events', body);
       return data;
     },
     {
@@ -74,7 +74,10 @@ export function usePutPhysicalEvent(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<PhysicalEvent, unknown, PutPhysicalEventVariables>(
     async ({ id, ...body }: PutPhysicalEventVariables) => {
-      const { data } = await api.put<PhysicalEvent>(`/physical_events/${id}`, body);
+      const { data } = await api.put<PhysicalEvent, PhysicalEventBody>(
+        `/physical_events/${id}`,
+        body,
+      );
       return data;
     },
     {

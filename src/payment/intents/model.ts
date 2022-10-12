@@ -3,48 +3,35 @@ export interface RedirectToUrl {
   url?: string;
 }
 
-export interface AlipayHandleRedirect {
-  native_data?: string;
-  native_url?: string;
-  return_url?: string;
-  url?: string;
-}
-
-export interface OxxoDisplayDetails {
-  expires_after?: number;
-  hosted_voucher_url?: string;
-  number?: string;
-}
-
-export type NextActionType =
+export type PaymentIntentNextActionType =
   | 'unknown'
-  | 'use_stripe_sdk'
   | 'redirect_to_url'
-  | 'alipay_handle_redirect'
+  | 'use_stripe_sdk'
   | 'oxxo_display_details';
 
-export interface NextAction {
-  alipay_handle_redirect?: AlipayHandleRedirect;
-  oxxo_display_details?: OxxoDisplayDetails;
+export interface PaymentIntentNextAction {
   redirect_to_url?: RedirectToUrl;
-  type: NextActionType;
+  type: PaymentIntentNextActionType;
   use_stripe_sdk?: unknown;
 }
 
 export type PaymentIntentStatus =
   | 'unknown'
-  | 'canceled'
-  | 'processing'
+  | 'requires_payment_method'
+  | 'requires_confirmation'
   | 'requires_action'
   | 'requires_capture'
-  | 'requires_confirmation'
-  | 'requires_payment_method'
+  | 'processing'
+  | 'captured'
+  | 'canceled'
+  | 'failed'
+  | 'refunded'
   | 'succeeded';
 
 export default interface PaymentIntent {
   id?: string;
   amount?: number;
   status?: PaymentIntentStatus;
-  next_action?: NextAction;
+  next_action?: PaymentIntent;
   client_secret?: string;
 }

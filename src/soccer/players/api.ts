@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { AxiosResponse } from 'axios';
-import { ApiContext, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ApiContext, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Player from './model';
 
 export function usePlayer(id?: string): UseQueryResult<Player> {
@@ -25,7 +25,7 @@ export function usePlayer(id?: string): UseQueryResult<Player> {
 
 export type PlayerList = PaginatedList<'players', Player>;
 
-export interface GetPlayersQuery extends RequestQuery {
+export interface GetPlayersQuery extends ListRequestQuery {
   wallet?: string;
   composition_setting?: string;
   match?: string;
@@ -37,7 +37,7 @@ export interface GetPlayersQuery extends RequestQuery {
 export function usePlayers(query?: GetPlayersQuery): UseQueryResult<PlayerList> {
   const api = useApi();
   return useQuery<PlayerList>(['players', query], async () => {
-    const { data } = await api.get<PlayerList>('/players', query);
+    const { data } = await api.get<PlayerList, GetPlayersQuery>('/players', query);
     return data;
   });
 }
@@ -53,7 +53,7 @@ export async function getPlayers(
     position,
   }: GetPlayersQuery,
 ): Promise<AxiosResponse<PlayerList>> {
-  return api.get<PlayerList>('/players', {
+  return api.get<PlayerList, GetPlayersQuery>('/players', {
     wallet,
     composition_setting,
     match,
@@ -63,7 +63,7 @@ export async function getPlayers(
   });
 }
 
-export interface PlayerBody extends RequestBody {
+export interface PlayerBody {
   name?: string | null;
   description?: string | null;
   club?: string | null;
@@ -77,7 +77,7 @@ export function usePostPlayer(): UseMutationResult<Player, unknown, PlayerBody> 
   const queryClient = useQueryClient();
   return useMutation<Player, unknown, PlayerBody>(
     async (body: PlayerBody) => {
-      const { data } = await api.post<Player>('/players', body);
+      const { data } = await api.post<Player, PlayerBody>('/players', body);
       return data;
     },
     {
@@ -95,7 +95,7 @@ export function usePutPlayer(): UseMutationResult<Player, unknown, PutPlayerVari
   const queryClient = useQueryClient();
   return useMutation<Player, unknown, PutPlayerVariables>(
     async ({ id, ...body }: PutPlayerVariables) => {
-      const { data } = await api.put<Player>(`/players/${id}`, body);
+      const { data } = await api.put<Player, PlayerBody>(`/players/${id}`, body);
       return data;
     },
     {
@@ -130,7 +130,7 @@ export function useAddPlayerIllustration(): UseMutationResult<
   );
 }
 
-export interface PostPlayerBulkBody extends RequestBody {
+export interface PostPlayerBulkBody {
   bulk: File;
 }
 
@@ -144,7 +144,10 @@ export function usePostPlayerBulk(): UseMutationResult<
   const api = useApi();
   return useMutation<PostPlayerBulkResponse, unknown, PostPlayerBulkBody>(
     async (body: PostPlayerBulkBody) => {
-      const { data } = await api.post<PostPlayerBulkResponse>('/players/bulk', body);
+      const { data } = await api.post<PostPlayerBulkResponse, PostPlayerBulkBody>(
+        '/players/bulk',
+        body,
+      );
       return data;
     },
   );

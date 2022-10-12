@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, useApi } from '../../api';
+import { PaginatedList, useApi } from '../../api';
 import Rank from './model';
 
 export function useRank(id?: string): UseQueryResult<Rank> {
@@ -30,7 +30,7 @@ export function useRanks(): UseQueryResult<RankList> {
   });
 }
 
-export interface RankBody extends RequestBody {
+export interface RankBody {
   name?: string | null;
   description?: string | null;
   ranking?: string | null;
@@ -43,7 +43,7 @@ export function usePostRank(): UseMutationResult<Rank, unknown, RankBody> {
   const queryClient = useQueryClient();
   return useMutation<Rank, unknown, RankBody>(
     async (body: RankBody) => {
-      const { data } = await api.post<Rank>('/ranks', body);
+      const { data } = await api.post<Rank, RankBody>('/ranks', body);
       return data;
     },
     {
@@ -61,7 +61,7 @@ export function usePutRank(): UseMutationResult<Rank, unknown, PutRankVariables>
   const queryClient = useQueryClient();
   return useMutation<Rank, unknown, PutRankVariables>(
     async ({ id, ...body }: PutRankVariables) => {
-      const { data } = await api.put<Rank>(`/ranks/${id}`, body);
+      const { data } = await api.put<Rank, RankBody>(`/ranks/${id}`, body);
       return data;
     },
     {

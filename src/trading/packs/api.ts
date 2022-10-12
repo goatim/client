@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery } from '../../api';
 import Pack from './model';
 
 export function usePack(id?: string): UseQueryResult<Pack> {
@@ -24,7 +24,7 @@ export function usePack(id?: string): UseQueryResult<Pack> {
 
 export type PackList = PaginatedList<'packs', Pack>;
 
-export interface GetPacksQuery extends RequestQuery {
+export interface GetPacksQuery extends ListRequestQuery {
   seen?: boolean;
   wallet?: string;
   tags?: string[] | string;
@@ -39,7 +39,7 @@ export function usePacks(query?: GetPacksQuery): UseQueryResult<PackList> {
   });
 }
 
-export interface PostPackBody extends RequestBody {
+export interface PostPackBody {
   wallet?: string | null;
   share_bulks?: string | null;
   tags?: string | null;
@@ -53,7 +53,7 @@ export function usePostPack(): UseMutationResult<Pack, unknown, PostPackBody> {
   const queryClient = useQueryClient();
   return useMutation<Pack, unknown, PostPackBody>(
     async (body: PostPackBody) => {
-      const { data } = await api.post<Pack>('/packs', body);
+      const { data } = await api.post<Pack, PostPackBody>('/packs', body);
       return data;
     },
     {
@@ -64,7 +64,7 @@ export function usePostPack(): UseMutationResult<Pack, unknown, PostPackBody> {
   );
 }
 
-export interface PutPackBody extends RequestBody {
+export interface PutPackBody {
   seen?: boolean;
   title?: string | null;
   message?: string | null;
@@ -77,7 +77,7 @@ export function usePutPack(): UseMutationResult<Pack, unknown, PutPackVariables>
   const queryClient = useQueryClient();
   return useMutation<Pack, unknown, PutPackVariables>(
     async ({ id, ...body }: PutPackVariables) => {
-      const { data } = await api.put<Pack>(`/packs/${id}`, body);
+      const { data } = await api.put<Pack, PostPackBody>(`/packs/${id}`, body);
       return data;
     },
     {

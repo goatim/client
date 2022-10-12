@@ -5,8 +5,8 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Wallet from './model';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import { useFridayClient } from '../../client';
 
 export interface GetWalletQuery extends RequestQuery {
@@ -18,7 +18,7 @@ export function useWallet(id?: string, query?: GetWalletQuery): UseQueryResult<W
   return useQuery<Wallet>(
     ['wallets', id],
     async () => {
-      const { data } = await api.get<Wallet>(`/wallets/${id}`, query);
+      const { data } = await api.get<Wallet, RequestQuery>(`/wallets/${id}`, query);
       return data;
     },
     {
@@ -50,7 +50,7 @@ export function useWallets(query?: GetWalletsQuery): UseQueryResult<WalletList> 
   });
 }
 
-export interface WalletBody extends RequestBody {
+export interface WalletBody {
   owner?: string | null;
   name?: string | null;
   type?: string | null;
@@ -63,7 +63,7 @@ export function usePostWallet(): UseMutationResult<Wallet, unknown, WalletBody> 
   const queryClient = useQueryClient();
   return useMutation<Wallet, unknown, WalletBody>(
     async (body: WalletBody) => {
-      const { data } = await api.post<Wallet>('/wallets', body);
+      const { data } = await api.post<Wallet, WalletBody>('/wallets', body);
       return data;
     },
     {
@@ -81,7 +81,7 @@ export function usePutWallet(): UseMutationResult<Wallet, unknown, PutWalletVari
   const queryClient = useQueryClient();
   return useMutation<Wallet, unknown, PutWalletVariables>(
     async ({ id, ...body }: PutWalletVariables) => {
-      const { data } = await api.put<Wallet>(`/wallets/${id}`, body);
+      const { data } = await api.put<Wallet, WalletBody>(`/wallets/${id}`, body);
       return data;
     },
     {

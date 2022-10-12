@@ -1,4 +1,4 @@
-import {Model} from "../../api";
+import { Model } from '../../api';
 
 export enum PermissionLevel {
   /**

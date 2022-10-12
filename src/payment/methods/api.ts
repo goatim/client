@@ -1,5 +1,5 @@
 import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
-import { useApi, RequestBody, PaginatedList } from '../../api';
+import { useApi, PaginatedList } from '../../api';
 import PaymentMethod from './model';
 
 export type PaymentMethodList = PaginatedList<'payment_methods', PaymentMethod>;
@@ -12,7 +12,7 @@ export function usePaymentMethods(): UseQueryResult<PaymentMethodList> {
   });
 }
 
-export interface CreditCardBody extends RequestBody {
+export interface CreditCardBody {
   payment_method?: string;
 }
 

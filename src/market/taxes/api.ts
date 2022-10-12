@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { PaginatedList, RequestQuery, useApi } from '../../api';
 import Tax from './model';
 
 export function useTax(id?: string): UseQueryResult<Tax> {
@@ -25,7 +25,7 @@ export interface GetTaxesQuery extends RequestQuery {
 export function useTaxes(query?: GetTaxesQuery): UseQueryResult<TaxList> {
   const api = useApi();
   return useQuery<TaxList>(['taxes', query], async () => {
-    const { data } = await api.get<TaxList>('/taxes', query);
+    const { data } = await api.get<TaxList, GetTaxesQuery>('/taxes', query);
     return data;
   });
 }
@@ -34,7 +34,7 @@ export function useVats(): UseQueryResult<TaxList> {
   return useTaxes({ tags: 'vat' });
 }
 
-export interface TaxBody extends RequestBody {
+export interface TaxBody {
   tags?: string | null;
   name?: string | null;
   amount?: number;
@@ -47,7 +47,7 @@ export function usePostTax(): UseMutationResult<Tax, unknown, TaxBody> {
   const queryClient = useQueryClient();
   return useMutation<Tax, unknown, TaxBody>(
     async (body: TaxBody) => {
-      const { data } = await api.post<Tax>('/taxes', body);
+      const { data } = await api.post<Tax, TaxBody>('/taxes', body);
       return data;
     },
     {
@@ -65,7 +65,7 @@ export function usePutTax(): UseMutationResult<Tax, unknown, PutTaxVariables> {
   const queryClient = useQueryClient();
   return useMutation<Tax, unknown, PutTaxVariables>(
     async ({ id, ...body }: PutTaxVariables) => {
-      const { data } = await api.put<Tax>(`/taxes/${id}`, body);
+      const { data } = await api.put<Tax, TaxBody>(`/taxes/${id}`, body);
       return data;
     },
     {

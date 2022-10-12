@@ -1,11 +1,10 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { RequestQuery, useApi } from '../../../api';
+import { ListRequestQuery, useApi } from '../../../api';
 import OrdersBook from './model';
 
-export interface GetOrderBookQuery extends RequestQuery {
+export interface GetOrderBookQuery extends ListRequestQuery {
   asset?: string;
-  limit?: number;
 }
 
 export function useOrderBook(

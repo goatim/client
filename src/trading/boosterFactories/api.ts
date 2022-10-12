@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import BoosterFactory from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -23,7 +23,7 @@ export function useBoosterFactory(id?: string): UseQueryResult<BoosterFactory> {
 
 export type BoosterFactoryList = PaginatedList<'booster_factories', BoosterFactory>;
 
-export interface GetBoosterFactoriesQuery extends RequestQuery {
+export interface GetBoosterFactoriesQuery extends ListRequestQuery {
   wallet?: string;
 }
 
@@ -44,7 +44,7 @@ export function useCurrentWalletBoosterFactories(
   return useBoosterFactories({ ...query, wallet: wallet.data?.id });
 }
 
-export interface BoosterFactoryBody extends RequestBody {
+export interface BoosterFactoryBody {
   name?: string | null;
   description?: string | null;
   price?: number;
@@ -62,7 +62,10 @@ export function usePostBoosterFactory(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<BoosterFactory, unknown, BoosterFactoryBody>(
     async (body: BoosterFactoryBody) => {
-      const { data } = await api.post<BoosterFactory>('/booster_factories', body);
+      const { data } = await api.post<BoosterFactory, BoosterFactoryBody>(
+        '/booster_factories',
+        body,
+      );
       return data;
     },
     {
@@ -84,7 +87,10 @@ export function usePutBoosterFactory(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<BoosterFactory, unknown, PutBoosterFactoryVariables>(
     async ({ id, ...body }: PutBoosterFactoryVariables) => {
-      const { data } = await api.put<BoosterFactory>(`/booster_factories/${id}`, body);
+      const { data } = await api.put<BoosterFactory, BoosterFactoryBody>(
+        `/booster_factories/${id}`,
+        body,
+      );
       return data;
     },
     {

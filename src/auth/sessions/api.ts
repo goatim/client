@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 import Session from './model';
 import { ApiError, RequestBody, RequestQuery, useApi } from '../../api';
 
-export interface UseSessionQuery extends RequestQuery {
+export interface UseSessionQuery {
   auto_refresh?: boolean;
 }
 
@@ -50,7 +50,7 @@ export function useActiveSession(): UseQueryResult<Session> {
   );
 }
 
-export interface SignInBody extends RequestBody {
+export interface SignInBody {
   email?: string;
   password?: string;
 }

@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Spotlight from './model';
 
 export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
@@ -38,7 +38,7 @@ export function useSpotlights(query?: GetSpotlightsQuery): UseQueryResult<Spotli
   });
 }
 
-export interface SpotlightBody extends RequestBody {
+export interface SpotlightBody {
   tags?: string;
   type?: string;
   subtitle?: string;
@@ -57,7 +57,7 @@ export function usePostSpotlight(): UseMutationResult<Spotlight, unknown, Spotli
   const queryClient = useQueryClient();
   return useMutation<Spotlight, unknown, SpotlightBody>(
     async (body: SpotlightBody) => {
-      const { data } = await api.post<Spotlight>('/spotlights', body);
+      const { data } = await api.post<Spotlight, SpotlightBody>('/spotlights', body);
       return data;
     },
     {
@@ -75,7 +75,7 @@ export function usePutSpotlight(): UseMutationResult<Spotlight, unknown, PutSpot
   const queryClient = useQueryClient();
   return useMutation<Spotlight, unknown, PutSpotlightVariables>(
     async ({ id, ...body }: PutSpotlightVariables) => {
-      const { data } = await api.put<Spotlight>(`/spotlights/${id}`, body);
+      const { data } = await api.put<Spotlight, SpotlightBody>(`/spotlights/${id}`, body);
       return data;
     },
     {

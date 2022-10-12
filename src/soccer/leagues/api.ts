@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import League from './model';
 
 export function useLeague(id?: string): UseQueryResult<League> {
@@ -22,7 +22,7 @@ export function useLeague(id?: string): UseQueryResult<League> {
 
 export type LeagueList = PaginatedList<'leagues', League>;
 
-export type GetLeaguesQuery = RequestQuery;
+export type GetLeaguesQuery = ListRequestQuery;
 
 export function useLeagues(query?: GetLeaguesQuery): UseQueryResult<LeagueList> {
   const api = useApi();
@@ -32,7 +32,7 @@ export function useLeagues(query?: GetLeaguesQuery): UseQueryResult<LeagueList> 
   });
 }
 
-export interface LeagueBody extends RequestBody {
+export interface LeagueBody {
   name?: string | null;
   description?: string | null;
 }
@@ -42,7 +42,7 @@ export function usePostLeague(): UseMutationResult<League, unknown, LeagueBody> 
   const queryClient = useQueryClient();
   return useMutation<League, unknown, LeagueBody>(
     async (body: LeagueBody) => {
-      const { data } = await api.post<League>('/leagues', body);
+      const { data } = await api.post<League, LeagueBody>('/leagues', body);
       return data;
     },
     {
@@ -60,7 +60,7 @@ export function usePutLeague(): UseMutationResult<League, unknown, PutLeagueVari
   const queryClient = useQueryClient();
   return useMutation<League, unknown, PutLeagueVariables>(
     async ({ id, ...body }: PutLeagueVariables) => {
-      const { data } = await api.put<League>(`/leagues/${id}`, body);
+      const { data } = await api.put<League, LeagueBody>(`/leagues/${id}`, body);
       return data;
     },
     {

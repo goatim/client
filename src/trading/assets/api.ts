@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
 
@@ -28,7 +28,7 @@ export function useAsset(
 
 export type AssetList = PaginatedList<'assets', Asset>;
 
-export interface GetAssetsQuery extends RequestQuery {
+export interface GetAssetsQuery extends ListRequestQuery {
   type?: AssetType;
   league?: string;
   club?: string;
@@ -51,7 +51,7 @@ export function useAssets(
   );
 }
 
-export interface AssetBody extends RequestBody {
+export interface AssetBody {
   name?: string | null;
   entity?: string | null;
 }
@@ -61,7 +61,7 @@ export function usePostAsset(): UseMutationResult<Asset, unknown, AssetBody> {
   const queryClient = useQueryClient();
   return useMutation<Asset, unknown, AssetBody>(
     async (body: AssetBody) => {
-      const { data } = await api.post<Asset>('/assets', body);
+      const { data } = await api.post<Asset, AssetBody>('/assets', body);
       return data;
     },
     {
@@ -79,7 +79,7 @@ export function usePutAsset(): UseMutationResult<Asset, unknown, PutAssetVariabl
   const queryClient = useQueryClient();
   return useMutation<Asset, unknown, PutAssetVariables>(
     async ({ id, ...body }: PutAssetVariables) => {
-      const { data } = await api.put<Asset>(`/assets/${id}`, body);
+      const { data } = await api.put<Asset, AssetBody>(`/assets/${id}`, body);
       return data;
     },
     {

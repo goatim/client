@@ -8,7 +8,7 @@ import {
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { DateTime } from 'luxon';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Match, { MatchStatus } from './model';
 
 export function useMatch(id?: string): UseQueryResult<Match> {
@@ -62,7 +62,7 @@ export function useMatchLiveStatus(
 
 export type MatchList = PaginatedList<'matches', Match>;
 
-export interface GetMatchesQuery extends RequestQuery {
+export interface GetMatchesQuery extends ListRequestQuery {
   spotlight?: boolean;
 }
 
@@ -85,7 +85,7 @@ export function useSpotlightMatches(): UseQueryResult<MatchList> {
   return useMatches({ spotlight: true });
 }
 
-export interface MatchBody extends RequestBody {
+export interface MatchBody {
   title?: string | null;
   description?: string | null;
   beginning?: string | null;
@@ -99,7 +99,7 @@ export function usePostMatch(): UseMutationResult<Match, unknown, MatchBody> {
   const queryClient = useQueryClient();
   return useMutation<Match, unknown, MatchBody>(
     async (body: MatchBody) => {
-      const { data } = await api.post<Match>('/matches', body);
+      const { data } = await api.post<Match, MatchBody>('/matches', body);
       return data;
     },
     {
@@ -117,7 +117,7 @@ export function usePutMatch(): UseMutationResult<Match, unknown, PutMatchVariabl
   const queryClient = useQueryClient();
   return useMutation<Match, unknown, PutMatchVariables>(
     async ({ id, ...body }: PutMatchVariables) => {
-      const { data } = await api.put<Match>(`/matches/${id}`, body);
+      const { data } = await api.put<Match, MatchBody>(`/matches/${id}`, body);
       return data;
     },
     {

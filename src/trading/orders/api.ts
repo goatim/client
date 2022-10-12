@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Order, { OrderType } from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -53,7 +53,7 @@ export function useCurrentWalletOrders(
   });
 }
 
-export interface OrderBody extends RequestBody {
+export interface OrderBody {
   wallet?: string | null;
   asset?: string | null;
   type?: OrderType;
@@ -67,7 +67,7 @@ export function usePostOrder(): UseMutationResult<Order, unknown, OrderBody> {
   const queryClient = useQueryClient();
   return useMutation<Order, unknown, OrderBody>(
     async (body: OrderBody) => {
-      const { data } = await api.post<Order>('/orders', body);
+      const { data } = await api.post<Order, OrderBody>('/orders', body);
       return data;
     },
     {
@@ -85,7 +85,7 @@ export function usePutOrder(): UseMutationResult<Order, unknown, PutOrderVariabl
   const queryClient = useQueryClient();
   return useMutation<Order, unknown, PutOrderVariables>(
     async ({ id, ...body }: PutOrderVariables) => {
-      const { data } = await api.put<Order>(`/orders/${id}`, body);
+      const { data } = await api.put<Order, OrderBody>(`/orders/${id}`, body);
       return data;
     },
     {

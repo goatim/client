@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestBody, useApi } from '../../api';
+import { PaginatedList, useApi } from '../../api';
 import CompositionSetting from './model';
 
 export function useCompositionSetting(id?: string): UseQueryResult<CompositionSetting> {
@@ -26,7 +26,7 @@ export function useCompositionSettings(): UseQueryResult<CompositionSettingList>
   });
 }
 
-export interface CompositionSettingBody extends RequestBody {
+export interface CompositionSettingBody {
   name?: string | null;
   description?: string | null;
   is_default?: boolean;
@@ -41,7 +41,10 @@ export function usePostCompositionSetting(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<CompositionSetting, unknown, CompositionSettingBody>(
     async (body: CompositionSettingBody) => {
-      const { data } = await api.post<CompositionSetting>('/composition_settings', body);
+      const { data } = await api.post<CompositionSetting, CompositionSettingBody>(
+        '/composition_settings',
+        body,
+      );
       return data;
     },
     {
@@ -66,7 +69,10 @@ export function usePutCompositionSetting(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<CompositionSetting, unknown, PutCompositionSettingVariables>(
     async ({ id, ...body }: PutCompositionSettingVariables) => {
-      const { data } = await api.put<CompositionSetting>(`/composition_settings/${id}`, body);
+      const { data } = await api.put<CompositionSetting, CompositionSettingBody>(
+        `/composition_settings/${id}`,
+        body,
+      );
       return data;
     },
     {

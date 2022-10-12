@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import Ipo, { IpoType } from './model';
 
 export function useIpo(
@@ -27,7 +27,7 @@ export function useIpo(
 
 export type IpoList = PaginatedList<'ipos', Ipo>;
 
-export interface GetIposQuery extends RequestQuery {
+export interface GetIposQuery extends ListRequestQuery {
   asset?: string;
 }
 
@@ -46,7 +46,7 @@ export function useIpos(
   );
 }
 
-export interface IpoBody extends RequestBody {
+export interface IpoBody {
   asset?: string | null;
   stocks_tags?: string | null;
   type?: IpoType | null;
@@ -62,7 +62,7 @@ export function usePostIpo(): UseMutationResult<Ipo, unknown, IpoBody> {
   const queryClient = useQueryClient();
   return useMutation<Ipo, unknown, IpoBody>(
     async (body: IpoBody) => {
-      const { data } = await api.post<Ipo>('/ipos', body);
+      const { data } = await api.post<Ipo, IpoBody>('/ipos', body);
       return data;
     },
     {
@@ -80,7 +80,7 @@ export function usePutIpo(): UseMutationResult<Ipo, unknown, PutIpoVariables> {
   const queryClient = useQueryClient();
   return useMutation<Ipo, unknown, PutIpoVariables>(
     async ({ id, ...body }: PutIpoVariables) => {
-      const { data } = await api.put<Ipo>(`/ipos/${id}`, body);
+      const { data } = await api.put<Ipo, IpoBody>(`/ipos/${id}`, body);
       return data;
     },
     {

@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { useApi, RequestBody, PaginatedList, RequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery } from '../../api';
 import Dividend, { DividendType } from './model';
 
 export function useDividend(id?: string): UseQueryResult<Dividend> {
@@ -17,7 +17,7 @@ export function useDividend(id?: string): UseQueryResult<Dividend> {
   });
 }
 
-export interface GetDividendsQuery extends RequestQuery {
+export interface GetDividendsQuery extends ListRequestQuery {
   physical_event?: string;
 }
 
@@ -34,7 +34,7 @@ export function useDividends(
   });
 }
 
-export interface DividendBody extends RequestBody {
+export interface DividendBody {
   type?: DividendType;
   asset?: string | null;
   physical_event?: string | null;
@@ -46,7 +46,7 @@ export function usePostDividend(): UseMutationResult<Dividend, unknown, Dividend
   const queryClient = useQueryClient();
   return useMutation<Dividend, unknown, DividendBody>(
     async (body: DividendBody) => {
-      const { data } = await api.post<Dividend>('/dividends', body);
+      const { data } = await api.post<Dividend, DividendBody>('/dividends', body);
       return data;
     },
     {
@@ -82,7 +82,7 @@ export function usePutDividend(): UseMutationResult<Dividend, unknown, PutDivide
   const queryClient = useQueryClient();
   return useMutation<Dividend, unknown, PutDividendVariables>(
     async ({ id, ...body }: PutDividendVariables) => {
-      const { data } = await api.put<Dividend>(`/dividends/${id}`, body);
+      const { data } = await api.put<Dividend, DividendBody>(`/dividends/${id}`, body);
       return data;
     },
     {
@@ -93,7 +93,7 @@ export function usePutDividend(): UseMutationResult<Dividend, unknown, PutDivide
   );
 }
 
-export interface PostDividendBulkBody extends RequestBody {
+export interface PostDividendBulkBody {
   bulk: File;
   physical_event?: string;
 }
@@ -110,7 +110,10 @@ export function usePostDividendBulk(): UseMutationResult<
   const api = useApi();
   return useMutation<PostDividendBulkResponse, unknown, PostDividendBulkBody>(
     async (body: PostDividendBulkBody) => {
-      const { data } = await api.post<PostDividendBulkResponse>('/dividends/bulk', body);
+      const { data } = await api.post<PostDividendBulkResponse, PostDividendBulkBody>(
+        '/dividends/bulk',
+        body,
+      );
       return data;
     },
   );

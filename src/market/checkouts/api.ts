@@ -5,12 +5,16 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, RequestBody, PaginatedList } from '../../api';
+import { useApi, PaginatedList, RequestQuery } from '../../api';
 import Checkout from './model';
 import { useCurrentWallet } from '../wallets/api';
 import { ItemType } from '../items/model';
 import PaymentIntent from '../../payment/intents/model';
 import { OrderList } from '../../trading/orders/api';
+
+export interface CheckoutQuery extends RequestQuery {
+  wallet?: string;
+}
 
 export function useCurrentCheckout(): UseQueryResult<Checkout> {
   const api = useApi();
@@ -20,7 +24,7 @@ export function useCurrentCheckout(): UseQueryResult<Checkout> {
     ['checkouts', 'current'],
     async () => {
       const token = queryClient.getQueryData<Checkout>(['checkouts', 'current'])?.token;
-      const { data } = await api.get<Checkout>(`/checkouts/${token || 'current'}`, {
+      const { data } = await api.get<Checkout, CheckoutQuery>(`/checkouts/${token || 'current'}`, {
         wallet: currentWallet.data?.id,
       });
       return data;
@@ -41,14 +45,14 @@ export function useCheckouts(): UseQueryResult<CheckoutList> {
   });
 }
 
-export interface CheckoutItemBody extends RequestBody {
+export interface CheckoutItemBody {
   type?: ItemType;
   order?: string;
   booster?: string;
   pack?: string;
 }
 
-export interface CheckoutBody extends RequestBody {
+export interface CheckoutBody {
   items?: CheckoutItemBody[] | string;
   wallet?: string;
   expiration?: string;
@@ -70,7 +74,7 @@ export function usePostCheckout(
       if (wallet.data?.id) {
         body.wallet = wallet.data?.id;
       }
-      const { data } = await api.post<Checkout>('/checkouts', body);
+      const { data } = await api.post<Checkout, CheckoutBody>('/checkouts', body);
       return data;
     },
     {
@@ -93,9 +97,13 @@ export function usePutCheckout(
         body.items = JSON.stringify(body.items);
       }
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
-      const { data } = await api.put<Checkout>(`/checkouts/${checkout?.token || 'current'}`, body, {
-        wallet: wallet.data?.id,
-      });
+      const { data } = await api.put<Checkout, CheckoutBody, CheckoutQuery>(
+        `/checkouts/${checkout?.token || 'current'}`,
+        body,
+        {
+          wallet: wallet.data?.id,
+        },
+      );
       return data;
     },
     {
@@ -113,7 +121,7 @@ export function useDeleteCheckout(checkoutKey = 'current'): UseMutationResult<vo
   return useMutation<void, unknown, void>(
     async () => {
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
-      await api.delete<void>(`/checkouts/${checkout?.token || 'current'}`, {
+      await api.delete<void, CheckoutQuery>(`/checkouts/${checkout?.token || 'current'}`, {
         wallet: wallet.data?.id,
       });
     },
@@ -134,7 +142,7 @@ export function useAddCheckoutItem(
   return useMutation<Checkout, unknown, CheckoutItemBody>(
     async (body: CheckoutItemBody) => {
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
-      const { data } = await api.post<Checkout>(
+      const { data } = await api.post<Checkout, CheckoutItemBody, CheckoutQuery>(
         `/checkouts/${checkout?.token || 'current'}/items`,
         body,
         {
@@ -167,7 +175,7 @@ export function usePutCheckoutItem(
   return useMutation<Checkout, unknown, PutCheckoutItemVariables>(
     async ({ id, ...body }: PutCheckoutItemVariables) => {
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
-      const { data } = await api.put<Checkout>(
+      const { data } = await api.put<Checkout, CheckoutItemBody, CheckoutQuery>(
         `/checkouts/${checkout?.token || 'current'}/items/${id}`,
         body,
         {
@@ -198,7 +206,7 @@ export function useRemoveCheckoutItem(
   return useMutation<Checkout, unknown, string>(
     async (id: string) => {
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
-      const { data } = await api.delete<Checkout>(
+      const { data } = await api.delete<Checkout, CheckoutQuery>(
         `/checkouts/${checkout?.token || 'current'}/items/${id}`,
         {
           wallet: wallet.data?.id,
@@ -219,13 +227,17 @@ export function useRemoveCheckoutItem(
   );
 }
 
-export interface ConfirmCheckoutBody extends RequestBody {
+export interface ConfirmCheckoutBody {
   wallet?: string;
   billing?: string;
   payment_method?: string;
-  total_to_pay?: number;
+  card_number?: string;
+  card_exp_month?: string;
+  card_exp_year?: string;
+  card_csc?: string;
+  total_to_pay?: string;
   return_url?: string;
-  attach_payment_method?: boolean;
+  save_payment_method?: string;
 }
 
 export interface CheckoutConfirmation {
@@ -242,7 +254,7 @@ export function useConfirmCheckout(
   return useMutation<CheckoutConfirmation, unknown, ConfirmCheckoutBody>(
     async (body: ConfirmCheckoutBody) => {
       const checkout = queryClient.getQueryData<Checkout>(['checkouts', checkoutKey]);
-      const { data } = await api.post<CheckoutConfirmation>(
+      const { data } = await api.post<CheckoutConfirmation, ConfirmCheckoutBody, CheckoutQuery>(
         `/checkouts/${checkout?.token || 'current'}/confirm`,
         body,
         {

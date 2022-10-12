@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery } from '../../api';
 import PackFactory from './model';
 
 export function usePackFactory(id?: string): UseQueryResult<PackFactory> {
@@ -24,7 +24,7 @@ export function usePackFactory(id?: string): UseQueryResult<PackFactory> {
 
 export type PackFactoryList = PaginatedList<'pack_factories', PackFactory>;
 
-export interface GetPackFactoriesQuery extends RequestQuery {
+export interface GetPackFactoriesQuery extends ListRequestQuery {
   tags?: string[] | string;
   stock_tags?: string[] | string;
   margin?: string[] | string;
@@ -38,7 +38,7 @@ export function usePackFactories(query?: GetPackFactoriesQuery): UseQueryResult<
   });
 }
 
-export interface PackFactoryBody extends RequestBody {
+export interface PackFactoryBody {
   name?: string | null;
   description?: string | null;
   tags?: string | null;
@@ -55,7 +55,7 @@ export function usePostPackFactory(): UseMutationResult<PackFactory, unknown, Pa
   const queryClient = useQueryClient();
   return useMutation<PackFactory, unknown, PackFactoryBody>(
     async (body: PackFactoryBody) => {
-      const { data } = await api.post<PackFactory>('/pack_factories', body);
+      const { data } = await api.post<PackFactory, PackFactoryBody>('/pack_factories', body);
       return data;
     },
     {
@@ -77,7 +77,7 @@ export function usePutPackFactory(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<PackFactory, unknown, PutPackFactoryVariables>(
     async ({ id, ...body }: PutPackFactoryVariables) => {
-      const { data } = await api.put<PackFactory>(`/pack_factories/${id}`, body);
+      const { data } = await api.put<PackFactory, PackFactoryBody>(`/pack_factories/${id}`, body);
       return data;
     },
     {
