@@ -168,7 +168,7 @@ import PaymentIntent, {
   PaymentIntentNextAction,
   PaymentIntentStatus,
 } from './payment/intents/model';
-import PaymentMethod, { CardBrands, Card, MinifiedPaymentMethod } from './payment/methods/model';
+import PaymentMethod, { CardBrand, Card, MinifiedPaymentMethod } from './payment/methods/model';
 import {
   PaymentMethodList,
   usePaymentMethods,
@@ -652,7 +652,7 @@ export type {
   PaymentIntentNextAction,
   PaymentIntentStatus,
   PaymentMethod,
-  CardBrands,
+  CardBrand,
   Card,
   MinifiedPaymentMethod,
   PaymentMethodList,

@@ -1,6 +1,6 @@
 import { PaymentService } from '../services';
 
-export type CardBrands =
+export type CardBrand =
   | 'amex'
   | 'diners'
   | 'discover'
@@ -12,7 +12,7 @@ export type CardBrands =
 
 export interface Card {
   country?: string;
-  brand?: CardBrands;
+  brand?: CardBrand;
   exp_month?: number;
   exp_year?: number;
   last4?: string;
