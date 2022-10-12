@@ -15,7 +15,7 @@ export function formatEuros(amount?: number, decimalDigits = 2): string {
   if (resolvedEuros === undefined) {
     return '';
   }
-  return `${resolvedEuros.toFixed(decimalDigits)} FDY`;
+  return `${resolvedEuros.toFixed(decimalDigits)} €`;
 }
 
 export function formatEurosVariation(variation?: number, decimalDigits = 2): string {
