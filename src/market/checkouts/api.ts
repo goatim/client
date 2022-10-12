@@ -235,7 +235,7 @@ export interface ConfirmCheckoutBody {
   card_exp_month?: string;
   card_exp_year?: string;
   card_csc?: string;
-  total_to_pay?: string;
+  total_to_pay?: number;
   return_url?: string;
   save_payment_method?: string;
 }
