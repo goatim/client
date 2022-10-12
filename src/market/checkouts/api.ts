@@ -237,7 +237,7 @@ export interface ConfirmCheckoutBody {
   card_csc?: string;
   total_to_pay?: number;
   return_url?: string;
-  save_payment_method?: string;
+  save_payment_method?: boolean;
 }
 
 export interface CheckoutConfirmation {
