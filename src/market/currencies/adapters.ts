@@ -15,12 +15,15 @@ export function adaptCurrency(amount?: number, smallestUnit = 0.001): number | u
 export function formatCurrency(
   amount?: number,
   smallestUnit = 0.001,
-  currency = 'EUR',
   locale = 'fr-FR',
+  currency?: string,
+  currencySign?: string,
 ): string {
   const resolvedCurrency = resolveCurrency(amount, smallestUnit);
   if (resolvedCurrency === undefined) {
     return '';
   }
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(resolvedCurrency);
+  return new Intl.NumberFormat(locale, { style: 'currency', currency, currencySign }).format(
+    resolvedCurrency,
+  );
 }
