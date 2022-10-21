@@ -5,6 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { useCallback } from 'react';
 import { useApi, PaginatedList, RequestQuery } from '../../api';
 import Checkout from './model';
 import { useCurrentWallet } from '../wallets/api';
@@ -270,7 +271,9 @@ export function useConfirmCheckout(
   );
 }
 
-export function useClearCheckout(checkoutKey = 'current'): void {
+export function useClearCheckout(checkoutKey = 'current'): () => void {
   const queryClient = useQueryClient();
-  queryClient.removeQueries(['checkouts', checkoutKey], { exact: true });
+  return useCallback(() => {
+    queryClient.removeQueries(['checkouts', checkoutKey], { exact: true });
+  }, [checkoutKey, queryClient]);
 }
