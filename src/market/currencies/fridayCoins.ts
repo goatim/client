@@ -23,7 +23,6 @@ export function formatFridayCoins(
   return formatCurrency(amount, {
     smallestUnit: fridayCoinsSmallestUnit,
     iso: 'FDY',
-    symbol: 'FDY',
     decimalDigits,
     signDisplay,
   });

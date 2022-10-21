@@ -13,7 +13,6 @@ export type FormatCurrencySignDisplay = 'auto' | 'never' | 'always' | 'exceptZer
 export interface FormatCurrencyOptions {
   smallestUnit?: number;
   iso?: string;
-  symbol?: string;
   decimalDigits?: number;
   signDisplay?: FormatCurrencySignDisplay;
 }
@@ -26,8 +25,7 @@ export function formatCurrency(
   const resolvedCurrency = resolveCurrency(amount, options?.smallestUnit || 0.01);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: options?.iso,
-    currencySign: options?.symbol,
+    currency: options?.iso || 'EUR',
     minimumFractionDigits: options?.decimalDigits,
     signDisplay: options?.signDisplay,
   }).format(resolvedCurrency);
