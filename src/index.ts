@@ -91,6 +91,7 @@ import {
   ConfirmCheckoutBody,
   CheckoutConfirmation,
   useConfirmCheckout,
+  useClearCheckout,
 } from './market/checkouts/api';
 import Currency from './market/currencies/model';
 import {
@@ -613,6 +614,7 @@ export {
   useAddWalletPicture,
   useCheckouts,
   useConfirmCheckout,
+  useClearCheckout,
   usePostCheckout,
   usePostTax,
   usePostWallet,

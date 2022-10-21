@@ -11,6 +11,8 @@ import { useCurrentWallet } from '../wallets/api';
 import { ItemType } from '../items/model';
 import PaymentIntent from '../../payment/intents/model';
 import { OrderList } from '../../trading/orders/api';
+import { PackList } from '../../trading/packs/api';
+import { BoosterList } from '../../trading/boosters/api';
 
 export interface CheckoutQuery extends RequestQuery {
   wallet?: string;
@@ -243,6 +245,8 @@ export interface ConfirmCheckoutBody {
 export interface CheckoutConfirmation {
   payment_intent?: PaymentIntent;
   orders?: OrderList;
+  packs?: PackList;
+  boosters?: BoosterList;
 }
 
 export function useConfirmCheckout(
@@ -263,10 +267,10 @@ export function useConfirmCheckout(
       );
       return data;
     },
-    {
-      onSuccess() {
-        queryClient.removeQueries(['checkouts', checkoutKey], { exact: true });
-      },
-    },
   );
+}
+
+export function useClearCheckout(checkoutKey = 'current'): void {
+  const queryClient = useQueryClient();
+  queryClient.removeQueries(['checkouts', checkoutKey], { exact: true });
 }
