@@ -38,20 +38,16 @@ export function useCurrenciesRates(
   });
 }
 
-export function useFridayCoinOverEtherConvertor(): (amount?: number) => number | undefined {
+export function useFridayCoinOverEtherConvertor(): (amount: number) => number | undefined {
   const fridayOverEther = useCurrenciesRate('FDY_ETH');
   return useCallback(
-    (amount?: number) => {
+    (amount: number) => {
       const resolvedFridayCoins = resolveFridayCoins(amount);
 
-      if (resolvedFridayCoins === undefined) {
+      if (fridayOverEther.data?.rate === undefined) {
         return undefined;
       }
-
-      if (fridayOverEther.data?.rate !== undefined) {
-        return resolvedFridayCoins * fridayOverEther.data.rate;
-      }
-      return undefined;
+      return resolvedFridayCoins * fridayOverEther.data.rate;
     },
     [fridayOverEther.data?.rate],
   );
