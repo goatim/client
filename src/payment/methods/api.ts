@@ -1,4 +1,10 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from 'react-query';
 import { useApi, PaginatedList } from '../../api';
 import PaymentMethod from './model';
 
@@ -18,8 +24,27 @@ export interface CreditCardBody {
 
 export function useAddCreditCard(): UseMutationResult<PaymentMethod, unknown, CreditCardBody> {
   const api = useApi();
-  return useMutation<PaymentMethod, unknown, CreditCardBody>(async (body: CreditCardBody) => {
-    const { data } = await api.post<PaymentMethod, CreditCardBody>('/payment_methods', body);
-    return data;
-  });
+  const queryClient = useQueryClient();
+  return useMutation<PaymentMethod, unknown, CreditCardBody>(
+    async (body: CreditCardBody) => {
+      const { data } = await api.post<PaymentMethod, CreditCardBody>('/payment_methods', body);
+      return data;
+    },
+    {
+      onSuccess: (paymentMethod: PaymentMethod) => {
+        queryClient.setQueryData<PaymentMethodList>(
+          'payment_methods',
+          (paymentMethodList: PaymentMethodList | undefined) => {
+            return paymentMethodList
+              ? {
+                  ...paymentMethodList,
+                  payment_methods: [...paymentMethodList.payment_methods, paymentMethod],
+                  total: paymentMethodList.total + 1,
+                }
+              : { payment_methods: [paymentMethod], total: 1 };
+          },
+        );
+      },
+    },
+  );
 }
