@@ -14,4 +14,5 @@ export default interface Match extends Model {
   is_public?: boolean;
   status?: MatchStatus;
   icon?: Image;
+  nb_participants?: number;
 }
