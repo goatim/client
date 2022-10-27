@@ -8,7 +8,7 @@ export function adaptEtherAmount(amount: number): number {
   return Math.round(amount / etherSmallestUnit);
 }
 
-export function formatEtherAmount(amount: number, decimalDigits = 6, locale = 'fr-FR'): string {
+export function formatEtherAmount(amount: number, decimalDigits = 7, locale = 'fr-FR'): string {
   const resolvedAmount = resolveEtherAmount(amount);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -19,7 +19,7 @@ export function formatEtherAmount(amount: number, decimalDigits = 6, locale = 'f
 
 export function formatEtherVariation(
   variation: number,
-  decimalDigits = 6,
+  decimalDigits = 7,
   locale = 'fr-FR',
 ): string {
   const resolvedVariation = resolveEtherAmount(variation);
