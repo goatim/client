@@ -1,33 +1,32 @@
-import {
-  adaptCurrency,
-  formatCurrency,
-  FormatCurrencySignDisplay,
-  resolveCurrency,
-} from './adapters';
-
 export const etherSmallestUnit = 0.001;
 
-export function resolveEther(amount: number): number {
-  return resolveCurrency(amount, etherSmallestUnit);
+export function resolveEtherAmount(amount: number): number {
+  return amount * etherSmallestUnit;
 }
 
-export function adaptEther(amount: number): number {
-  return adaptCurrency(amount, etherSmallestUnit);
+export function adaptEtherAmount(amount: number): number {
+  return Math.round(amount / etherSmallestUnit);
 }
 
-export function formatEther(
-  amount: number,
-  decimalDigits = 2,
-  signDisplay: FormatCurrencySignDisplay = 'auto',
+export function formatEtherAmount(amount: number, decimalDigits = 6, locale = 'fr-FR'): string {
+  const resolvedAmount = resolveEtherAmount(amount);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'ETH',
+    minimumFractionDigits: decimalDigits,
+  }).format(resolvedAmount);
+}
+
+export function formatEtherVariation(
+  variation: number,
+  decimalDigits = 6,
+  locale = 'fr-FR',
 ): string {
-  return formatCurrency(amount, {
-    smallestUnit: etherSmallestUnit,
-    iso: 'ETH',
-    decimalDigits,
-    signDisplay,
-  });
-}
-
-export function formatEtherVariation(variation: number, decimalDigits = 2): string {
-  return formatEther(variation, decimalDigits, 'exceptZero');
+  const resolvedVariation = resolveEtherAmount(variation);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'ETH',
+    minimumFractionDigits: decimalDigits,
+    signDisplay: 'exceptZero',
+  }).format(resolvedVariation);
 }

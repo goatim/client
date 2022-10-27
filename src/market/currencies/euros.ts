@@ -1,33 +1,32 @@
-import {
-  adaptCurrency,
-  formatCurrency,
-  FormatCurrencySignDisplay,
-  resolveCurrency,
-} from './adapters';
-
 export const eurosSmallestUnit = 0.01;
 
-export function resolveEuros(amount: number): number | undefined {
-  return resolveCurrency(amount, eurosSmallestUnit);
+export function resolveEurosAmount(amount: number): number {
+  return amount * eurosSmallestUnit;
 }
 
-export function adaptEuros(amount: number): number | undefined {
-  return adaptCurrency(amount, eurosSmallestUnit);
+export function adaptEurosAmount(amount: number): number {
+  return Math.round(amount / eurosSmallestUnit);
 }
 
-export function formatEuros(
-  amount: number,
+export function formatEurosAmount(amount: number, decimalDigits = 2, locale = 'fr-FR'): string {
+  const resolvedAmount = resolveEurosAmount(amount);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: decimalDigits,
+  }).format(resolvedAmount);
+}
+
+export function formatEurosVariation(
+  variation: number,
   decimalDigits = 2,
-  signDisplay: FormatCurrencySignDisplay = 'auto',
+  locale = 'fr-FR',
 ): string {
-  return formatCurrency(amount, {
-    smallestUnit: eurosSmallestUnit,
-    iso: 'EUR',
-    decimalDigits,
-    signDisplay,
-  });
-}
-
-export function formatEurosVariation(variation: number, decimalDigits = 2): string {
-  return formatEuros(variation, decimalDigits, 'exceptZero');
+  const resolvedVariation = resolveEurosAmount(variation);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: decimalDigits,
+    signDisplay: 'exceptZero',
+  }).format(resolvedVariation);
 }

@@ -1,33 +1,38 @@
-import {
-  adaptCurrency,
-  formatCurrency,
-  FormatCurrencySignDisplay,
-  resolveCurrency,
-} from './adapters';
+import { resolveEurosAmount } from './euros';
 
 export const fridayCoinsSmallestUnit = 0.001;
 
-export function resolveFridayCoins(amount: number): number {
-  return resolveCurrency(amount, fridayCoinsSmallestUnit);
+export function resolveFridayCoinsAmount(amount: number): number {
+  return amount * fridayCoinsSmallestUnit;
 }
 
-export function adaptFridayCoins(amount: number): number {
-  return adaptCurrency(amount, fridayCoinsSmallestUnit);
+export function adaptFridayCoinsAmount(amount: number): number {
+  return Math.round(amount / fridayCoinsSmallestUnit);
 }
 
-export function formatFridayCoins(
+export function formatFridayCoinsAmount(
   amount: number,
   decimalDigits = 2,
-  signDisplay: FormatCurrencySignDisplay = 'auto',
+  locale = 'fr-FR',
 ): string {
-  return formatCurrency(amount, {
-    smallestUnit: fridayCoinsSmallestUnit,
-    iso: 'FDY',
-    decimalDigits,
-    signDisplay,
-  });
+  const resolvedAmount = resolveFridayCoinsAmount(amount);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'FDY',
+    minimumFractionDigits: decimalDigits,
+  }).format(resolvedAmount);
 }
 
-export function formatFridayCoinsVariation(variation: number, decimalDigits = 2): string {
-  return formatFridayCoins(variation, decimalDigits, 'exceptZero');
+export function formatFridayCoinsVariation(
+  variation: number,
+  decimalDigits = 2,
+  locale = 'fr-FR',
+): string {
+  const resolvedVariation = resolveFridayCoinsAmount(variation);
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'FDY',
+    minimumFractionDigits: decimalDigits,
+    signDisplay: 'exceptZero',
+  }).format(resolvedVariation);
 }

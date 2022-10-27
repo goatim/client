@@ -100,19 +100,26 @@ import {
   GetCurrenciesQuery,
   useCurrencies,
 } from './market/currencies/api';
-import { resolveCurrency, adaptCurrency, formatCurrency } from './market/currencies/adapters';
+import { formatCurrencyAmount, formatCurrencyVariation } from './market/currencies/adapters';
 import {
   fridayCoinsSmallestUnit,
-  resolveFridayCoins,
-  adaptFridayCoins,
-  formatFridayCoins,
+  resolveFridayCoinsAmount,
+  adaptFridayCoinsAmount,
+  formatFridayCoinsAmount,
   formatFridayCoinsVariation,
 } from './market/currencies/fridayCoins';
 import {
+  etherSmallestUnit,
+  resolveEtherAmount,
+  adaptEtherAmount,
+  formatEtherAmount,
+  formatEtherVariation,
+} from './market/currencies/ether';
+import {
   eurosSmallestUnit,
-  resolveEuros,
-  adaptEuros,
-  formatEuros,
+  resolveEurosAmount,
+  adaptEurosAmount,
+  formatEurosAmount,
   formatEurosVariation,
 } from './market/currencies/euros';
 import CurrenciesRate from './market/currenciesRates/model';
@@ -597,19 +604,23 @@ export type {
 };
 
 export {
-  adaptCurrency,
-  formatCurrency,
-  resolveCurrency,
+  formatCurrencyAmount,
+  formatCurrencyVariation,
   fridayCoinsSmallestUnit,
-  adaptFridayCoins,
-  formatFridayCoins,
+  resolveFridayCoinsAmount,
+  adaptFridayCoinsAmount,
+  formatFridayCoinsAmount,
   formatFridayCoinsVariation,
+  etherSmallestUnit,
+  resolveEtherAmount,
+  adaptEtherAmount,
+  formatEtherAmount,
+  formatEtherVariation,
   eurosSmallestUnit,
-  resolveEuros,
-  adaptEuros,
-  formatEuros,
+  resolveEurosAmount,
+  adaptEurosAmount,
+  formatEurosAmount,
   formatEurosVariation,
-  resolveFridayCoins,
   useAddCheckoutItem,
   useAddWalletPicture,
   useCheckouts,
