@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useCallback } from 'react';
 import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import CurrenciesRate from './model';
-import { resolveFridayCoins } from '../currencies/fridayCoins';
+import { resolveFridayCoinsAmount } from '../currencies/fridayCoins';
 
 export function useCurrenciesRate(
   id?: string,
@@ -42,7 +42,7 @@ export function useFridayCoinOverEtherConvertor(): (amount: number) => number | 
   const fridayOverEther = useCurrenciesRate('FDY_ETH');
   return useCallback(
     (amount: number) => {
-      const resolvedFridayCoins = resolveFridayCoins(amount);
+      const resolvedFridayCoins = resolveFridayCoinsAmount(amount);
 
       if (fridayOverEther.data?.rate === undefined) {
         return undefined;
