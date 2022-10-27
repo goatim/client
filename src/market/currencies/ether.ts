@@ -1,4 +1,4 @@
-export const etherSmallestUnit = 0.001;
+export const etherSmallestUnit = 0.0000000000000000001;
 
 export function resolveEtherAmount(amount: number): number {
   return amount * etherSmallestUnit;
