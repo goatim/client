@@ -1,5 +1,3 @@
-import { resolveEurosAmount } from './euros';
-
 export const fridayCoinsSmallestUnit = 0.001;
 
 export function resolveFridayCoinsAmount(amount: number): number {
