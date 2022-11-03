@@ -460,6 +460,13 @@ import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification from './notifications/model';
+import {
+  GetNotificationQuery,
+  useNotification,
+  NotificationList,
+  GetNotificationsQuery,
+  useNotifications,
+} from './notifications/api';
 import { OnboardingUserEvents } from './onboarding/userEvents';
 import Search, { SearchResultType, SearchResult } from './search/model';
 import { SearchQuery, useSearch } from './search/api';
@@ -943,7 +950,9 @@ export {
  * Notifications
  */
 
-export type { Notification };
+export { useNotification, useNotifications };
+
+export type { Notification, GetNotificationQuery, NotificationList, GetNotificationsQuery };
 
 /**
  * Onboarding

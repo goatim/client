@@ -7,7 +7,6 @@ import { Image } from '../../medias/image';
 export default interface User extends Model {
   slug?: string;
   email?: string;
-  picture?: Image;
   gender?: string;
   first_name?: string;
   last_name?: string;
@@ -18,4 +17,5 @@ export default interface User extends Model {
   country?: Country | string;
   locale?: string;
   session?: Session;
+  picture?: Image;
 }

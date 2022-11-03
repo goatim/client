@@ -7,6 +7,6 @@ export default interface Notification<P = unknown> extends Model {
   wallet?: Wallet | string;
   event?: string;
   payload?: P;
-  seen_at?: string;
-  read_at?: string;
+  is_seen?: boolean;
+  is_read?: boolean;
 }
