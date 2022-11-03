@@ -1,4 +1,5 @@
 import { useQuery, UseQueryResult } from 'react-query';
+import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Portfolio from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
@@ -21,15 +22,22 @@ export interface GetPortfoliosQuery extends ListRequestQuery {
   wallet?: string;
 }
 
-export function usePortfolios(query?: GetPortfoliosQuery): UseQueryResult<PortfolioList> {
+export function usePortfolios(
+  query?: GetPortfoliosQuery,
+  options?: UseQueryOptions<PortfolioList>,
+): UseQueryResult<PortfolioList> {
   const api = useApi();
-  return useQuery<PortfolioList>(['portfolios', query], async () => {
-    const { data } = await api.get<PortfolioList>('/portfolios', query);
-    return data;
-  });
+  return useQuery<PortfolioList>(
+    ['portfolios', query],
+    async () => {
+      const { data } = await api.get<PortfolioList>('/portfolios', query);
+      return data;
+    },
+    options,
+  );
 }
 
 export function useCurrentWalletPortfolios(query?: Omit<GetPortfoliosQuery, 'wallet'>) {
   const wallet = useCurrentWallet();
-  return usePortfolios({ ...query, wallet: wallet.data?.id });
+  return usePortfolios({ ...query, wallet: wallet.data?.id }, { enabled: !!wallet.data?.id });
 }

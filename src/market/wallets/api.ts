@@ -16,7 +16,7 @@ export interface GetWalletQuery extends RequestQuery {
 export function useWallet(id?: string, query?: GetWalletQuery): UseQueryResult<Wallet> {
   const api = useApi();
   return useQuery<Wallet>(
-    ['wallets', id],
+    ['wallets', id, query],
     async () => {
       const { data } = await api.get<Wallet, RequestQuery>(`/wallets/${id}`, query);
       return data;
