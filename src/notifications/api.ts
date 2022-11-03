@@ -21,7 +21,10 @@ export function useNotification(
   );
 }
 
-export type NotificationList = PaginatedList<'notifications', Notification>;
+export interface NotificationList extends PaginatedList<'notifications', Notification> {
+  total_unseen?: number;
+  total_unread?: number;
+}
 
 export interface GetNotificationsQuery extends ListRequestQuery {
   is_seen?: boolean;

@@ -77,6 +77,8 @@ import Billing from './market/billings/model';
 import Capture, { CaptureStatus } from './market/captures/model';
 import Checkout from './market/checkouts/model';
 import {
+  CheckoutQuery,
+  useCheckout,
   useCurrentCheckout,
   CheckoutList,
   useCheckouts,
@@ -91,7 +93,7 @@ import {
   ConfirmCheckoutBody,
   CheckoutConfirmation,
   useConfirmCheckout,
-  useClearCheckout,
+  useClearCheckouts,
 } from './market/checkouts/api';
 import Currency from './market/currencies/model';
 import {
@@ -575,6 +577,7 @@ export type {
   Capture,
   CaptureStatus,
   Checkout,
+  CheckoutQuery,
   CheckoutBody,
   CheckoutConfirmation,
   CheckoutItemBody,
@@ -632,7 +635,7 @@ export {
   useAddWalletPicture,
   useCheckouts,
   useConfirmCheckout,
-  useClearCheckout,
+  useClearCheckouts,
   usePostCheckout,
   usePostTax,
   usePostWallet,
@@ -642,6 +645,7 @@ export {
   useCurrenciesRates,
   useFridayCoinOverEtherConvertor,
   useCurrency,
+  useCheckout,
   useCurrentCheckout,
   useCurrentWallet,
   useCurrentWalletWithdrawals,
