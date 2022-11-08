@@ -38,9 +38,14 @@ export interface GetNotificationsQuery extends ListRequestQuery {
   is_read?: boolean;
 }
 
+export interface UseNotificationsOptions {
+  onCreated: (notification: Notification) => unknown;
+}
+
 export function useNotifications(
   query?: GetNotificationsQuery,
-): UseQueryResult<NotificationList> | undefined {
+  options?: UseNotificationsOptions,
+): UseQueryResult<NotificationList> {
   const api = useApi();
   const queryClient = useQueryClient();
 
@@ -53,14 +58,17 @@ export function useNotifications(
       console.error(error);
     });
 
-    socket.on('create', async () => {
+    socket.on('created', async (notification: Notification) => {
+      if (options?.onCreated) {
+        options.onCreated(notification);
+      }
       await queryClient.invalidateQueries(['notifications', query]);
     });
 
     return () => {
       socket.close();
     };
-  }, [api, query, queryClient]);
+  }, [api, options, query, queryClient]);
 
   return useQuery<NotificationList>(
     ['notifications', query],
