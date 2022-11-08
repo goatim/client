@@ -39,8 +39,8 @@ export interface GetNotificationsQuery extends ListRequestQuery {
 }
 
 export interface UseNotificationsOptions {
-  onCreated: (notification: Notification) => unknown;
-  onUpdated: (notification: Notification) => unknown;
+  onCreated?: (notification: Notification) => unknown;
+  onUpdated?: (notification: Notification) => unknown;
 }
 
 export function useNotifications(
