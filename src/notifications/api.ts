@@ -40,6 +40,7 @@ export interface GetNotificationsQuery extends ListRequestQuery {
 
 export interface UseNotificationsOptions {
   onCreated: (notification: Notification) => unknown;
+  onUpdated: (notification: Notification) => unknown;
 }
 
 export function useNotifications(
@@ -61,6 +62,13 @@ export function useNotifications(
     socket.on('created', async (notification: Notification) => {
       if (options?.onCreated) {
         options.onCreated(notification);
+      }
+      await queryClient.invalidateQueries(['notifications', query]);
+    });
+
+    socket.on('updated', async (notification: Notification) => {
+      if (options?.onUpdated) {
+        options.onUpdated(notification);
       }
       await queryClient.invalidateQueries(['notifications', query]);
     });
