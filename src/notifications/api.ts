@@ -98,7 +98,7 @@ export function usePutNotification(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<Notification, unknown, PutNotificationVariables>(
     async ({ id, ...body }: PutNotificationVariables) => {
-      const { data } = await api.put<Notification, NotificationBody>(`/users/${id}`, body);
+      const { data } = await api.put<Notification, NotificationBody>(`/notifications/${id}`, body);
       return data;
     },
     {
