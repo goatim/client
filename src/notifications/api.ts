@@ -82,17 +82,19 @@ export function useNotifications(
   );
 }
 
-export function useSeeNotification(): UseMutationResult<Notification, unknown, string> {
+export function useSeeAllNotifications(
+  query?: GetNotificationsQuery,
+): UseMutationResult<NotificationList, unknown, void> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Notification, unknown, string>(
-    async (id: string) => {
-      const { data } = await api.put<Notification>(`/notifications/${id}`);
+  return useMutation<NotificationList>(
+    async () => {
+      const { data } = await api.put<NotificationList>('/notifications/all/see');
       return data;
     },
     {
-      onSuccess() {
-        queryClient.setQueryData(['notifications'], 4);
+      onSuccess(notifications) {
+        queryClient.setQueryData(['notifications', query], notifications);
       },
     },
   );

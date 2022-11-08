@@ -469,6 +469,7 @@ import {
   NotificationList,
   GetNotificationsQuery,
   useNotifications,
+  useSeeAllNotifications,
 } from './notifications/api';
 import { OnboardingUserEvents } from './onboarding/userEvents';
 import Search, { SearchResultType, SearchResult } from './search/model';
@@ -956,7 +957,7 @@ export {
  * Notifications
  */
 
-export { useNotification, useNotifications };
+export { useNotification, useNotifications, useSeeAllNotifications };
 
 export type { Notification, GetNotificationQuery, NotificationList, GetNotificationsQuery };
 
