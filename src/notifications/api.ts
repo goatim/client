@@ -82,6 +82,33 @@ export function useNotifications(
   );
 }
 
+export interface NotificationBody {
+  is_seen?: boolean | string;
+  is_read?: boolean | string;
+}
+
+export type PutNotificationVariables = NotificationBody & { id: string };
+
+export function usePutNotification(): UseMutationResult<
+  Notification,
+  unknown,
+  PutNotificationVariables
+> {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  return useMutation<Notification, unknown, PutNotificationVariables>(
+    async ({ id, ...body }: PutNotificationVariables) => {
+      const { data } = await api.put<Notification, NotificationBody>(`/users/${id}`, body);
+      return data;
+    },
+    {
+      onSuccess(notification: Notification) {
+        queryClient.setQueryData(['users', notification.id], notification);
+      },
+    },
+  );
+}
+
 export function useSeeAllNotifications(
   query?: GetNotificationsQuery,
 ): UseMutationResult<NotificationList, unknown, void> {

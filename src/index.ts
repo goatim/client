@@ -465,10 +465,14 @@ import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification from './notifications/model';
 import {
   GetNotificationQuery,
+  UseNotificationsOptions,
   useNotification,
   NotificationList,
   GetNotificationsQuery,
   useNotifications,
+  NotificationBody,
+  PutNotificationVariables,
+  usePutNotification,
   useSeeAllNotifications,
 } from './notifications/api';
 import { OnboardingUserEvents } from './onboarding/userEvents';
@@ -957,9 +961,17 @@ export {
  * Notifications
  */
 
-export { useNotification, useNotifications, useSeeAllNotifications };
+export { useNotification, useNotifications, usePutNotification, useSeeAllNotifications };
 
-export type { Notification, GetNotificationQuery, NotificationList, GetNotificationsQuery };
+export type {
+  Notification,
+  GetNotificationQuery,
+  UseNotificationsOptions,
+  NotificationList,
+  GetNotificationsQuery,
+  NotificationBody,
+  PutNotificationVariables,
+};
 
 /**
  * Onboarding
