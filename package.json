@@ -32,16 +32,17 @@
     "build-storybook": "build-storybook"
   },
   "peerDependencies": {
+    "@cezembre/forms": ">=1.7.0",
     "luxon": ">=2.0.0",
     "react": ">=17.0.2",
-    "react-query": ">=3.0.0",
-    "@cezembre/forms": ">=1.7.0"
+    "react-query": ">=3.0.0"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
     "http-status": "^1.5.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "socket.io-client": "^4.5.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",

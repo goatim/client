@@ -1,8 +1,11 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
+import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
 import base64 from 'base-64';
 import { FormErrors } from '@cezembre/forms';
+import { ManagerOptions } from 'socket.io-client/build/esm/manager';
+import { SocketOptions } from 'socket.io-client/build/esm/socket';
 
 export interface Model {
   id: string;
@@ -250,6 +253,8 @@ export interface ApiContext {
     query?: RQ,
   ): Promise<AxiosResponse<D>>;
   delete<D = unknown, RQ = RequestQuery>(route: string, query?: RQ): Promise<AxiosResponse<D>>;
+
+  createSocket: (namespace?: string, opts?: Partial<ManagerOptions & SocketOptions>) => Socket;
 }
 
 const apiContext = createContext<ApiContext | undefined>(undefined);
@@ -361,6 +366,19 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
     [persistConfig],
   );
 
+  const createSocket = useCallback(
+    (namespace?: string, opts?: Partial<ManagerOptions & SocketOptions>): Socket => {
+      return io((apiConfig?.host || '') + namespace, {
+        ...opts,
+        auth: {
+          api_key: apiConfig?.api_key,
+          bearer_token: apiConfig?.bearer_token,
+        },
+      });
+    },
+    [apiConfig?.api_key, apiConfig?.bearer_token, apiConfig?.host],
+  );
+
   const value = useMemo<ApiContext>(
     () => ({
       config: apiConfig,
@@ -375,8 +393,9 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
       put: (route: string, body?: unknown, query?: unknown) =>
         apiPut(route, body, apiConfig, query),
       delete: (route: string, query?: unknown) => apiDelete(route, apiConfig, query),
+      createSocket,
     }),
-    [apiConfig, setApiKey, setBearerToken, setConfig, setHost, setLocale],
+    [apiConfig, createSocket, setApiKey, setBearerToken, setConfig, setHost, setLocale],
   );
 
   return <apiContext.Provider value={value}>{children}</apiContext.Provider>;

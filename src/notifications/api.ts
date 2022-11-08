@@ -1,4 +1,11 @@
-import { useQuery, UseQueryResult } from 'react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from 'react-query';
+import { useEffect } from 'react';
 import Notification from './model';
 import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../api';
 
@@ -35,8 +42,50 @@ export function useNotifications(
   query?: GetNotificationsQuery,
 ): UseQueryResult<NotificationList> | undefined {
   const api = useApi();
-  return useQuery<NotificationList>(['notifications', query], async () => {
-    const { data } = await api.get<NotificationList>('/notifications', query);
-    return data;
-  });
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const socket = api.createSocket('/notifications', {
+      query,
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
+
+    socket.on('create', async () => {
+      await queryClient.invalidateQueries(['notifications', query]);
+    });
+
+    return () => {
+      socket.close();
+    };
+  }, [api, query, queryClient]);
+
+  return useQuery<NotificationList>(
+    ['notifications', query],
+    async () => {
+      const { data } = await api.get<NotificationList>('/notifications', query);
+      return data;
+    },
+    {
+      staleTime: Infinity,
+    },
+  );
+}
+
+export function useSeeNotification(): UseMutationResult<Notification, unknown, string> {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  return useMutation<Notification, unknown, string>(
+    async (id: string) => {
+      const { data } = await api.put<Notification>(`/notifications/${id}`);
+      return data;
+    },
+    {
+      onSuccess() {
+        queryClient.setQueryData(['notifications'], 4);
+      },
+    },
+  );
 }
