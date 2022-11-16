@@ -238,7 +238,6 @@ import {
 import Match, { MatchStatus } from './soccer/matches/model';
 import {
   useMatch,
-  useMatchLiveStatus,
   MatchList,
   GetMatchesQuery,
   useMatches,
@@ -778,7 +777,6 @@ export {
   usePutLeague,
   useAddLeagueIcon,
   useMatch,
-  useMatchLiveStatus,
   useMatches,
   useSpotlightMatches,
   usePostMatch,
