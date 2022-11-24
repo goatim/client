@@ -2,20 +2,7 @@ import { Model } from '../../api';
 import Club from '../clubs/model';
 import { Image } from '../../medias/image';
 
-export type PlayerPosition =
-  | 'goalkeeper'
-  | 'fullback'
-  | 'center_back'
-  | 'sweeper'
-  | 'wing_back'
-  | 'center_midfield'
-  | 'defensive_midfield'
-  | 'attacking_midfield'
-  | 'wide_midfield'
-  | 'center_forward'
-  | 'winger'
-  | 'second_striker'
-  | 'striker';
+export type PlayerPosition = 'goalkeeper' | 'defender' | 'midfielder' | 'forward';
 
 export type PlayerSide = 'center' | 'left' | 'right';
 
