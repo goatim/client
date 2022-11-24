@@ -17,4 +17,5 @@ export default interface Player extends Model {
   side?: PlayerSide;
   number?: number;
   resolved_position?: string;
+  resolved_short_position?: string;
 }
