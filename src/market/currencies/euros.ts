@@ -1,7 +1,7 @@
 export const eurosSmallestUnit = 0.01;
 
 export function resolveEurosAmount(amount: number): number {
-  return amount * eurosSmallestUnit;
+  return Number((amount * eurosSmallestUnit).toFixed(2));
 }
 
 export function adaptEurosAmount(amount: number): number {

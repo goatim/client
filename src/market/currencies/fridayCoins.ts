@@ -1,7 +1,7 @@
 export const fridayCoinsSmallestUnit = 0.001;
 
 export function resolveFridayCoinsAmount(amount: number): number {
-  return amount * fridayCoinsSmallestUnit;
+  return Number((amount * fridayCoinsSmallestUnit).toFixed(3));
 }
 
 export function adaptFridayCoinsAmount(amount: number): number {
