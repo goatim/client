@@ -153,9 +153,9 @@ export function usePostAssetAcceptBankProposal(): UseMutationResult<
   PostAssetAcceptBankProposalVariables
 > {
   const api = useApi();
-  return useMutation<Asset, unknown, PostAssetAcceptBankProposalVariables>(
+  return useMutation<Transaction, unknown, PostAssetAcceptBankProposalVariables>(
     async ({ id, ...body }: PostAssetAcceptBankProposalVariables) => {
-      const { data } = await api.post<Asset, AssetAcceptBankProposalBody>(
+      const { data } = await api.post<Transaction, AssetAcceptBankProposalBody>(
         `/assets/${id}/accept_bank_proposal`,
         body,
       );
