@@ -21,4 +21,5 @@ export default interface Asset extends Model<'asset'> {
   club?: Club | string;
   league?: League | string;
   quotation_history?: QuotationHistory;
+  bank_proposal_quotation?: number;
 }
