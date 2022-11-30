@@ -141,8 +141,8 @@ export function useAssetQuotationHistory(assetId?: string): UseQueryResult<Quota
 
 export interface AssetAcceptBankProposalBody {
   wallet?: string;
-  nb_shares?: string;
-  bank_proposal_quotation?: string;
+  nb_shares?: number;
+  bank_proposal_quotation?: number;
 }
 
 export type PostAssetAcceptBankProposalVariables = AssetAcceptBankProposalBody & { id: string };
