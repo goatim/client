@@ -310,6 +310,9 @@ import {
   useAddAssetIllustration,
   useAssetQuotation,
   useAssetQuotationHistory,
+  AssetAcceptBankProposalBody,
+  PostAssetAcceptBankProposalVariables,
+  usePostAssetAcceptBankProposal,
 } from './trading/assets/api';
 import BoosterFactory from './trading/boosterFactories/model';
 import {
@@ -810,6 +813,8 @@ export type {
   AssetType,
   AssetList,
   GetAssetsQuery,
+  AssetAcceptBankProposalBody,
+  PostAssetAcceptBankProposalVariables,
   AssetBody,
   PutAssetVariables,
   AddAssetPictureBody,
@@ -896,6 +901,7 @@ export {
   useAddAssetIllustration,
   useAssetQuotation,
   useAssetQuotationHistory,
+  usePostAssetAcceptBankProposal,
   useBoosterFactory,
   useBoosterFactories,
   useCurrentWalletBoosterFactories,

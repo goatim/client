@@ -9,6 +9,7 @@ import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
+import Transaction from '../transactions/model';
 
 export function useAsset(
   assetId?: string,
@@ -135,5 +136,30 @@ export function useAssetQuotationHistory(assetId?: string): UseQueryResult<Quota
       return data;
     },
     { enabled: !!assetId },
+  );
+}
+
+export interface AssetAcceptBankProposalBody {
+  wallet?: string;
+  nb_shares?: string;
+  bank_proposal_quotation?: string;
+}
+
+export type PostAssetAcceptBankProposalVariables = AssetAcceptBankProposalBody & { id: string };
+
+export function usePostAssetAcceptBankProposal(): UseMutationResult<
+  Transaction,
+  unknown,
+  PostAssetAcceptBankProposalVariables
+> {
+  const api = useApi();
+  return useMutation<Asset, unknown, PostAssetAcceptBankProposalVariables>(
+    async ({ id, ...body }: PostAssetAcceptBankProposalVariables) => {
+      const { data } = await api.post<Asset, AssetAcceptBankProposalBody>(
+        `/assets/${id}/accept_bank_proposal`,
+        body,
+      );
+      return data;
+    },
   );
 }
