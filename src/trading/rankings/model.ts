@@ -13,7 +13,7 @@ export type RankingPeriod =
   | 'millennium'
   | 'custom';
 
-export default interface Ranking extends Model {
+export default interface Ranking extends Model<'ranking'> {
   name?: string;
   slug?: string;
   description?: string;

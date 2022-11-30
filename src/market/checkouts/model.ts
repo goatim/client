@@ -7,7 +7,7 @@ import Billing from '../billings/model';
 import PaymentMethod from '../../payment/methods/model';
 import PaymentIntent, { PaymentIntentStatus } from '../../payment/intents/model';
 
-export default interface Checkout extends Model {
+export default interface Checkout extends Model<'checkout'> {
   session?: Session | string;
   user?: User | string;
   items?: Item[];

@@ -3,7 +3,7 @@ import Wallet from '../../market/wallets/model';
 import Asset from '../assets/model';
 import Booster from '../boosters/model';
 
-export default interface Portfolio extends Model {
+export default interface Portfolio extends Model<'portfolio'> {
   wallet?: Wallet | string;
   asset?: Asset | string;
   buy_price?: number;

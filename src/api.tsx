@@ -6,8 +6,10 @@ import base64 from 'base-64';
 import { FormErrors } from '@cezembre/forms';
 import { ManagerOptions } from 'socket.io-client/build/esm/manager';
 import { SocketOptions } from 'socket.io-client/build/esm/socket';
+import { ModelName } from './utils/models';
 
-export interface Model {
+export interface Model<N extends ModelName = ModelName> {
+  __name__?: N;
   id: string;
   creation?: string;
   last_update?: string;

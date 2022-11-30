@@ -4,7 +4,7 @@ export type ParagraphType = 'title' | 'text' | 'rich-text' | 'media';
 
 export type ParagraphSize = 'auto' | 'tiny' | 'small' | 'medium' | 'large';
 
-export default interface Paragraph extends Model {
+export default interface Paragraph extends Model<'paragraph'> {
   article?: string;
   type?: ParagraphType;
   size?: ParagraphSize;

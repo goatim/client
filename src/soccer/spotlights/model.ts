@@ -6,7 +6,7 @@ import { Model } from '../../api';
 
 export type SpotlightType = 'simple' | 'duo';
 
-export default interface Spotlight extends Model {
+export default interface Spotlight extends Model<'spotlight'> {
   tags?: string[];
   type?: SpotlightType;
   subtitle?: string;

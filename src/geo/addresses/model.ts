@@ -35,7 +35,7 @@ export interface MinifiedAddress {
   shipment_infos?: string;
 }
 
-export default interface Address extends Model {
+export default interface Address extends Model<'address'> {
   name?: string;
   is_company?: boolean;
   street_address?: string;

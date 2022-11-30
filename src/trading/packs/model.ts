@@ -5,7 +5,7 @@ import ShareBulk from '../shareBulks/model';
 import MinifiedShareBulk from '../shareBulks/minified';
 import { Image } from '../../medias/image';
 
-export default interface Pack extends Model {
+export default interface Pack extends Model<'pack'> {
   factory?: PackFactory | string;
   wallet?: Wallet | string;
   share_bulks?: ShareBulk[] | MinifiedShareBulk[] | string;

@@ -6,7 +6,7 @@ export type PlayerPosition = 'goalkeeper' | 'defender' | 'midfielder' | 'forward
 
 export type PlayerSide = 'center' | 'left' | 'right';
 
-export default interface Player extends Model {
+export default interface Player extends Model<'player'> {
   club?: Club | string;
   name?: string;
   picture?: Image;

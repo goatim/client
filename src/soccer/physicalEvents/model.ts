@@ -3,7 +3,7 @@ import Dividend from '../../trading/dividends/model';
 
 export type PhysicalEventType = 'match' | 'goal';
 
-export default interface PhysicalEvent extends Model {
+export default interface PhysicalEvent extends Model<'physical_event'> {
   type?: PhysicalEventType;
   name?: string;
   beginning?: string;

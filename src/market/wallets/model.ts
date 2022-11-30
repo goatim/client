@@ -5,7 +5,7 @@ import { Image } from '../../medias/image';
 
 export type WalletType = 'user' | 'team' | 'broker';
 
-export default interface Wallet extends Model {
+export default interface Wallet extends Model<'wallet'> {
   owner?: User | string;
   name?: string;
   slug?: string;

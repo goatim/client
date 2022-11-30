@@ -13,7 +13,7 @@ export type ArticleType =
   | 'content'
   | 'unknown';
 
-export default interface Article extends Model {
+export default interface Article extends Model<'article'> {
   publication?: DateTime;
   is_published?: boolean;
   type?: ArticleType;

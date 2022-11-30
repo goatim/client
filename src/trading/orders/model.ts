@@ -5,7 +5,7 @@ import Booster from '../boosters/model';
 
 export type OrderType = 'buy' | 'sell';
 
-export default interface Order extends Model {
+export default interface Order extends Model<'order'> {
   wallet?: Wallet | string;
   asset?: Asset | string;
   type?: OrderType;

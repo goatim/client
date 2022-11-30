@@ -12,7 +12,7 @@ export interface MinifiedBilling {
   vat_code?: string;
 }
 
-export default interface Billing extends Model {
+export default interface Billing extends Model<'billing'> {
   first_name?: string;
   last_name?: string;
   company_name?: string;

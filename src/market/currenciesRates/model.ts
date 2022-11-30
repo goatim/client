@@ -9,7 +9,7 @@ import Currency from '../currencies/model';
  * e.g. 1 FDY = 0.00059 EUR (rate = 0.00059);
  */
 
-export default interface CurrenciesRate extends Model {
+export default interface CurrenciesRate extends Model<'currencies_rate'> {
   base_currency?: Currency | string;
   target_currency?: Currency | string;
   rate?: number;

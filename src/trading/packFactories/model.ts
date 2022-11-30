@@ -6,7 +6,7 @@ export interface PackFactoryOdds {
   [key: string]: number;
 }
 
-export default interface PackFactory extends Model {
+export default interface PackFactory extends Model<'pack_factory'> {
   name?: string;
   description?: string;
   price?: number;

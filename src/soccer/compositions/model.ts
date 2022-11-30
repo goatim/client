@@ -4,12 +4,12 @@ import CompositionSetting from '../compositionSettings/model';
 import Player from '../players/model';
 import Match from '../matches/model';
 
-export interface CompositionPosition<P = Model | string> {
+export interface CompositionPosition<P = Model<'player'> | string> {
   id: string;
   player: P;
 }
 
-export default interface Composition<P = Player | string> extends Model {
+export default interface Composition<P = Player | string> extends Model<'composition'> {
   match?: Match | string;
   wallet?: Wallet | string;
   setting?: CompositionSetting | string;

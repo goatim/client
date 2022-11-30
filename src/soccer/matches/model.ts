@@ -3,7 +3,7 @@ import Wallet from '../../market/wallets/model';
 
 export type MatchStatus = 'planned' | 'ongoing' | 'passed' | 'cancelled';
 
-export default interface Match extends Model {
+export default interface Match extends Model<'match'> {
   creator?: Wallet | string;
   title?: string;
   slug?: string;

@@ -1,7 +1,7 @@
 import { Model } from '../../api';
 import Tax from '../../market/taxes/model';
 
-export default interface BoosterFactory extends Model {
+export default interface BoosterFactory extends Model<'booster_factory'> {
   name?: string;
   slug?: string;
   description?: string;

@@ -6,7 +6,7 @@ import { QuotationHistory } from '../quotations/model';
 
 export type AssetType = 'player' | 'club' | 'league';
 
-export default interface Asset extends Model {
+export default interface Asset extends Model<'asset'> {
   entity?: string;
   type?: AssetType;
   name?: string;

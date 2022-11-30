@@ -7,7 +7,7 @@ export interface CompositionSettingPosition {
   y?: number;
 }
 
-export default interface CompositionSetting extends Model {
+export default interface CompositionSetting extends Model<'composition_setting'> {
   name?: string;
   description?: string;
   positions?: CompositionSettingPosition[];

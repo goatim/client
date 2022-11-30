@@ -8,7 +8,7 @@ export interface Dimension {
 
 export type Format = 'png' | 'jpg' | 'gif' | 'unknown';
 
-export interface Image extends Model, Dimension {
+export interface Image extends Model<'media'>, Dimension {
   format?: Format;
   url?: string;
   large_url?: string;

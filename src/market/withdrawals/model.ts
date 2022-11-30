@@ -8,7 +8,7 @@ export type WithdrawalStatus = 'created' | 'accepted' | 'refused' | 'done';
 
 export type WithdrawalCurrencyIso = 'ETH';
 
-export default interface Withdrawal extends Model {
+export default interface Withdrawal extends Model<'withdrawal'> {
   session?: Session | string;
   wallet?: Wallet | string;
   status?: WithdrawalStatus;

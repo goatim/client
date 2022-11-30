@@ -4,7 +4,7 @@ import Session from '../sessions/model';
 import { Model } from '../../api';
 import { Image } from '../../medias/image';
 
-export default interface User extends Model {
+export default interface User extends Model<'user'> {
   slug?: string;
   email?: string;
   gender?: string;

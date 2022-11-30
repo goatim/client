@@ -4,7 +4,7 @@ import League from '../leagues/model';
 import Player from '../players/model';
 import { Image } from '../../medias/image';
 
-export default interface Club extends Model {
+export default interface Club extends Model<'club'> {
   league?: League | string;
   city?: City | string;
   name?: string;

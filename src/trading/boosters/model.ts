@@ -4,7 +4,7 @@ import Wallet from '../../market/wallets/model';
 import Order from '../orders/model';
 import BoosterFactory from '../boosterFactories/model';
 
-export default interface Booster extends Model {
+export default interface Booster extends Model<'booster'> {
   factory?: BoosterFactory | string;
   wallet?: Wallet | string;
   order?: Order | string;

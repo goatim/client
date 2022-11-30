@@ -460,6 +460,7 @@ import {
   GetTransactionsQuery,
   useTransactions,
 } from './trading/transactions/api';
+import { ModelName, ModelISO, ModelIdLength, forbiddenSlugs } from './utils/models';
 import { formatPercentage, formatPercentageVariation } from './utils/adapters';
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
@@ -891,6 +892,9 @@ export type {
   Transaction,
   TransactionList,
   GetTransactionsQuery,
+  ModelName,
+  ModelISO,
+  ModelIdLength,
 };
 
 export {
@@ -959,6 +963,7 @@ export {
   usePutPack,
   useTransaction,
   useTransactions,
+  forbiddenSlugs,
 };
 
 /**
