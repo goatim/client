@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { useEffect } from 'react';
 import Notification from './model';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../api';
+import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
 
 export type GetNotificationQuery = RequestQuery;
 
@@ -111,7 +111,7 @@ export function usePutNotification(): UseMutationResult<
     },
     {
       onSuccess(notification: Notification) {
-        queryClient.setQueryData(['users', notification.id], notification);
+        queryClient.setQueryData(['notifications', notification.id], notification);
       },
     },
   );

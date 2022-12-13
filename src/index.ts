@@ -62,8 +62,8 @@ import {
   AddUserPictureVariables,
   useAddUserPicture,
 } from './auth/users/api';
-import Article from './blog/articles/model';
-import Paragraph from './blog/paragraphs/model';
+import Article from './community/articles/model';
+import Paragraph from './community/paragraphs/model';
 import Address, {
   MinifiedAddress,
   serializeGeoLocation,
@@ -377,7 +377,6 @@ import {
   usePutOrder,
   useDeleteOrder,
 } from './trading/orders/api';
-import { OrderEvent, OrderMatchEventPayload } from './trading/orders/events';
 import OrderBook from './trading/orders/book/model';
 import { useOrderBook, GetOrderBookQuery } from './trading/orders/book/api';
 import Portfolio from './trading/portfolios/model';
@@ -465,7 +464,10 @@ import { formatPercentage, formatPercentageVariation } from './utils/adapters';
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
-import Notification from './notifications/model';
+import Notification, {
+  NotificationEventMap,
+  NotificationOrderMatchPayload,
+} from './community/notifications/model';
 import {
   GetNotificationQuery,
   UseNotificationsOptions,
@@ -477,7 +479,24 @@ import {
   PutNotificationVariables,
   usePutNotification,
   useSeeAllNotifications,
-} from './notifications/api';
+} from './community/notifications/api';
+import Post, {
+  PostNewOrderPayload,
+  PostOrderMatchPayload,
+  PostNewPackPayload,
+  PostTypeMap,
+} from './community/posts/model';
+import {
+  GetPostQuery,
+  UsePostsOptions,
+  usePost,
+  PostList,
+  GetPostsQuery,
+  usePosts,
+  PostBody,
+  PutPostVariables,
+  usePutPost,
+} from './community/posts/api';
 import { OnboardingUserEvents } from './onboarding/userEvents';
 import Search, { SearchResultType, SearchResult } from './search/model';
 import { SearchQuery, useSearch } from './search/api';
@@ -561,10 +580,43 @@ export {
 };
 
 /**
- * Blog
+ * Community
  */
 
-export type { Article, Paragraph };
+export {
+  useNotification,
+  useNotifications,
+  usePutNotification,
+  useSeeAllNotifications,
+  usePost,
+  usePosts,
+  usePutPost,
+};
+
+export type {
+  Notification,
+  NotificationEventMap,
+  NotificationOrderMatchPayload,
+  GetNotificationQuery,
+  UseNotificationsOptions,
+  NotificationList,
+  GetNotificationsQuery,
+  NotificationBody,
+  PutNotificationVariables,
+  Post,
+  PostNewPackPayload,
+  PostNewOrderPayload,
+  PostOrderMatchPayload,
+  PostTypeMap,
+  PostList,
+  GetPostQuery,
+  GetPostsQuery,
+  UsePostsOptions,
+  PostBody,
+  PutPostVariables,
+  Article,
+  Paragraph,
+};
 
 /**
  * Geo
@@ -849,8 +901,6 @@ export type {
   PutOrderVariables,
   OrderBook,
   GetOrderBookQuery,
-  OrderEvent,
-  OrderMatchEventPayload,
   Portfolio,
   PortfolioList,
   GetPortfoliosQuery,
@@ -964,22 +1014,6 @@ export {
   useTransaction,
   useTransactions,
   forbiddenSlugs,
-};
-
-/**
- * Notifications
- */
-
-export { useNotification, useNotifications, usePutNotification, useSeeAllNotifications };
-
-export type {
-  Notification,
-  GetNotificationQuery,
-  UseNotificationsOptions,
-  NotificationList,
-  GetNotificationsQuery,
-  NotificationBody,
-  PutNotificationVariables,
 };
 
 /**

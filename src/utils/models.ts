@@ -43,7 +43,8 @@ export type ModelName =
   | 'user'
   | 'user_event'
   | 'wallet'
-  | 'withdrawal';
+  | 'withdrawal'
+  | 'post';
 
 export enum ModelISO {
   ADDRESS = 'ad',
