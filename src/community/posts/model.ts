@@ -7,6 +7,7 @@ import Transaction from '../../trading/transactions/model';
 import Pack from '../../trading/packs/model';
 
 export interface PostNewOrderPayload {
+  id: string;
   type?: OrderType;
   nb_shares?: number;
   asset?: Asset | string;
