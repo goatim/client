@@ -6,7 +6,7 @@ import { OrderType } from '../../trading/orders/model';
 import Transaction from '../../trading/transactions/model';
 import Pack from '../../trading/packs/model';
 
-export interface PostNewOrderPayload {
+export interface OrderPostPayload {
   id: string;
   type?: OrderType;
   nb_shares?: number;
@@ -14,18 +14,18 @@ export interface PostNewOrderPayload {
   asset?: Asset | string;
 }
 
-export interface PostOrderMatchPayload {
+export interface TransactionPostPayload {
   transaction?: Transaction | string;
 }
 
-export interface PostNewPackPayload {
+export interface PackPostPayload {
   pack?: Pack | string;
 }
 
 export interface PostTypeMap {
-  new_orders: PostNewOrderPayload[];
-  order_match: PostOrderMatchPayload;
-  new_pack: PostNewPackPayload;
+  orders: OrderPostPayload[];
+  transaction: TransactionPostPayload;
+  pack: PackPostPayload;
 }
 
 export default interface Post<T extends keyof PostTypeMap = keyof PostTypeMap>
