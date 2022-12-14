@@ -481,9 +481,9 @@ import {
   useSeeAllNotifications,
 } from './community/notifications/api';
 import Post, {
-  PostNewOrderPayload,
-  PostOrderMatchPayload,
-  PostNewPackPayload,
+  OrderPostPayload,
+  TransactionPostPayload,
+  PackPostPayload,
   PostTypeMap,
 } from './community/posts/model';
 import {
@@ -604,9 +604,9 @@ export type {
   NotificationBody,
   PutNotificationVariables,
   Post,
-  PostNewPackPayload,
-  PostNewOrderPayload,
-  PostOrderMatchPayload,
+  OrderPostPayload,
+  TransactionPostPayload,
+  PackPostPayload,
   PostTypeMap,
   PostList,
   GetPostQuery,
