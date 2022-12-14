@@ -10,6 +10,7 @@ export interface PostNewOrderPayload {
   id: string;
   type?: OrderType;
   nb_shares?: number;
+  price_limit?: number;
   asset?: Asset | string;
 }
 
