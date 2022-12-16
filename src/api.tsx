@@ -1,5 +1,10 @@
 import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
-import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  RawAxiosRequestHeaders,
+} from 'axios';
 import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
 import base64 from 'base-64';
@@ -78,7 +83,7 @@ export interface RequestBody {
   [key: string]: unknown;
 }
 
-export function buildRequestBody<B = RequestBody>(body: B): FormData {
+export function buildRequestBody<B extends RequestBody = RequestBody>(body: B): FormData {
   const formData = new FormData();
 
   Object.entries(body).forEach(([param, value]) => {
@@ -124,11 +129,11 @@ export interface ListRequestQuery extends RequestQuery {
   page?: number;
 }
 
-export function buildRequestConfig<RQ = RequestQuery>(
+export function buildRequestConfig<Q = RequestQuery>(
   apiConfig?: ApiConfig,
-  query?: RQ,
+  query?: Q,
 ): AxiosRequestConfig {
-  const headers: AxiosRequestHeaders = {};
+  const headers: RawAxiosRequestHeaders = {};
 
   if (apiConfig?.api_key) {
     headers['X-Api-Key'] = apiConfig.api_key;
@@ -167,12 +172,12 @@ function parseError(error: unknown): ApiError {
   return new ApiError('Unknown error');
 }
 
-export async function apiGet<D = unknown, RQ = RequestQuery>(
+export async function apiGet<D = unknown, Q = RequestQuery>(
   url: string,
   apiConfig?: ApiConfig,
-  query?: RQ,
+  query?: Q,
 ): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RQ>(apiConfig, query);
+  const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
     return await axios.get<D>((apiConfig?.host || '') + url, config);
@@ -181,18 +186,17 @@ export async function apiGet<D = unknown, RQ = RequestQuery>(
   }
 }
 
-export async function apiPost<D = unknown, RB = RequestBody, RQ = RequestQuery>(
-  url: string,
-  body?: RB,
-  apiConfig?: ApiConfig,
-  query?: RQ,
-): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RQ>(apiConfig, query);
+export async function apiPost<
+  D = unknown,
+  B extends RequestBody = RequestBody,
+  Q extends RequestQuery = RequestQuery,
+>(url: string, body?: B, apiConfig?: ApiConfig, query?: Q): Promise<AxiosResponse<D>> {
+  const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
     return await axios.post<D>(
       (apiConfig?.host || '') + url,
-      body ? buildRequestBody<RB>(body) : undefined,
+      body ? buildRequestBody<B>(body) : undefined,
       config,
     );
   } catch (error: unknown) {
@@ -200,18 +204,17 @@ export async function apiPost<D = unknown, RB = RequestBody, RQ = RequestQuery>(
   }
 }
 
-export async function apiPut<D = unknown, RB = RequestBody, RQ = RequestQuery>(
-  url: string,
-  body?: RB,
-  apiConfig?: ApiConfig,
-  query?: RQ,
-): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RQ>(apiConfig, query);
+export async function apiPut<
+  D = unknown,
+  B extends RequestBody = RequestBody,
+  Q extends RequestQuery = RequestQuery,
+>(url: string, body?: B, apiConfig?: ApiConfig, query?: Q): Promise<AxiosResponse<D>> {
+  const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
     return await axios.put<D>(
       (apiConfig?.host || '') + url,
-      body ? buildRequestBody<RB>(body) : undefined,
+      body ? buildRequestBody<B>(body) : undefined,
       config,
     );
   } catch (error: unknown) {
@@ -219,12 +222,12 @@ export async function apiPut<D = unknown, RB = RequestBody, RQ = RequestQuery>(
   }
 }
 
-export async function apiDelete<D = unknown, RQ = RequestQuery>(
+export async function apiDelete<D = unknown, Q = RequestQuery>(
   url: string,
   apiConfig?: ApiConfig,
-  query?: RQ,
+  query?: Q,
 ): Promise<AxiosResponse<D>> {
-  const config = buildRequestConfig<RQ>(apiConfig, query);
+  const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
     return await axios.delete<D>((apiConfig?.host || '') + url, config);
@@ -243,18 +246,24 @@ export interface ApiContext {
   setLocale(locale?: string | null): void;
   setBearerToken(bearerToken?: string | null): void;
 
-  get<D = unknown, RQ = RequestQuery>(route: string, query?: RQ): Promise<AxiosResponse<D>>;
-  post<D = unknown, RB = RequestBody, RQ = RequestQuery>(
+  get<D = unknown, Q extends RequestQuery = RequestQuery>(
     route: string,
-    body?: RB,
-    query?: RQ,
+    query?: Q,
   ): Promise<AxiosResponse<D>>;
-  put<D = unknown, RB = RequestBody, RQ = RequestQuery>(
+  post<D = unknown, B extends RequestBody = RequestBody, Q extends RequestQuery = RequestQuery>(
     route: string,
-    body?: RB,
-    query?: RQ,
+    body?: B,
+    query?: Q,
   ): Promise<AxiosResponse<D>>;
-  delete<D = unknown, RQ = RequestQuery>(route: string, query?: RQ): Promise<AxiosResponse<D>>;
+  put<D = unknown, B extends RequestBody = RequestBody, Q extends RequestQuery = RequestQuery>(
+    route: string,
+    body?: B,
+    query?: Q,
+  ): Promise<AxiosResponse<D>>;
+  delete<D = unknown, Q extends RequestQuery = RequestQuery>(
+    route: string,
+    query?: Q,
+  ): Promise<AxiosResponse<D>>;
 
   createSocket: (namespace?: string, opts?: Partial<ManagerOptions & SocketOptions>) => Socket;
 }
@@ -389,12 +398,12 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
       setApiKey,
       setLocale,
       setBearerToken,
-      get: (route: string, query?: unknown) => apiGet(route, apiConfig, query),
-      post: (route: string, body?: unknown, query?: unknown) =>
+      get: (route: string, query?: RequestQuery) => apiGet(route, apiConfig, query),
+      post: (route: string, body?: RequestBody, query?: RequestQuery) =>
         apiPost(route, body, apiConfig, query),
-      put: (route: string, body?: unknown, query?: unknown) =>
+      put: (route: string, body?: RequestBody, query?: RequestQuery) =>
         apiPut(route, body, apiConfig, query),
-      delete: (route: string, query?: unknown) => apiDelete(route, apiConfig, query),
+      delete: (route: string, query?: RequestQuery) => apiDelete(route, apiConfig, query),
       createSocket,
     }),
     [apiConfig, createSocket, setApiKey, setBearerToken, setConfig, setHost, setLocale],
