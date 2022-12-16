@@ -1,10 +1,5 @@
 import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  RawAxiosRequestHeaders,
-} from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosRequestHeaders } from 'axios';
 import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
 import base64 from 'base-64';
@@ -133,7 +128,7 @@ export function buildRequestConfig<Q extends RequestQuery = RequestQuery>(
   apiConfig?: ApiConfig,
   query?: Q,
 ): AxiosRequestConfig {
-  const headers: RawAxiosRequestHeaders = {};
+  const headers: AxiosRequestHeaders = {};
 
   if (apiConfig?.api_key) {
     headers['X-Api-Key'] = apiConfig.api_key;
