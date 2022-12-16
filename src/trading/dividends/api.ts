@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { useApi, PaginatedList, ListRequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
 import Dividend, { DividendType } from './model';
 
 export function useDividend(id?: string): UseQueryResult<Dividend> {
@@ -34,7 +34,7 @@ export function useDividends(
   });
 }
 
-export interface DividendBody {
+export interface DividendBody extends RequestBody {
   type?: DividendType;
   asset?: string | null;
   physical_event?: string | null;
@@ -93,7 +93,7 @@ export function usePutDividend(): UseMutationResult<Dividend, unknown, PutDivide
   );
 }
 
-export interface PostDividendBulkBody {
+export interface PostDividendBulkBody extends RequestBody {
   bulk: File;
   physical_event?: string;
 }

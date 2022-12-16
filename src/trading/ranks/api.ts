@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, useApi } from '../../api';
+import { PaginatedList, RequestBody, useApi } from '../../api';
 import Rank from './model';
 
 export function useRank(id?: string): UseQueryResult<Rank> {
@@ -30,7 +30,7 @@ export function useRanks(): UseQueryResult<RankList> {
   });
 }
 
-export interface RankBody {
+export interface RankBody extends RequestBody {
   name?: string | null;
   description?: string | null;
   ranking?: string | null;

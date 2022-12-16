@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { useEffect } from 'react';
 import Notification from './model';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 
 export type GetNotificationQuery = RequestQuery;
 
@@ -90,7 +90,7 @@ export function useNotifications(
   );
 }
 
-export interface NotificationBody {
+export interface NotificationBody extends RequestBody {
   is_seen?: boolean | string;
   is_read?: boolean | string;
 }

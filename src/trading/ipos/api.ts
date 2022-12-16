@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Ipo, { IpoType } from './model';
 
 export function useIpo(
@@ -46,7 +46,7 @@ export function useIpos(
   );
 }
 
-export interface IpoBody {
+export interface IpoBody extends RequestBody {
   asset?: string | null;
   stocks_tags?: string | null;
   type?: IpoType | null;

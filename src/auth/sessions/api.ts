@@ -9,9 +9,9 @@ import { useCallback } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import Session from './model';
-import { ApiError, useApi } from '../../api';
+import { ApiError, RequestBody, RequestQuery, useApi } from '../../api';
 
-export interface GetSessionQuery {
+export interface GetSessionQuery extends RequestQuery {
   auto_refresh?: boolean;
 }
 
@@ -50,7 +50,7 @@ export function useActiveSession(): UseQueryResult<Session> {
   );
 }
 
-export interface SignInBody {
+export interface SignInBody extends RequestBody {
   email?: string;
   password?: string;
 }

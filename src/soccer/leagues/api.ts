@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import League from './model';
 
 export function useLeague(id?: string): UseQueryResult<League> {
@@ -36,7 +36,7 @@ export function useLeagues(query?: GetLeaguesQuery): UseQueryResult<LeagueList> 
   });
 }
 
-export interface LeagueBody {
+export interface LeagueBody extends RequestBody {
   name?: string | null;
   description?: string | null;
 }

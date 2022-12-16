@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
 import Stock from './model';
 
 export function useStock(id?: string): UseQueryResult<Stock> {
@@ -37,7 +37,7 @@ export function useStocks(query?: GetStocksQuery): UseQueryResult<StockList> {
   });
 }
 
-export interface PostStockBody {
+export interface PostStockBody extends RequestBody {
   asset?: string | null;
   tags?: string | null;
   initial_shares?: number;
@@ -59,7 +59,7 @@ export function usePostStock(): UseMutationResult<Stock, unknown, PostStockBody>
   );
 }
 
-export interface PutStockBody {
+export interface PutStockBody extends RequestBody {
   tags?: string | null;
 }
 

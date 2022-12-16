@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { AxiosResponse } from 'axios';
-import { ApiContext, ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { ApiContext, ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Player from './model';
 
 export function usePlayer(id?: string): UseQueryResult<Player> {
@@ -63,7 +63,7 @@ export async function getPlayers(
   });
 }
 
-export interface PlayerBody {
+export interface PlayerBody extends RequestBody {
   name?: string | null;
   description?: string | null;
   club?: string | null;
@@ -130,7 +130,7 @@ export function useAddPlayerIllustration(): UseMutationResult<
   );
 }
 
-export interface PostPlayerBulkBody {
+export interface PostPlayerBulkBody extends RequestBody {
   bulk: File;
 }
 

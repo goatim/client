@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Withdrawal from './model';
 import { useCurrentWallet } from '../wallets/api';
 
@@ -44,7 +44,7 @@ export function useCurrentWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'w
   return useWithdrawals({ ...query, wallet: wallet.data?.id });
 }
 
-export interface WithdrawalBody {
+export interface WithdrawalBody extends RequestBody {
   wallet?: string | null;
   amount?: number | null;
   currency_iso?: string | null;

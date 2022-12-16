@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
 import PhysicalEvent, { PhysicalEventType } from './model';
 
 export function usePhysicalEvent(id?: string): UseQueryResult<PhysicalEvent> {
@@ -34,7 +34,7 @@ export function usePhysicalEvents(
   });
 }
 
-export interface PhysicalEventBody {
+export interface PhysicalEventBody extends RequestBody {
   type?: PhysicalEventType;
   name?: string | null;
   description?: string | null;

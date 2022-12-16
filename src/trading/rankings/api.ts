@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestQuery, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Ranking, { RankingPeriod } from './model';
 
 export type GetRankingQuery = RequestQuery;
@@ -32,7 +32,7 @@ export function useRankings(): UseQueryResult<RankingList> {
   });
 }
 
-export interface RankingBody {
+export interface RankingBody extends RequestBody {
   name?: string | null;
   description?: string | null;
   period?: RankingPeriod | null;

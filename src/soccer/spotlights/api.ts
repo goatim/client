@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Spotlight from './model';
 
 export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
@@ -38,7 +38,7 @@ export function useSpotlights(query?: GetSpotlightsQuery): UseQueryResult<Spotli
   });
 }
 
-export interface SpotlightBody {
+export interface SpotlightBody extends RequestBody {
   tags?: string;
   type?: string;
   subtitle?: string;

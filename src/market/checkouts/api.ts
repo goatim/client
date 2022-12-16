@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { useCallback } from 'react';
-import { useApi, PaginatedList, RequestQuery } from '../../api';
+import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
 import Checkout from './model';
 import { useCurrentWallet } from '../wallets/api';
 import { ItemType } from '../items/model';
@@ -48,14 +48,14 @@ export function useCheckouts(query?: CheckoutQuery): UseQueryResult<CheckoutList
   });
 }
 
-export interface CheckoutItemBody {
+export interface CheckoutItemBody extends RequestBody {
   type?: ItemType;
   order?: string;
   booster?: string;
   pack?: string;
 }
 
-export interface CheckoutBody {
+export interface CheckoutBody extends RequestBody {
   items?: CheckoutItemBody[] | string;
   wallet?: string;
   expiration?: string;
@@ -265,7 +265,7 @@ export interface ConfirmCheckoutBody {
   save_payment_method?: boolean;
 }
 
-export interface CheckoutConfirmation {
+export interface CheckoutConfirmation extends RequestBody {
   payment_intent?: PaymentIntent;
   orders?: OrderList;
   packs?: PackList;

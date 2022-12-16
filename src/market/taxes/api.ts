@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, RequestQuery, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Tax from './model';
 
 export function useTax(id?: string): UseQueryResult<Tax> {
@@ -34,7 +34,7 @@ export function useVats(): UseQueryResult<TaxList> {
   return useTaxes({ tags: 'vat' });
 }
 
-export interface TaxBody {
+export interface TaxBody extends RequestBody {
   tags?: string | null;
   name?: string | null;
   amount?: number;

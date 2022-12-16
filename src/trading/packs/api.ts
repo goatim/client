@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
 import Pack from './model';
 
 export function usePack(id?: string): UseQueryResult<Pack> {
@@ -39,7 +39,7 @@ export function usePacks(query?: GetPacksQuery): UseQueryResult<PackList> {
   });
 }
 
-export interface PostPackBody {
+export interface PostPackBody extends RequestBody {
   wallet?: string | null;
   share_bulks?: string | null;
   tags?: string | null;
@@ -64,7 +64,7 @@ export function usePostPack(): UseMutationResult<Pack, unknown, PostPackBody> {
   );
 }
 
-export interface PutPackBody {
+export interface PutPackBody extends RequestBody {
   seen?: boolean;
   title?: string | null;
   message?: string | null;

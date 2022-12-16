@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Club from './model';
 
 export function useClub(
@@ -38,7 +38,7 @@ export function useClubs(query?: GetClubsQuery): UseQueryResult<ClubList> {
   });
 }
 
-export interface ClubBody {
+export interface ClubBody extends RequestBody {
   name?: string | null;
   short_name?: string | null;
   description?: string | null;

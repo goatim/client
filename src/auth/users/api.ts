@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import User from './model';
-import { PaginatedList, useApi } from '../../api';
+import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 
 export function useUser(id?: string): UseQueryResult<User> {
   const api = useApi();
@@ -36,7 +36,7 @@ export function useUsers(): UseQueryResult<UserList> {
   });
 }
 
-export interface UserBody {
+export interface UserBody extends RequestBody {
   email?: string | null;
   gender?: string | null;
   first_name?: string | null;
@@ -49,7 +49,7 @@ export interface UserBody {
   locale?: string | null;
 }
 
-export interface PostUserQuery {
+export interface PostUserQuery extends RequestQuery {
   create_session?: boolean;
 }
 

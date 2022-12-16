@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList } from '../../api';
+import { useApi, PaginatedList, RequestBody } from '../../api';
 import PaymentMethod from './model';
 
 export type PaymentMethodList = PaginatedList<'payment_methods', PaymentMethod>;
@@ -18,7 +18,7 @@ export function usePaymentMethods(): UseQueryResult<PaymentMethodList> {
   });
 }
 
-export interface CreditCardBody {
+export interface CreditCardBody extends RequestBody {
   payment_method?: string;
 }
 

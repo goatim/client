@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Match from './model';
 
 export function useMatch(id?: string): UseQueryResult<Match> {
@@ -42,7 +42,7 @@ export function useSpotlightMatches(): UseQueryResult<MatchList> {
   return useMatches({ spotlight: true });
 }
 
-export interface MatchBody {
+export interface MatchBody extends RequestBody {
   title?: string | null;
   description?: string | null;
   beginning?: string | null;

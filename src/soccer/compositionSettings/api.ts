@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { PaginatedList, useApi } from '../../api';
+import { PaginatedList, RequestBody, useApi } from '../../api';
 import CompositionSetting from './model';
 
 export function useCompositionSetting(id?: string): UseQueryResult<CompositionSetting> {
@@ -26,7 +26,7 @@ export function useCompositionSettings(): UseQueryResult<CompositionSettingList>
   });
 }
 
-export interface CompositionSettingBody {
+export interface CompositionSettingBody extends RequestBody {
   name?: string | null;
   description?: string | null;
   is_default?: boolean;

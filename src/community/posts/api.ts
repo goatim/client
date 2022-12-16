@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { useEffect } from 'react';
 import Post from './model';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 
 export type GetPostQuery = RequestQuery;
 
@@ -83,7 +83,7 @@ export function usePosts(
   );
 }
 
-export interface PostBody {
+export interface PostBody extends RequestBody {
   user?: string;
   author?: string;
   wallet?: string;

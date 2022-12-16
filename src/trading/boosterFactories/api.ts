@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import BoosterFactory from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -44,7 +44,7 @@ export function useCurrentWalletBoosterFactories(
   return useBoosterFactories({ ...query, wallet: wallet.data?.id });
 }
 
-export interface BoosterFactoryBody {
+export interface BoosterFactoryBody extends RequestBody {
   name?: string | null;
   description?: string | null;
   price?: number;

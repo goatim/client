@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Order, { OrderType } from './model';
 import { useCurrentWallet } from '../../market/wallets/api';
 
@@ -53,7 +53,7 @@ export function useCurrentWalletOrders(
   });
 }
 
-export interface OrderBody {
+export interface OrderBody extends RequestBody {
   wallet?: string | null;
   asset?: string | null;
   type?: OrderType;

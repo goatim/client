@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery } from '../../api';
+import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
 import PackFactory from './model';
 
 export function usePackFactory(id?: string): UseQueryResult<PackFactory> {
@@ -38,7 +38,7 @@ export function usePackFactories(query?: GetPackFactoriesQuery): UseQueryResult<
   });
 }
 
-export interface PackFactoryBody {
+export interface PackFactoryBody extends RequestBody {
   name?: string | null;
   description?: string | null;
   tags?: string | null;

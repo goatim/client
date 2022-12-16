@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import Wallet from './model';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import { useFridayClient } from '../../client';
 
 export interface GetWalletQuery extends RequestQuery {
@@ -50,7 +50,7 @@ export function useWallets(query?: GetWalletsQuery): UseQueryResult<WalletList> 
   });
 }
 
-export interface WalletBody {
+export interface WalletBody extends RequestBody {
   owner?: string | null;
   name?: string | null;
   type?: string | null;

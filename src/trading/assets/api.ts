@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
 import Transaction from '../transactions/model';
@@ -52,7 +52,7 @@ export function useAssets(
   );
 }
 
-export interface AssetBody {
+export interface AssetBody extends RequestBody {
   name?: string | null;
   entity?: string | null;
 }
@@ -139,7 +139,7 @@ export function useAssetQuotationHistory(assetId?: string): UseQueryResult<Quota
   );
 }
 
-export interface AssetAcceptBankProposalBody {
+export interface AssetAcceptBankProposalBody extends RequestBody {
   wallet?: string;
   nb_shares?: number;
   bank_proposal_quotation?: number;

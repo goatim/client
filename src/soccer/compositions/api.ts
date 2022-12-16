@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { useMemo } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
+import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Player from '../players/model';
 import { useCurrentWallet } from '../../market/wallets/api';
 import Composition from './model';
@@ -69,7 +69,7 @@ export interface CompositionPositionBody {
   player: Player | string | null;
 }
 
-export interface CompositionBody {
+export interface CompositionBody extends RequestBody {
   match?: string | null;
   wallet?: string | null;
   setting?: string | null;
@@ -147,7 +147,7 @@ export function usePutComposition(
   );
 }
 
-export interface DeleteCompositionQuery {
+export interface DeleteCompositionQuery extends RequestQuery {
   wallet?: string;
 }
 
