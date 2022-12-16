@@ -252,7 +252,7 @@ export function useRemoveCheckoutItem(
   );
 }
 
-export interface ConfirmCheckoutBody {
+export interface ConfirmCheckoutBody extends RequestBody {
   wallet?: string;
   billing?: string;
   payment_method?: string;
