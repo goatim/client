@@ -129,7 +129,7 @@ export interface ListRequestQuery extends RequestQuery {
   page?: number;
 }
 
-export function buildRequestConfig<Q = RequestQuery>(
+export function buildRequestConfig<Q extends RequestQuery = RequestQuery>(
   apiConfig?: ApiConfig,
   query?: Q,
 ): AxiosRequestConfig {
@@ -172,7 +172,7 @@ function parseError(error: unknown): ApiError {
   return new ApiError('Unknown error');
 }
 
-export async function apiGet<D = unknown, Q = RequestQuery>(
+export async function apiGet<D = unknown, Q extends RequestQuery = RequestQuery>(
   url: string,
   apiConfig?: ApiConfig,
   query?: Q,
@@ -222,7 +222,7 @@ export async function apiPut<
   }
 }
 
-export async function apiDelete<D = unknown, Q = RequestQuery>(
+export async function apiDelete<D = unknown, Q extends RequestQuery = RequestQuery>(
   url: string,
   apiConfig?: ApiConfig,
   query?: Q,
