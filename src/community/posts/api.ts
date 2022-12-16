@@ -28,7 +28,7 @@ export function usePost(id?: string, query?: GetPostQuery): UseQueryResult<Post>
 export type PostList = PaginatedList<'posts', Post>;
 
 export interface GetPostsQuery extends ListRequestQuery {
-  wallet?: boolean;
+  wallet?: string;
 }
 
 export interface UsePostsOptions {
