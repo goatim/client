@@ -10,6 +10,7 @@ import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } fr
 import Asset, { AssetType } from './model';
 import Quotation, { QuotationHistory } from '../quotations/model';
 import Transaction from '../transactions/model';
+import { PlayerPosition } from '../../soccer/players/model';
 
 export function useAsset(
   assetId?: string,
@@ -35,6 +36,7 @@ export interface GetAssetsQuery extends ListRequestQuery {
   club?: string;
   asset?: string;
   search?: string;
+  player_position?: PlayerPosition;
 }
 
 export function useAssets(
