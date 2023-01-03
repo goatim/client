@@ -116,20 +116,20 @@ export function useAddUserPicture(): UseMutationResult<User, unknown, AddUserPic
   );
 }
 
-export interface UsePostUserPasswordResetBody extends RequestBody {
+export interface UsePostUserPasswordResetRequestBody extends RequestBody {
   email?: string;
 }
 
-export function usePostUserPasswordReset(): UseMutationResult<
+export function usePostUserPasswordResetRequest(): UseMutationResult<
   void,
   unknown,
-  UsePostUserPasswordResetBody
+  UsePostUserPasswordResetRequestBody
 > {
   const api = useApi();
-  return useMutation<void, unknown, UsePostUserPasswordResetBody>(
-    async (body: UsePostUserPasswordResetBody) => {
-      const { data } = await api.post<void, UsePostUserPasswordResetBody>(
-        '/users/password_reset',
+  return useMutation<void, unknown, UsePostUserPasswordResetRequestBody>(
+    async (body: UsePostUserPasswordResetRequestBody) => {
+      const { data } = await api.post<void, UsePostUserPasswordResetRequestBody>(
+        '/users/password_reset_request',
         body,
       );
       return data;
