@@ -115,3 +115,24 @@ export function useAddUserPicture(): UseMutationResult<User, unknown, AddUserPic
     },
   );
 }
+
+export interface UsePostUserPasswordResetBody extends RequestBody {
+  email?: string;
+}
+
+export function usePostUserPasswordReset(): UseMutationResult<
+  void,
+  unknown,
+  UsePostUserPasswordResetBody
+> {
+  const api = useApi();
+  return useMutation<void, unknown, UsePostUserPasswordResetBody>(
+    async (body: UsePostUserPasswordResetBody) => {
+      const { data } = await api.post<void, UsePostUserPasswordResetBody>(
+        '/users/password_reset',
+        body,
+      );
+      return data;
+    },
+  );
+}
