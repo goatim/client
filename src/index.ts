@@ -61,8 +61,10 @@ import {
   AddUserPictureBody,
   AddUserPictureVariables,
   useAddUserPicture,
-  UsePostUserPasswordResetRequestBody,
+  PostUserPasswordResetRequestBody,
   usePostUserPasswordResetRequest,
+  PostUserResetPasswordBody,
+  usePostUserResetPassword,
 } from './auth/users/api';
 import Article from './community/articles/model';
 import Paragraph from './community/paragraphs/model';
@@ -557,7 +559,8 @@ export type {
   PutUserVariables,
   AddUserPictureBody,
   AddUserPictureVariables,
-  UsePostUserPasswordResetRequestBody,
+  PostUserPasswordResetRequestBody,
+  PostUserResetPasswordBody,
   UserEvent,
   UserEventsQuery,
   UserEventList,
@@ -577,6 +580,7 @@ export {
   usePutUser,
   useAddUserPicture,
   usePostUserPasswordResetRequest,
+  usePostUserResetPassword,
   useUserEvent,
   useUserEvents,
   useDoesUserEventExists,

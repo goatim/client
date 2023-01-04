@@ -116,20 +116,42 @@ export function useAddUserPicture(): UseMutationResult<User, unknown, AddUserPic
   );
 }
 
-export interface UsePostUserPasswordResetRequestBody extends RequestBody {
+export interface PostUserPasswordResetRequestBody extends RequestBody {
   email?: string;
 }
 
 export function usePostUserPasswordResetRequest(): UseMutationResult<
   void,
   unknown,
-  UsePostUserPasswordResetRequestBody
+  PostUserPasswordResetRequestBody
 > {
   const api = useApi();
-  return useMutation<void, unknown, UsePostUserPasswordResetRequestBody>(
-    async (body: UsePostUserPasswordResetRequestBody) => {
-      const { data } = await api.post<void, UsePostUserPasswordResetRequestBody>(
+  return useMutation<void, unknown, PostUserPasswordResetRequestBody>(
+    async (body: PostUserPasswordResetRequestBody) => {
+      const { data } = await api.post<void, PostUserPasswordResetRequestBody>(
         '/users/password_reset_request',
+        body,
+      );
+      return data;
+    },
+  );
+}
+
+export interface PostUserResetPasswordBody extends RequestBody {
+  token?: string;
+  password?: string;
+}
+
+export function usePostUserResetPassword(): UseMutationResult<
+  void,
+  unknown,
+  PostUserResetPasswordBody
+> {
+  const api = useApi();
+  return useMutation<void, unknown, PostUserResetPasswordBody>(
+    async (body: PostUserResetPasswordBody) => {
+      const { data } = await api.post<void, PostUserResetPasswordBody>(
+        '/users/reset_password',
         body,
       );
       return data;
