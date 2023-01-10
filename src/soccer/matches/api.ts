@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import Match from './model';
+import Match, { MatchStatus } from './model';
 
 export function useMatch(id?: string): UseQueryResult<Match> {
   const api = useApi();
@@ -48,7 +48,7 @@ export interface MatchBody extends RequestBody {
   beginning?: string | null;
   end?: string | null;
   is_public?: boolean;
-  status?: string | null;
+  status?: MatchStatus | null;
 }
 
 export function usePostMatch(): UseMutationResult<Match, unknown, MatchBody> {

@@ -1,7 +1,7 @@
 import { Model } from '../../api';
 import Wallet from '../../market/wallets/model';
 
-export type MatchStatus = 'planned' | 'ongoing' | 'passed' | 'cancelled';
+export type MatchStatus = 'created' | 'open' | 'closing' | 'closed' | 'cancelled';
 
 export default interface Match extends Model<'match'> {
   creator?: Wallet | string;
