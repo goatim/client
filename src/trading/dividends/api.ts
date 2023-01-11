@@ -38,7 +38,7 @@ export interface DividendBody extends RequestBody {
   type?: DividendType;
   asset?: string | null;
   physical_event?: string | null;
-  percentage?: string | null;
+  percentage?: number | null;
 }
 
 export function usePostDividend(): UseMutationResult<Dividend, unknown, DividendBody> {
