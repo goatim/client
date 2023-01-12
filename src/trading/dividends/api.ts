@@ -57,14 +57,12 @@ export function usePostDividend(): UseMutationResult<Dividend, unknown, Dividend
   );
 }
 
-export function useDistributeDividend(
-  dividendId: string,
-): UseMutationResult<Dividend, unknown, void> {
+export function useDistributeDividend(): UseMutationResult<Dividend, unknown, string> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Dividend, unknown, void>(
-    async () => {
-      const { data } = await api.post<Dividend>(`/dividends/${dividendId}/distribute`);
+  return useMutation<Dividend, unknown, string>(
+    async (id) => {
+      const { data } = await api.post<Dividend>(`/dividends/${id}/distribute`);
       return data;
     },
     {
