@@ -19,5 +19,6 @@ export default interface Composition<P = Player | string> extends Model<'composi
   is_active?: boolean;
   positions_missing?: number;
   rank?: number;
-  score?: number;
+  dividends_gains?: number;
+  dividends_percentage?: number;
 }

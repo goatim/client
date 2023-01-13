@@ -39,6 +39,8 @@ export type ModelName =
   | 'spotlight'
   | 'stock'
   | 'tax'
+  | 'tournament'
+  | 'tournament_participant'
   | 'transaction'
   | 'user'
   | 'user_event'
@@ -79,6 +81,7 @@ export enum ModelISO {
   PHYSICAL_EVENT = 'ph',
   PLAYER = 'pl',
   PORTFOLIO = 'po',
+  POST = 'ps',
   RANK = 'rk',
   RANKING = 'ra',
   SCORE = 'so',
@@ -87,6 +90,8 @@ export enum ModelISO {
   SPOTLIGHT = 'sp',
   STOCK = 'st',
   TAX = 'ta',
+  TOURNAMENT = 'to',
+  TOURNAMENT_PARTICIPANT = 'tp',
   TRANSACTION = 'tr',
   USER = 'us',
   USER_EVENT = 'ue',
@@ -135,11 +140,14 @@ export enum ModelIdLength {
   SPOTLIGHT = 8,
   STOCK = 30,
   TAX = 15,
+  TOURNAMENT = 10,
+  TOURNAMENT_PARTICIPANT = 15,
   TRANSACTION = 10,
   USER = 15,
   USER_EVENT = 40,
   WALLET = 12,
   WITHDRAWAL = 30,
+  POST = 30,
 }
 
 export const forbiddenSlugs = ['friday', 'default', 'all', 'any', 'bulk', 'me', 'active'];

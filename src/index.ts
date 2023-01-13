@@ -1,4 +1,5 @@
 import env, { Env, NativeEnv } from './env';
+import { ModelName, ModelISO, ModelIdLength, forbiddenSlugs } from './utils/models';
 import {
   Model,
   PaginatedList,
@@ -299,6 +300,31 @@ import {
   AddSpotlightIllustrationVariables,
   useAddSpotlightIllustration,
 } from './soccer/spotlights/api';
+import Tournament from './soccer/tournaments/model';
+import {
+  useTournament,
+  TournamentList,
+  GetTournamentsQuery,
+  useTournaments,
+  TournamentBody,
+  usePostTournament,
+  PutTournamentVariables,
+  usePutTournament,
+  AttachTournamentMatchBody,
+  AttachTournamentMatchVariables,
+  useAttachTournamentMatch,
+} from './soccer/tournaments/api';
+import TournamentParticipant from './soccer/tournamentParticipants/model';
+import {
+  useTournamentParticipant,
+  TournamentParticipantList,
+  GetTournamentParticipantsQuery,
+  useTournamentParticipants,
+  TournamentParticipantBody,
+  usePostTournamentParticipant,
+  PutTournamentParticipantVariables,
+  usePutTournamentParticipant,
+} from './soccer/tournamentParticipants/api';
 import Asset, { AssetType } from './trading/assets/model';
 import {
   useAsset,
@@ -463,7 +489,6 @@ import {
   GetTransactionsQuery,
   useTransactions,
 } from './trading/transactions/api';
-import { ModelName, ModelISO, ModelIdLength, forbiddenSlugs } from './utils/models';
 import { formatPercentage, formatPercentageVariation } from './utils/adapters';
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
@@ -818,6 +843,18 @@ export type {
   PutSpotlightVariables,
   AddSpotlightIllustrationBody,
   AddSpotlightIllustrationVariables,
+  Tournament,
+  TournamentList,
+  GetTournamentsQuery,
+  TournamentBody,
+  PutTournamentVariables,
+  AttachTournamentMatchBody,
+  AttachTournamentMatchVariables,
+  TournamentParticipant,
+  TournamentParticipantList,
+  GetTournamentParticipantsQuery,
+  TournamentParticipantBody,
+  PutTournamentParticipantVariables,
 };
 
 export {
@@ -863,6 +900,15 @@ export {
   usePostSpotlight,
   usePutSpotlight,
   useAddSpotlightIllustration,
+  useTournament,
+  useTournaments,
+  usePostTournament,
+  usePutTournament,
+  useAttachTournamentMatch,
+  useTournamentParticipant,
+  useTournamentParticipants,
+  usePostTournamentParticipant,
+  usePutTournamentParticipant,
 };
 
 /**
