@@ -325,7 +325,6 @@ import {
   PutTournamentParticipantVariables,
   usePutTournamentParticipant,
 } from './soccer/tournamentParticipants/api';
-import { formatTournamentParticipantScore } from './soccer/tournamentParticipants/adapters';
 import Asset, { AssetType } from './trading/assets/model';
 import {
   useAsset,
@@ -490,7 +489,7 @@ import {
   GetTransactionsQuery,
   useTransactions,
 } from './trading/transactions/api';
-import { formatPercentage, formatPercentageVariation } from './utils/adapters';
+import { formatPercentage, formatPercentageVariation, formatScore } from './utils/adapters';
 import { getUserPublicName } from './utils/auth';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
@@ -910,7 +909,6 @@ export {
   useTournamentParticipants,
   usePostTournamentParticipant,
   usePutTournamentParticipant,
-  formatTournamentParticipantScore,
 };
 
 /**
@@ -1090,7 +1088,7 @@ export { useSearch };
  * Utils
  */
 
-export { formatPercentage, formatPercentageVariation, getUserPublicName, unSlugify };
+export { formatPercentage, formatPercentageVariation, formatScore, getUserPublicName, unSlugify };
 
 /**
  * Client

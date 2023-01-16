@@ -21,4 +21,5 @@ export default interface Composition<P = Player | string> extends Model<'composi
   rank?: number;
   dividends_gains?: number;
   dividends_percentage?: number;
+  score?: number;
 }

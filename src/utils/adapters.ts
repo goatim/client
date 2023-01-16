@@ -8,3 +8,7 @@ export function formatPercentageVariation(variation?: number, fractionDigits = 2
   }
   return formatPercentage(variation, fractionDigits);
 }
+
+export function formatScore(score: number) {
+  return `${score} pts`;
+}
