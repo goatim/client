@@ -88,7 +88,7 @@ export function useAttachTournamentMatch(): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation<Tournament, unknown, AttachTournamentMatchVariables>(
     async ({ id, match }: AttachTournamentMatchVariables) => {
-      const { data } = await api.post<Tournament>(`/tournaments/${id}/attach_match`, {
+      const { data } = await api.put<Tournament>(`/tournaments/${id}/attach_match`, {
         match,
       });
       return data;
