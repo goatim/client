@@ -20,7 +20,10 @@ export function useMatch(id?: string): UseQueryResult<Match> {
 export type MatchList = PaginatedList<'matches', Match>;
 
 export interface GetMatchesQuery extends ListRequestQuery {
+  status?: MatchStatus;
   spotlight?: boolean;
+  tournament?: string;
+  search?: string;
 }
 
 export function useMatches(
