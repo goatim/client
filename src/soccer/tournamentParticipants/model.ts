@@ -9,4 +9,5 @@ export default interface TournamentParticipant extends Model<'tournament_partici
   dividends_percentage?: number;
   position?: number;
   last_position?: number;
+  score?: number;
 }
