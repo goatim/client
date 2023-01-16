@@ -325,6 +325,7 @@ import {
   PutTournamentParticipantVariables,
   usePutTournamentParticipant,
 } from './soccer/tournamentParticipants/api';
+import { formatTournamentParticipantScore } from './soccer/tournamentParticipants/adapters';
 import Asset, { AssetType } from './trading/assets/model';
 import {
   useAsset,
@@ -909,6 +910,7 @@ export {
   useTournamentParticipants,
   usePostTournamentParticipant,
   usePutTournamentParticipant,
+  formatTournamentParticipantScore,
 };
 
 /**
