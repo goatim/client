@@ -17,9 +17,10 @@ export default interface Composition<P = Player | string> extends Model<'composi
   positions?: CompositionPosition<P>[];
   is_valid?: boolean;
   is_active?: boolean;
-  positions_missing?: number;
-  rank?: number;
   dividends_gains?: number;
   dividends_percentage?: number;
   score?: number;
+  position?: number;
+  last_position?: number;
+  positions_missing?: number;
 }
