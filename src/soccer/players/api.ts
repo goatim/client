@@ -31,7 +31,7 @@ export interface GetPlayersQuery extends ListRequestQuery {
   wallet?: string;
   match?: string;
   composition?: string;
-  position?: PlayerPosition;
+  position?: PlayerPosition[] | PlayerPosition;
   search?: string;
 }
 
