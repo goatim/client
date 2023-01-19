@@ -286,6 +286,7 @@ import {
   PostPlayerBulkResponse,
   usePostPlayerBulk,
 } from './soccer/players/api';
+import { formatPlayerName, PlayerNameFormat } from './soccer/players/adapters';
 import Spotlight, { SpotlightType } from './soccer/spotlights/model';
 import {
   useSpotlight,
@@ -835,6 +836,7 @@ export type {
   AddPlayerPictureVariables,
   PostPlayerBulkBody,
   PostPlayerBulkResponse,
+  PlayerNameFormat,
   Spotlight,
   SpotlightType,
   SpotlightList,
@@ -895,6 +897,7 @@ export {
   usePutPlayer,
   useAddPlayerIllustration,
   usePostPlayerBulk,
+  formatPlayerName,
   useSpotlight,
   useSpotlights,
   usePostSpotlight,

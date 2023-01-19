@@ -5,7 +5,7 @@ import Currency from './model';
 export function useCurrency(id?: string, query?: RequestQuery): UseQueryResult<Currency> {
   const api = useApi();
   return useQuery<Currency>(
-    ['currencies', id],
+    ['players', id],
     async () => {
       const { data } = await api.get<Currency>(`/currencies/${id}`, query);
       return data;
@@ -16,7 +16,7 @@ export function useCurrency(id?: string, query?: RequestQuery): UseQueryResult<C
   );
 }
 
-export type CurrencyList = PaginatedList<'currencies', Currency>;
+export type CurrencyList = PaginatedList<'players', Currency>;
 
 export type GetCurrenciesQuery = ListRequestQuery;
 
@@ -24,7 +24,7 @@ export function useCurrencies(
   query?: GetCurrenciesQuery,
 ): UseQueryResult<CurrencyList> | undefined {
   const api = useApi();
-  return useQuery<CurrencyList>(['currencies', query], async () => {
+  return useQuery<CurrencyList>(['players', query], async () => {
     const { data } = await api.get<CurrencyList, GetCurrenciesQuery>('/currencies', query);
     return data;
   });
