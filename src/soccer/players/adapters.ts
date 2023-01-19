@@ -15,7 +15,7 @@ export function formatPlayerName(
     if (format === 'full') {
       result += firstName;
     } else {
-      result += firstName.match(/(\b\w)/g)?.join('. ') || '';
+      result += firstName.match(/^(\w)|\s(\w)/gu)?.join('. ') || '';
       if (result) {
         result += '.';
       }
@@ -27,7 +27,7 @@ export function formatPlayerName(
       result += ' ';
     }
     if (format === 'initials') {
-      result += lastName.match(/(\b\w)/g)?.join('. ') || '';
+      result += lastName.match(/^(\w)|\s(\w)/gu)?.join('. ') || '';
     } else {
       result += lastName;
     }

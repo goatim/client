@@ -10,7 +10,7 @@ export default {
 
 const Template: ComponentStory<JSXElementConstructor<Props>> = ({}: Props) => (
   <div>
-    <h1>{formatPlayerName('John Ronald Reuel', 'Tolkien', 'reduced')}</h1>
+    <h1>{formatPlayerName('Magalhães Josh', 'Gabriel Lopez')}</h1>
   </div>
 );
 
