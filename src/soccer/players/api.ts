@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { ApiContext, ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import Player from './model';
+import Player, { PlayerPosition } from './model';
 
 export function usePlayer(id?: string): UseQueryResult<Player> {
   const api = useApi();
@@ -26,11 +26,12 @@ export function usePlayer(id?: string): UseQueryResult<Player> {
 export type PlayerList = PaginatedList<'players', Player>;
 
 export interface GetPlayersQuery extends ListRequestQuery {
+  club?: string;
+  league?: string;
   wallet?: string;
-  composition_setting?: string;
   match?: string;
   composition?: string;
-  position?: string;
+  position?: PlayerPosition;
   search?: string;
 }
 
@@ -45,20 +46,24 @@ export function usePlayers(query?: GetPlayersQuery): UseQueryResult<PlayerList> 
 export async function getPlayers(
   api: ApiContext,
   {
+    club,
+    league,
     wallet = 'default',
-    expand = 'club',
-    composition_setting,
     match,
     composition,
     position,
+    search,
+    expand = 'club',
   }: GetPlayersQuery,
 ): Promise<AxiosResponse<PlayerList>> {
   return api.get<PlayerList, GetPlayersQuery>('/players', {
+    club,
+    league,
     wallet,
-    composition_setting,
     match,
     composition,
     position,
+    search,
     expand,
   });
 }
