@@ -69,7 +69,8 @@ export async function getPlayers(
 }
 
 export interface PlayerBody extends RequestBody {
-  name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
   description?: string | null;
   club?: string | null;
   position?: string | null;

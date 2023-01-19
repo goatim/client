@@ -8,7 +8,8 @@ export type PlayerSide = 'center' | 'left' | 'right';
 
 export default interface Player extends Model<'player'> {
   club?: Club | string;
-  name?: string;
+  first_name?: string;
+  last_name?: string;
   picture?: Image;
   nickname?: string;
   slug?: string;
