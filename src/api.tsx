@@ -2,11 +2,12 @@ import { createContext, ReactElement, useCallback, useContext, useMemo, useState
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosRequestHeaders } from 'axios';
 import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
-import base64 from 'base-64';
 import cookie from 'cookie';
 import { FormErrors } from '@cezembre/forms';
 import { ManagerOptions } from 'socket.io-client/build/esm/manager';
 import { SocketOptions } from 'socket.io-client/build/esm/socket';
+import { DateTime } from 'luxon';
+import { DurationLike } from 'luxon/src/duration';
 import { ModelName } from './utils/models';
 
 export interface Model<N extends ModelName = ModelName> {
@@ -237,10 +238,10 @@ export interface ApiContext {
 
   setConfig(config: ApiConfig): void;
 
-  setHost(host?: string | null): void;
-  setApiKey(apiKey?: string | null): void;
-  setLocale(locale?: string | null): void;
-  setBearerToken(bearerToken?: string | null): void;
+  setHost(host?: string | null, duration?: DurationLike): void;
+  setApiKey(apiKey?: string | null, duration?: DurationLike): void;
+  setLocale(locale?: string | null, duration?: DurationLike): void;
+  setBearerToken(bearerToken?: string | null, duration?: DurationLike): void;
 
   get<D = unknown, Q extends RequestQuery = RequestQuery>(
     route: string,
@@ -274,33 +275,72 @@ export function useApi(): ApiContext {
   return context;
 }
 
-function storeConfig(config?: ApiConfig): void {
-  if (config?.host) {
-    if (document) {
-      document.cookie = cookie.serialize('host', config.host);
-    }
+function storeHost(host: string | null, duration: DurationLike = { year: 1 }): string | null {
+  if (document) {
+    document.cookie = cookie.serialize('host', host || '', {
+      expires: host
+        ? DateTime.now().plus(duration).toJSDate()
+        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+    });
+  }
+  return host;
+}
+
+function storeApiKey(apiKey: string | null, duration: DurationLike = { year: 1 }): string | null {
+  if (document) {
+    document.cookie = cookie.serialize('api_key', apiKey || '', {
+      expires: apiKey
+        ? DateTime.now().plus(duration).toJSDate()
+        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+    });
+  }
+  return apiKey;
+}
+
+function storeLocale(locale: string | null, duration: DurationLike = { year: 1 }): string | null {
+  if (document) {
+    document.cookie = cookie.serialize('locale', locale || '', {
+      expires: locale
+        ? DateTime.now().plus(duration).toJSDate()
+        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+    });
+  }
+  return locale;
+}
+
+function storeBearerToken(
+  bearerToken: string | null,
+  duration: DurationLike = { year: 1 },
+): string | null {
+  if (document) {
+    document.cookie = cookie.serialize('bearer_token', bearerToken || '', {
+      expires: bearerToken
+        ? DateTime.now().plus(duration).toJSDate()
+        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+    });
+  }
+  return bearerToken;
+}
+
+function storeConfig(config?: ApiConfig, duration?: DurationLike): void {
+  if (config?.host !== undefined) {
+    storeHost(config.host, duration);
   }
 
-  if (config?.api_key) {
-    if (document) {
-      document.cookie = cookie.serialize('api_key', config.api_key);
-    }
+  if (config?.api_key !== undefined) {
+    storeApiKey(config.api_key, duration);
   }
 
-  if (config?.locale) {
-    if (document) {
-      document.cookie = cookie.serialize('locale', config.locale);
-    }
+  if (config?.locale !== undefined) {
+    storeLocale(config.locale, duration);
   }
 
-  if (config?.bearer_token) {
-    if (document) {
-      document.cookie = cookie.serialize('bearer_token', config.bearer_token);
-    }
+  if (config?.bearer_token !== undefined) {
+    storeBearerToken(config.bearer_token, duration);
   }
 }
 
-function hydrateConfig(config?: ApiConfig): ApiConfig | undefined {
+function retrieveConfig(): ApiConfig | undefined {
   if (document) {
     const {
       host,
@@ -311,6 +351,15 @@ function hydrateConfig(config?: ApiConfig): ApiConfig | undefined {
     if (host || apiKey || locale || bearerToken) {
       return { host, api_key: apiKey, locale, bearer_token: bearerToken };
     }
+  }
+  return undefined;
+}
+
+function hydrateConfig(config?: ApiConfig): ApiConfig | undefined {
+  const storedConfig = retrieveConfig();
+
+  if (storedConfig) {
+    return storedConfig;
   }
 
   storeConfig(config);
@@ -330,63 +379,51 @@ export function ApiProvider({ children, config, persistConfig = true }: Props): 
   );
 
   const setConfig = useCallback(
-    (_config: ApiConfig) => {
+    (_config: ApiConfig, duration?: DurationLike) => {
       setApiConfig(_config);
       if (persistConfig) {
-        storeConfig(_config);
+        storeConfig(_config, duration);
       }
     },
     [persistConfig],
   );
 
   const setHost = useCallback(
-    (host: string | null) => {
-      setApiConfig((oldConfig) => {
-        const newConfig: ApiConfig = { ...oldConfig, host };
-        if (persistConfig) {
-          storeConfig(newConfig);
-        }
-        return newConfig;
-      });
+    (host: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, host: host || undefined }));
+      if (persistConfig) {
+        storeHost(host, duration);
+      }
     },
     [persistConfig],
   );
 
   const setApiKey = useCallback(
-    (apiKey: string | null) => {
-      setApiConfig((oldConfig) => {
-        const newConfig: ApiConfig = { ...oldConfig, api_key: apiKey };
-        if (persistConfig) {
-          storeConfig(newConfig);
-        }
-        return newConfig;
-      });
+    (apiKey: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, api_key: apiKey || undefined }));
+      if (persistConfig) {
+        storeApiKey(apiKey, duration);
+      }
     },
     [persistConfig],
   );
 
   const setLocale = useCallback(
-    (locale: string | null) => {
-      setApiConfig((oldConfig) => {
-        const newConfig: ApiConfig = { ...oldConfig, locale };
-        if (persistConfig) {
-          storeConfig(newConfig);
-        }
-        return newConfig;
-      });
+    (locale: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, locale: locale || undefined }));
+      if (persistConfig) {
+        storeLocale(locale, duration);
+      }
     },
     [persistConfig],
   );
 
   const setBearerToken = useCallback(
-    (bearerToken: string | null) => {
-      setApiConfig((oldConfig) => {
-        const newConfig: ApiConfig = { ...oldConfig, bearer_token: bearerToken };
-        if (persistConfig) {
-          storeConfig(newConfig);
-        }
-        return newConfig;
-      });
+    (bearerToken: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, bearer_token: bearerToken || undefined }));
+      if (persistConfig) {
+        storeBearerToken(bearerToken, duration);
+      }
     },
     [persistConfig],
   );
