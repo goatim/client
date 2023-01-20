@@ -15,7 +15,7 @@ export function formatPlayerName(
     if (format === 'full') {
       result += firstName;
     } else {
-      result += firstName.match(/^(\w)|\s(\w)/gu)?.join('. ') || '';
+      result += firstName.match(/^([A-zÀ-ú])|\s([A-zÀ-ú])/gu)?.join('. ') || '';
       if (result) {
         result += '.';
       }
@@ -27,7 +27,7 @@ export function formatPlayerName(
       result += ' ';
     }
     if (format === 'initials') {
-      result += lastName.match(/^(\w)|\s(\w)/gu)?.join('. ') || '';
+      result += lastName.match(/^([A-zÀ-ú])|\s([A-zÀ-ú])/gu)?.join('. ') || '';
     } else {
       result += lastName;
     }
