@@ -39,6 +39,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
+    "cookie": "^0.5.0",
     "http-status": "^1.5.3",
     "lodash": "^4.17.21",
     "react-query": "^3.39.2",
@@ -66,6 +67,7 @@
     "@storybook/react": "^6.5.14",
     "@storybook/testing-library": "^0.0.13",
     "@types/base-64": "^1.0.0",
+    "@types/cookie": "^0.5.1",
     "@types/lodash.isequal": "^4.5.6",
     "@types/luxon": "^3.1.0",
     "@types/react": "^18.0.26",

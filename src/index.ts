@@ -491,7 +491,7 @@ import {
   useTransactions,
 } from './trading/transactions/api';
 import { formatPercentage, formatPercentageVariation, formatScore } from './utils/adapters';
-import { getUserPublicName } from './utils/auth';
+import { getUserPublicName } from './auth/users/adapters';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification, {

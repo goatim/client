@@ -3,6 +3,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosRequestHeade
 import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
 import base64 from 'base-64';
+import cookie from 'cookie';
 import { FormErrors } from '@cezembre/forms';
 import { ManagerOptions } from 'socket.io-client/build/esm/manager';
 import { SocketOptions } from 'socket.io-client/build/esm/socket';
@@ -273,25 +274,43 @@ export function useApi(): ApiContext {
   return context;
 }
 
-const API_CONFIG_STORAGE_KEY = base64.encode('friday_api_config');
-
 function storeConfig(config?: ApiConfig): void {
-  if (window) {
-    window.localStorage.setItem(API_CONFIG_STORAGE_KEY, base64.encode(JSON.stringify(config)));
+  if (config?.host) {
+    if (document) {
+      document.cookie = cookie.serialize('host', config.host);
+    }
+  }
+
+  if (config?.api_key) {
+    if (document) {
+      document.cookie = cookie.serialize('api_key', config.api_key);
+    }
+  }
+
+  if (config?.locale) {
+    if (document) {
+      document.cookie = cookie.serialize('locale', config.locale);
+    }
+  }
+
+  if (config?.bearer_token) {
+    if (document) {
+      document.cookie = cookie.serialize('bearer_token', config.bearer_token);
+    }
   }
 }
 
 function hydrateConfig(config?: ApiConfig): ApiConfig | undefined {
-  let storedConfig: ApiConfig | undefined;
-  if (window) {
-    const raw = window.localStorage.getItem(API_CONFIG_STORAGE_KEY);
-    if (raw) {
-      storedConfig = JSON.parse(base64.decode(raw)) as ApiConfig;
+  if (document) {
+    const {
+      host,
+      api_key: apiKey,
+      locale,
+      bearer_token: bearerToken,
+    } = cookie.parse(document.cookie);
+    if (host || apiKey || locale || bearerToken) {
+      return { host, api_key: apiKey, locale, bearer_token: bearerToken };
     }
-  }
-
-  if (storedConfig) {
-    return storedConfig;
   }
 
   storeConfig(config);
