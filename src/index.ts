@@ -497,6 +497,7 @@ import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification, {
   NotificationEventMap,
   NotificationOrderMatchPayload,
+  NotificationClosedMatchPayload,
 } from './community/notifications/model';
 import {
   GetNotificationQuery,
@@ -631,6 +632,7 @@ export type {
   Notification,
   NotificationEventMap,
   NotificationOrderMatchPayload,
+  NotificationClosedMatchPayload,
   GetNotificationQuery,
   UseNotificationsOptions,
   NotificationList,
