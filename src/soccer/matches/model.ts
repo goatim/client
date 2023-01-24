@@ -1,5 +1,6 @@
 import { Model } from '../../api';
 import Wallet from '../../market/wallets/model';
+import Composition from '../compositions/model';
 
 export type MatchStatus =
   | 'created'
@@ -20,4 +21,5 @@ export default interface Match extends Model<'match'> {
   is_public?: boolean;
   status?: MatchStatus;
   nb_participants?: number;
+  podium?: Composition[];
 }
