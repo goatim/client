@@ -6,21 +6,21 @@ import { OrderType } from '../../trading/orders/model';
 import Match from '../../soccer/matches/model';
 import Composition from '../../soccer/compositions/model';
 
-export interface NotificationOrderMatchPayload {
+export interface OrderMatchNotificationPayload {
   type?: OrderType;
   nb_matched?: number;
   total?: number;
   asset?: Asset | string;
 }
 
-export interface NotificationClosedMatchPayload {
+export interface ClosedMatchNotificationPayload {
   match?: Match | string;
   composition?: Composition | string;
 }
 
 export interface NotificationEventMap {
-  order_match: NotificationOrderMatchPayload;
-  closed_match: NotificationClosedMatchPayload;
+  order_match: OrderMatchNotificationPayload;
+  closed_match: ClosedMatchNotificationPayload;
 }
 
 export default interface Notification<

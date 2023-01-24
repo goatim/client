@@ -496,8 +496,8 @@ import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification, {
   NotificationEventMap,
-  NotificationOrderMatchPayload,
-  NotificationClosedMatchPayload,
+  OrderMatchNotificationPayload,
+  ClosedMatchNotificationPayload,
 } from './community/notifications/model';
 import {
   GetNotificationQuery,
@@ -515,6 +515,7 @@ import Post, {
   OrderPostPayload,
   TransactionPostPayload,
   PackPostPayload,
+  MatchSummaryPostPayload,
   PostTypeMap,
 } from './community/posts/model';
 import {
@@ -631,8 +632,8 @@ export {
 export type {
   Notification,
   NotificationEventMap,
-  NotificationOrderMatchPayload,
-  NotificationClosedMatchPayload,
+  OrderMatchNotificationPayload,
+  ClosedMatchNotificationPayload,
   GetNotificationQuery,
   UseNotificationsOptions,
   NotificationList,
@@ -643,6 +644,7 @@ export type {
   OrderPostPayload,
   TransactionPostPayload,
   PackPostPayload,
+  MatchSummaryPostPayload,
   PostTypeMap,
   PostList,
   GetPostQuery,
