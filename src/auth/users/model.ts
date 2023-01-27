@@ -7,11 +7,13 @@ import { Image } from '../../medias/image';
 export default interface User extends Model<'user'> {
   slug?: string;
   email?: string;
+  verified_email?: string;
   gender?: string;
   first_name?: string;
   last_name?: string;
   pseudo?: string;
   phone?: string;
+  verified_phone?: string;
   birthday?: Date;
   address?: Address | string;
   country?: Country | string;
