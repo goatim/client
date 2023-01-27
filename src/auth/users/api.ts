@@ -78,6 +78,24 @@ export function usePostUser(
   );
 }
 
+export interface PostUserVerifyEmailBody extends RequestBody {
+  token?: string;
+}
+
+export function usePostUserVerifyEmail(): UseMutationResult<
+  void,
+  unknown,
+  PostUserVerifyEmailBody
+> {
+  const api = useApi();
+  return useMutation<void, unknown, PostUserVerifyEmailBody>(
+    async (body: PostUserVerifyEmailBody) => {
+      const { data } = await api.post<void, PostUserVerifyEmailBody>('/users/verify_email', body);
+      return data;
+    },
+  );
+}
+
 export type PutUserVariables = UserBody & { id: string };
 
 export function usePutUser(): UseMutationResult<User, unknown, PutUserVariables> {
