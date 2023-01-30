@@ -493,7 +493,7 @@ import {
   useTransactions,
 } from './trading/transactions/api';
 import { formatPercentage, formatPercentageVariation, formatScore } from './utils/adapters';
-import { getUserPublicName } from './auth/users/adapters';
+import { formatReferralCode } from './auth/users/adapters';
 import unSlugify from './utils/unSlugify';
 import FridayClient, { FridayClientContext, useFridayClient } from './client';
 import Notification, {
@@ -617,6 +617,7 @@ export {
   useUserEvents,
   useDoesUserEventExists,
   usePostUserEvent,
+  formatReferralCode,
 };
 
 /**
@@ -1099,7 +1100,7 @@ export { useSearch };
  * Utils
  */
 
-export { formatPercentage, formatPercentageVariation, formatScore, getUserPublicName, unSlugify };
+export { formatPercentage, formatPercentageVariation, formatScore, unSlugify };
 
 /**
  * Client
