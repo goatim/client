@@ -1,13 +1,3 @@
-import User from './model';
-
-export function getUserPublicName(user: User): string | null {
-  if (user.pseudo?.length) {
-    return user.pseudo;
-  }
-
-  if (user.first_name?.length) {
-    return user.first_name;
-  }
-
-  return null;
+export function formatReferralCode(referralCode: string): string {
+  return referralCode.replace(/^(.{3})/g, '$1 ');
 }
