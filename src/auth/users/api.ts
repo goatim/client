@@ -47,6 +47,7 @@ export interface UserBody extends RequestBody {
   address?: string | null;
   country?: string | null;
   locale?: string | null;
+  referrer?: string | null;
 }
 
 export interface PostUserQuery extends RequestQuery {
