@@ -18,6 +18,7 @@ export default interface User extends Model<'user'> {
   address?: Address | string;
   country?: Country | string;
   locale?: string;
+  referral_code?: string;
   session?: Session;
   picture?: Image;
 }
