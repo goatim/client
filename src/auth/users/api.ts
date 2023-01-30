@@ -88,10 +88,16 @@ export function usePostUserVerifyEmail(): UseMutationResult<
   PostUserVerifyEmailBody
 > {
   const api = useApi();
+  const queryClient = useQueryClient();
   return useMutation<void, unknown, PostUserVerifyEmailBody>(
     async (body: PostUserVerifyEmailBody) => {
       const { data } = await api.post<void, PostUserVerifyEmailBody>('/users/verify_email', body);
       return data;
+    },
+    {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(['sessions', 'active']);
+      },
     },
   );
 }
