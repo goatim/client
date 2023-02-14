@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Player from '../players/model';
-import { useCurrentWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market/wallets/api';
 import Composition from './model';
 
 export interface GetCompositionQuery extends RequestQuery {
@@ -22,7 +22,7 @@ export function useComposition(
   query?: GetCompositionQuery,
 ): UseQueryResult<Composition> {
   const api = useApi();
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
 
   const memoizedQuery = useMemo<GetCompositionQuery | undefined>(() => {
     if (query?.wallet) {
@@ -83,7 +83,7 @@ export function usePostComposition(
 ): UseMutationResult<Composition, unknown, CompositionBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   return useMutation<Composition, unknown, CompositionBody>(
     async (body: CompositionBody) => {
       const saneBody = JSON.parse(JSON.stringify(body)) as CompositionBody;
@@ -110,7 +110,7 @@ export function usePutComposition(
   id = 'current',
   query?: GetCompositionQuery,
 ): UseMutationResult<Composition, unknown, CompositionBody> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
 
@@ -152,7 +152,7 @@ export interface DeleteCompositionQuery extends RequestQuery {
 }
 
 export function useDeleteComposition(id = 'current'): UseMutationResult<void, unknown, void> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<void, unknown, void>(

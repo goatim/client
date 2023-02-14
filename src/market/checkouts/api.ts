@@ -8,12 +8,13 @@ import {
 import { useCallback } from 'react';
 import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
 import Checkout from './model';
-import { useCurrentWallet } from '../wallets/api';
+import { useActiveWallet } from '../wallets/api';
 import { ItemType } from '../items/model';
 import PaymentIntent from '../../payment/intents/model';
 import { OrderList } from '../../trading/orders/api';
 import { PackList } from '../../trading/packs/api';
 import { BoosterList } from '../../trading/boosters/api';
+import { useActiveSession } from '../../auth/sessions/api';
 
 export interface CheckoutQuery extends RequestQuery {
   wallet?: string;
@@ -21,6 +22,7 @@ export interface CheckoutQuery extends RequestQuery {
 
 export function useCheckout(id: string, query?: CheckoutQuery): UseQueryResult<Checkout> {
   const api = useApi();
+  const session = useActiveSession();
   return useQuery<Checkout>(
     ['checkouts', id, query],
     async () => {
@@ -28,14 +30,14 @@ export function useCheckout(id: string, query?: CheckoutQuery): UseQueryResult<C
       return data;
     },
     {
-      enabled: !!id,
+      enabled: !!id && !!session,
     },
   );
 }
 
-export function useCurrentCheckout(): UseQueryResult<Checkout> {
-  const currentWallet = useCurrentWallet();
-  return useCheckout('current', { wallet: currentWallet.data?.id });
+export function useActiveCheckout(): UseQueryResult<Checkout> {
+  const wallet = useActiveWallet();
+  return useCheckout('current', { wallet: wallet.data?.id });
 }
 
 export type CheckoutList = PaginatedList<'checkouts', Checkout>;
@@ -65,7 +67,7 @@ export interface CheckoutBody extends RequestBody {
 export function usePostCheckout(
   query?: CheckoutQuery,
 ): UseMutationResult<Checkout, unknown, CheckoutBody> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Checkout, unknown, CheckoutBody>(
@@ -96,7 +98,7 @@ export function usePutCheckout(
   id = 'current',
   query?: CheckoutQuery,
 ): UseMutationResult<Checkout, unknown, CheckoutBody> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Checkout, unknown, CheckoutBody>(
@@ -129,7 +131,7 @@ export function useDeleteCheckout(
   id = 'current',
   query?: CheckoutQuery,
 ): UseMutationResult<void, unknown, void> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<void, unknown, void>(
@@ -150,7 +152,7 @@ export function useAddCheckoutItem(
   id = 'current',
   query?: CheckoutQuery,
 ): UseMutationResult<Checkout, unknown, CheckoutItemBody> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Checkout, unknown, CheckoutItemBody>(
@@ -187,7 +189,7 @@ export function usePutCheckoutItem(
   id = 'current',
   query?: CheckoutQuery,
 ): UseMutationResult<Checkout, unknown, PutCheckoutItemVariables> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Checkout, unknown, PutCheckoutItemVariables>(
@@ -224,7 +226,7 @@ export function useRemoveCheckoutItem(
 ): UseMutationResult<Checkout, unknown, string> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   return useMutation<Checkout, unknown, string>(
     async (itemId: string) => {
       const { data } = await api.delete<Checkout, CheckoutQuery>(
@@ -275,7 +277,7 @@ export interface CheckoutConfirmation extends RequestBody {
 export function useConfirmCheckout(
   id = 'current',
 ): UseMutationResult<CheckoutConfirmation, unknown, ConfirmCheckoutBody> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   const api = useApi();
   return useMutation<CheckoutConfirmation, unknown, ConfirmCheckoutBody>(
     async (body: ConfirmCheckoutBody) => {

@@ -7,6 +7,7 @@ import {
 } from 'react-query';
 import User from './model';
 import { PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { useActiveSession } from '../sessions/api';
 
 export function useUser(id?: string): UseQueryResult<User> {
   const api = useApi();
@@ -22,8 +23,11 @@ export function useUser(id?: string): UseQueryResult<User> {
   );
 }
 
-export function useMe(): UseQueryResult<User> {
-  return useUser('me');
+export function useActiveUser(): UseQueryResult<User> {
+  const session = useActiveSession();
+  return useUser(
+    typeof session.data?.user === 'object' ? session.data?.user.id : session.data?.user,
+  );
 }
 
 export type UserList = PaginatedList<'users', User>;

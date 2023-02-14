@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import BoosterFactory from './model';
-import { useCurrentWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market/wallets/api';
 
 export function useBoosterFactory(id?: string): UseQueryResult<BoosterFactory> {
   const api = useApi();
@@ -37,10 +37,10 @@ export function useBoosterFactories(
   });
 }
 
-export function useCurrentWalletBoosterFactories(
+export function useActiveWalletBoosterFactories(
   query: Omit<GetBoosterFactoriesQuery, 'wallet'>,
 ): UseQueryResult<BoosterFactoryList> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   return useBoosterFactories({ ...query, wallet: wallet.data?.id });
 }
 

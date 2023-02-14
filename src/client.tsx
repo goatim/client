@@ -6,8 +6,8 @@ import { ApiConfig, ApiProvider } from './api';
 const queryClient = new QueryClient();
 
 export interface FridayClientContext extends ApiConfig {
-  wallet: string | null;
-  setWallet(wallet: string | null): void;
+  wallet: string;
+  setWallet(wallet: string): void;
 }
 
 const fridayClientContext = createContext<FridayClientContext | undefined>(undefined);
@@ -33,7 +33,7 @@ export default function FridayClient({
   apiKey,
   locale = 'fr',
 }: Props): ReactElement {
-  const [wallet, setWallet] = useState<string | null>('default');
+  const [wallet, setWallet] = useState<string>('default');
 
   const value = useMemo<FridayClientContext>(
     () => ({

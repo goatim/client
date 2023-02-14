@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, useApi } from '../../api';
 import Portfolio from './model';
-import { useCurrentWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market/wallets/api';
 
 export function usePortfolio(id?: string): UseQueryResult<Portfolio> {
   const api = useApi();
@@ -37,7 +37,7 @@ export function usePortfolios(
   );
 }
 
-export function useCurrentWalletPortfolios(query?: Omit<GetPortfoliosQuery, 'wallet'>) {
-  const wallet = useCurrentWallet();
+export function useActiveWalletPortfolios(query?: Omit<GetPortfoliosQuery, 'wallet'>) {
+  const wallet = useActiveWallet();
   return usePortfolios({ ...query, wallet: wallet.data?.id }, { enabled: !!wallet.data?.id });
 }

@@ -8,7 +8,7 @@ import {
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
 import Order, { OrderType } from './model';
-import { useCurrentWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market/wallets/api';
 
 export function useOrder(id?: string): UseQueryResult<Order> {
   const api = useApi();
@@ -43,10 +43,10 @@ export function useOrders(
   );
 }
 
-export function useCurrentWalletOrders(
+export function useActiveWalletOrders(
   query?: Omit<GetOrdersQuery, 'wallet'>,
 ): UseQueryResult<OrderList> {
-  const wallet = useCurrentWallet();
+  const wallet = useActiveWallet();
   return useOrders({
     ...query,
     wallet: wallet.data?.id || 'default',

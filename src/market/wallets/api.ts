@@ -8,6 +8,7 @@ import {
 import Wallet from './model';
 import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import { useFridayClient } from '../../client';
+import { useActiveSession } from '../../auth/sessions/api';
 
 export interface GetWalletQuery extends RequestQuery {
   ranking?: string;
@@ -15,6 +16,7 @@ export interface GetWalletQuery extends RequestQuery {
 
 export function useWallet(id?: string, query?: GetWalletQuery): UseQueryResult<Wallet> {
   const api = useApi();
+  const session = useActiveSession();
   return useQuery<Wallet>(
     ['wallets', id, query],
     async () => {
@@ -22,18 +24,14 @@ export function useWallet(id?: string, query?: GetWalletQuery): UseQueryResult<W
       return data;
     },
     {
-      enabled: !!id,
+      enabled: !!id && !!session,
     },
   );
 }
 
-export function useDefaultWallet(query?: GetWalletQuery): UseQueryResult<Wallet> {
-  return useWallet('default', query);
-}
-
-export function useCurrentWallet(query?: GetWalletQuery): UseQueryResult<Wallet> {
+export function useActiveWallet(query?: GetWalletQuery): UseQueryResult<Wallet> {
   const { wallet } = useFridayClient();
-  return useWallet(wallet || 'default', query);
+  return useWallet(wallet, query);
 }
 
 export type WalletList = PaginatedList<'wallets', Wallet>;

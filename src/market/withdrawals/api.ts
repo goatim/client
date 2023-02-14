@@ -7,10 +7,12 @@ import {
 } from 'react-query';
 import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 import Withdrawal from './model';
-import { useCurrentWallet } from '../wallets/api';
+import { useActiveWallet } from '../wallets/api';
+import { useActiveSession } from '../../auth/sessions/api';
 
 export function useWithdrawal(id?: string, query?: RequestQuery): UseQueryResult<Withdrawal> {
   const api = useApi();
+  const session = useActiveSession();
   return useQuery<Withdrawal>(
     ['withdrawals', id],
     async () => {
@@ -18,7 +20,7 @@ export function useWithdrawal(id?: string, query?: RequestQuery): UseQueryResult
       return data;
     },
     {
-      enabled: !!id,
+      enabled: !!id && !!session,
     },
   );
 }
@@ -39,8 +41,8 @@ export function useWithdrawals(
   });
 }
 
-export function useCurrentWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'wallet'>) {
-  const wallet = useCurrentWallet();
+export function useActiveWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'wallet'>) {
+  const wallet = useActiveWallet();
   return useWithdrawals({ ...query, wallet: wallet.data?.id });
 }
 
