@@ -5,7 +5,14 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import {
+  ApiContext,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  RequestQuery,
+  useApi,
+} from '../../api';
 import Club from './model';
 
 export function useClub(
@@ -30,12 +37,14 @@ export interface GetClubsQuery extends ListRequestQuery {
   league?: string;
 }
 
+export async function getClubs(api: ApiContext, query?: GetClubsQuery): Promise<ClubList> {
+  const { data } = await api.get<ClubList>('/clubs', query);
+  return data;
+}
+
 export function useClubs(query?: GetClubsQuery): UseQueryResult<ClubList> {
   const api = useApi();
-  return useQuery<ClubList>(['clubs', query], async () => {
-    const { data } = await api.get<ClubList>('/clubs', query);
-    return data;
-  });
+  return useQuery<ClubList>(['clubs', query], () => getClubs(api, query));
 }
 
 export interface ClubBody extends RequestBody {

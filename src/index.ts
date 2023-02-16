@@ -197,6 +197,7 @@ import {
   useClub,
   ClubList,
   GetClubsQuery,
+  getClubs,
   useClubs,
   ClubBody,
   usePostClub,
@@ -868,6 +869,7 @@ export type {
 
 export {
   useClub,
+  getClubs,
   useClubs,
   usePostClub,
   usePutClub,
