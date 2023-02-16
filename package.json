@@ -18,6 +18,14 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    },
+    "./dist/*": "./dist/*"
+  },
   "engines": {
     "node": ">=10"
   },

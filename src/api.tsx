@@ -1,6 +1,10 @@
 import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
-import { AxiosError, AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
-import * as axios from 'axios';
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  RawAxiosRequestHeaders,
+} from 'axios';
 import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
 import cookie from 'cookie';
@@ -178,7 +182,7 @@ export async function apiGet<D = unknown, Q extends RequestQuery = RequestQuery>
   const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
-    return await axios.default.get<D>((apiConfig?.host || '') + url, config);
+    return await axios.get<D>((apiConfig?.host || '') + url, config);
   } catch (error: unknown) {
     throw parseError(error);
   }
@@ -192,7 +196,7 @@ export async function apiPost<
   const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
-    return await axios.default.post<D>(
+    return await axios.post<D>(
       (apiConfig?.host || '') + url,
       body ? buildRequestBody<B>(body) : undefined,
       config,
@@ -210,7 +214,7 @@ export async function apiPut<
   const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
-    return await axios.default.put<D>(
+    return await axios.put<D>(
       (apiConfig?.host || '') + url,
       body ? buildRequestBody<B>(body) : undefined,
       config,
@@ -228,7 +232,7 @@ export async function apiDelete<D = unknown, Q extends RequestQuery = RequestQue
   const config = buildRequestConfig<Q>(apiConfig, query);
 
   try {
-    return await axios.default.delete<D>((apiConfig?.host || '') + url, config);
+    return await axios.delete<D>((apiConfig?.host || '') + url, config);
   } catch (error: unknown) {
     throw parseError(error);
   }
