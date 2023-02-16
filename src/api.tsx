@@ -1,5 +1,10 @@
 import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosRequestHeaders } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  RawAxiosRequestHeaders,
+} from 'axios';
 import { io, Socket } from 'socket.io-client';
 import httpStatus from 'http-status';
 import cookie from 'cookie';
@@ -130,7 +135,7 @@ export function buildRequestConfig<Q extends RequestQuery = RequestQuery>(
   apiConfig?: ApiConfig,
   query?: Q,
 ): AxiosRequestConfig {
-  const headers: AxiosRequestHeaders = {};
+  const headers: RawAxiosRequestHeaders = {};
 
   if (apiConfig?.api_key) {
     headers['X-Api-Key'] = apiConfig.api_key;
