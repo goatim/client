@@ -1,4 +1,10 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from 'react-query';
 import UserEvent from './model';
 import { PaginatedList, RequestQuery, useApi } from '../../api';
 
@@ -48,10 +54,21 @@ export function usePostUserEvent(
   initialBody?: UserEventBody,
 ): UseMutationResult<UserEvent, unknown, UserEventBody | undefined> {
   const api = useApi();
+  const queryClient = useQueryClient();
   return useMutation<UserEvent, unknown, UserEventBody | undefined>(
     async (body?: UserEventBody) => {
       const { data } = await api.post<UserEvent>('/user_events', { ...initialBody, ...body });
       return data;
+    },
+    {
+      onSuccess: (userEvent: UserEvent) => {
+        const query = {
+          code: userEvent.code,
+          user: typeof userEvent.user === 'object' ? userEvent.user.id : userEvent.user,
+        };
+        queryClient.setQueryData(['user_events', query], userEvent);
+        queryClient.setQueryData(['user_events', 'any', 'exists', query], true);
+      },
     },
   );
 }
