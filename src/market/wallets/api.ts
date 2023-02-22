@@ -49,9 +49,12 @@ export function useWallet(
   );
 }
 
-export function useActiveWallet(query?: GetWalletQuery): UseQueryResult<Wallet> {
+export function useActiveWallet(
+  query?: GetWalletQuery,
+  options?: Omit<UseQueryOptions<Wallet, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Wallet> {
   const { wallet } = useFridayClient();
-  return useWallet(wallet, query);
+  return useWallet(wallet, query, options);
 }
 
 export type WalletList = PaginatedList<'wallets', Wallet>;
