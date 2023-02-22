@@ -68,10 +68,13 @@ export async function doesUserEventExists(
 
 export function useDoesUserEventExists(
   query?: GetUserEventsQuery,
+  options?: Omit<UseQueryOptions<boolean, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<boolean, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<boolean, ApiError | AxiosError>(['user_events', 'any', 'exists', query], () =>
-    doesUserEventExists(api, query),
+  return useQuery<boolean, ApiError | AxiosError>(
+    ['user_events', 'any', 'exists', query],
+    () => doesUserEventExists(api, query),
+    options,
   );
 }
 
