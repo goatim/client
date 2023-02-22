@@ -10,20 +10,18 @@ import { useCallback } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import {
-  useApi,
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
   PaginatedList,
   RequestBody,
-  ApiContext,
-  ListRequestQuery,
-  ApiError,
+  useApi,
 } from '../../api';
 import { Checkout } from './model';
-import { useActiveWallet } from '../wallets/api';
-import { ItemType } from '../items/model';
-import { PaymentIntent } from '../../payment/intents/model';
-import { OrderList } from '../../trading/orders/api';
-import { PackList } from '../../trading/packs/api';
-import { BoosterList } from '../../trading/boosters/api';
+import { useActiveWallet } from '../wallets';
+import { ItemType } from '../items';
+import { PaymentIntent } from '../../payment';
+import { BoosterList, OrderList, PackList } from '../../trading';
 
 export async function getCheckout(api: ApiContext, id: string): Promise<Checkout> {
   const { data } = await api.get<Checkout>(`/checkouts/${id}`);

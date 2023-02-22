@@ -1,4 +1,4 @@
-import { Asset } from '../assets/model';
+import { Asset } from '../assets';
 
 export interface ShareBulk {
   asset: Asset | string;

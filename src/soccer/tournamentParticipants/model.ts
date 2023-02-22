@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import { Tournament } from '../tournaments/model';
-import { Wallet } from '../../market/wallets/model';
+import { Tournament } from '../tournaments';
+import { Wallet } from '../../market';
 
 export interface TournamentParticipant extends Model<'tournament_participant'> {
   tournament?: Tournament | string;

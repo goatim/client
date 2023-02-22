@@ -1,10 +1,8 @@
 import { Model } from '../../api';
-import { User } from '../../auth/users/model';
-import { Wallet } from '../../market/wallets/model';
-import { Asset } from '../../trading/assets/model';
-import { OrderType } from '../../trading/orders/model';
-import { Match } from '../../soccer/matches/model';
-import { Composition } from '../../soccer/compositions/model';
+import { User } from '../../auth';
+import { Wallet } from '../../market';
+import { Asset, OrderType } from '../../trading';
+import { Composition, Match } from '../../soccer';
 
 export interface OrderMatchNotificationPayload {
   type?: OrderType;

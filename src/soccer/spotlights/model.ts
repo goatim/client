@@ -1,7 +1,7 @@
-import { League } from '../leagues/model';
-import { Club } from '../clubs/model';
-import { Asset } from '../../trading/assets/model';
-import { Image } from '../../medias/image';
+import { League } from '../leagues';
+import { Club } from '../clubs';
+import { Asset } from '../../trading';
+import { Image } from '../../medias';
 import { Model } from '../../api';
 
 export type SpotlightType = 'simple' | 'duo';

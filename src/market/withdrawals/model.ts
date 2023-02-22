@@ -1,8 +1,8 @@
 import { Model } from '../../api';
-import { Session } from '../../auth/sessions/model';
-import { Wallet } from '../wallets/model';
-import { Capture } from '../captures/model';
-import { CurrenciesRate } from '../currenciesRates/model';
+import { Session } from '../../auth';
+import { Wallet } from '../wallets';
+import { Capture } from '../captures';
+import { CurrenciesRate } from '../currenciesRates';
 
 export type WithdrawalStatus = 'created' | 'accepted' | 'refused' | 'done';
 

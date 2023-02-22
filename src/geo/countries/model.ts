@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import { GeoLocation } from '../addresses/model';
-import { Currency } from '../../market/currencies/model';
+import { GeoLocation } from '../addresses';
+import { Currency } from '../../market';
 
 export interface Country extends Model<'country'> {
   currency?: Currency | string;

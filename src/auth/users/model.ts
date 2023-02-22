@@ -1,8 +1,7 @@
-import { Address } from '../../geo/addresses/model';
-import { Country } from '../../geo/countries/model';
-import { Session } from '../sessions/model';
+import { Address, Country } from '../../geo';
+import { Session } from '../sessions';
 import { Model } from '../../api';
-import { Image } from '../../medias/image';
+import { Image } from '../../medias';
 
 export interface User extends Model<'user'> {
   slug?: string;

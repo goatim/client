@@ -1,8 +1,8 @@
 import { Model } from '../../api';
-import { Wallet } from '../../market/wallets/model';
-import { CompositionSetting } from '../compositionSettings/model';
-import { Player } from '../players/model';
-import { Match } from '../matches/model';
+import { Wallet } from '../../market';
+import { CompositionSetting } from '../compositionSettings';
+import { Player } from '../players';
+import { Match } from '../matches';
 
 export interface CompositionPosition<P = Model<'player'> | string> {
   id: string;

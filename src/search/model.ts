@@ -1,4 +1,4 @@
-import { Asset } from '../trading/assets/model';
+import { Asset } from '../trading';
 
 export type SearchResultType = 'player-asset';
 

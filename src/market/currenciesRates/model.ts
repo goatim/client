@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Currency } from '../currencies/model';
+import { Currency } from '../currencies';
 
 /**
  * Currencies rate

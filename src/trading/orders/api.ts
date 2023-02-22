@@ -17,7 +17,7 @@ import {
   useApi,
 } from '../../api';
 import { Order, OrderType } from './model';
-import { useActiveWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market';
 
 export async function getOrder(api: ApiContext, id: string): Promise<Order> {
   const { data } = await api.get<Order>(`/orders/${id}`);

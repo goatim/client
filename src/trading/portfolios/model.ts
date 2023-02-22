@@ -1,7 +1,7 @@
 import { Model } from '../../api';
-import { Wallet } from '../../market/wallets/model';
-import { Asset } from '../assets/model';
-import { Booster } from '../boosters/model';
+import { Wallet } from '../../market';
+import { Asset } from '../assets';
+import { Booster } from '../boosters';
 
 export interface Portfolio extends Model<'portfolio'> {
   wallet?: Wallet | string;

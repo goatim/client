@@ -1,7 +1,4 @@
-import { Asset } from '../../trading/assets/model';
-import { BoosterFactory } from '../../trading/boosterFactories/model';
-import { OrderType } from '../../trading/orders/model';
-import { PackFactory } from '../../trading/packFactories/model';
+import { Asset, BoosterFactory, OrderType, PackFactory } from '../../trading';
 
 export type ItemType = 'order' | 'booster' | 'pack';
 

@@ -13,7 +13,7 @@ import { ManagerOptions } from 'socket.io-client/build/esm/manager';
 import { SocketOptions } from 'socket.io-client/build/esm/socket';
 import { DateTime } from 'luxon';
 import { DurationLike } from 'luxon/src/duration';
-import { ModelName } from './utils/models';
+import { ModelName } from './utils';
 
 export interface Model<N extends ModelName = ModelName> {
   __name__?: N;

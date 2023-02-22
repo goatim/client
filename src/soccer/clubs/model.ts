@@ -1,8 +1,8 @@
 import { Model } from '../../api';
-import { City } from '../../geo/cities/model';
-import { League } from '../leagues/model';
-import { Player } from '../players/model';
-import { Image } from '../../medias/image';
+import { City } from '../../geo';
+import { League } from '../leagues';
+import { Player } from '../players';
+import { Image } from '../../medias';
 
 export interface Club extends Model<'club'> {
   league?: League | string;

@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Tax } from '../../market/taxes/model';
+import { Tax } from '../../market';
 
 export interface BoosterFactory extends Model<'booster_factory'> {
   name?: string;

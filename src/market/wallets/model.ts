@@ -1,7 +1,7 @@
 import { Model } from '../../api';
-import { User } from '../../auth/users/model';
-import { Rank } from '../../trading/ranks/model';
-import { Image } from '../../medias/image';
+import { User } from '../../auth';
+import { Rank } from '../../trading';
+import { Image } from '../../medias';
 
 export type WalletType = 'user' | 'team' | 'broker';
 

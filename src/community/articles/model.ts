@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
-import { User } from '../../auth/users/model';
-import { Paragraph } from '../paragraphs/model';
+import { User } from '../../auth';
+import { Paragraph } from '../paragraphs';
 import { Model } from '../../api';
-import { Image } from '../../medias/image';
+import { Image } from '../../medias';
 
 export type ArticleType =
   | 'static'

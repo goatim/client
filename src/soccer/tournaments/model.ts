@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Match } from '../matches/model';
+import { Match } from '../matches';
 
 export interface Tournament extends Model<'tournament'> {
   title?: string;

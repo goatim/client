@@ -1,9 +1,8 @@
 import { Model } from '../../api';
-import { Wallet } from '../../market/wallets/model';
-import { PackFactory } from '../packFactories/model';
-import { ShareBulk } from '../shareBulks/model';
-import { MinifiedShareBulk } from '../shareBulks/minified';
-import { Image } from '../../medias/image';
+import { Wallet } from '../../market';
+import { PackFactory } from '../packFactories';
+import { ShareBulk, MinifiedShareBulk } from '../shareBulks';
+import { Image } from '../../medias';
 
 export interface Pack extends Model<'pack'> {
   factory?: PackFactory | string;

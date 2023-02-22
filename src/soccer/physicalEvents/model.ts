@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Dividend } from '../../trading/dividends/model';
+import { Dividend } from '../../trading';
 
 export type PhysicalEventType = 'match' | 'goal';
 

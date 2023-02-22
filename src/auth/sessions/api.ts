@@ -1,10 +1,10 @@
 import {
   useMutation,
+  UseMutationOptions,
+  UseMutationResult,
   useQuery,
   useQueryClient,
-  UseMutationResult,
   UseQueryResult,
-  UseMutationOptions,
 } from 'react-query';
 import { useCallback } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';

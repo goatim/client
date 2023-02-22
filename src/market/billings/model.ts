@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Address, MinifiedAddress } from '../../geo/addresses/model';
+import { Address, MinifiedAddress } from '../../geo';
 
 export interface MinifiedBilling {
   id?: string;

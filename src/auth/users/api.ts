@@ -10,7 +10,7 @@ import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import { User } from './model';
 import { ApiContext, ApiError, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
-import { useActiveSession } from '../sessions/api';
+import { useActiveSession } from '../sessions';
 
 export async function getUser(api: ApiContext, id: string): Promise<User> {
   const { data } = await api.get<User>(`/users/${id}`);

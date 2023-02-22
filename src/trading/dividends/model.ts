@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import { Asset } from '../assets/model';
-import { PhysicalEvent } from '../../soccer/physicalEvents/model';
+import { Asset } from '../assets';
+import { PhysicalEvent } from '../../soccer';
 
 export type DividendType = 'general' | 'match';
 

@@ -1,8 +1,8 @@
 import { Model } from '../../api';
-import { Portfolio } from '../portfolios/model';
-import { Wallet } from '../../market/wallets/model';
-import { Order } from '../orders/model';
-import { BoosterFactory } from '../boosterFactories/model';
+import { Portfolio } from '../portfolios';
+import { Wallet } from '../../market';
+import { Order } from '../orders';
+import { BoosterFactory } from '../boosterFactories';
 
 export interface Booster extends Model<'booster'> {
   factory?: BoosterFactory | string;

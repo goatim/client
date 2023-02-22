@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import { Image } from '../../medias/image';
-import { Tax } from '../../market/taxes/model';
+import { Image } from '../../medias';
+import { Tax } from '../../market';
 
 export interface PackFactoryOdds {
   [key: string]: number;

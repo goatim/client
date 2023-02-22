@@ -1,7 +1,7 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
-import { useApi, ListRequestQuery, ApiContext, ApiError } from '../api';
+import { ApiContext, ApiError, ListRequestQuery, useApi } from '../api';
 import { Search } from './model';
 
 export interface SearchQuery extends ListRequestQuery {

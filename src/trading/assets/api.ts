@@ -17,9 +17,9 @@ import {
   useApi,
 } from '../../api';
 import { Asset, AssetType } from './model';
-import { Quotation, QuotationHistory } from '../quotations/model';
-import { Transaction } from '../transactions/model';
-import { PlayerPosition } from '../../soccer/players/model';
+import { Quotation, QuotationHistory } from '../quotations';
+import { Transaction } from '../transactions';
+import { PlayerPosition } from '../../soccer';
 
 export async function getAsset(api: ApiContext, id: string): Promise<Asset> {
   const { data } = await api.get<Asset>(`/assets/${id}`);

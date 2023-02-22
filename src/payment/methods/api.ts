@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { AxiosError } from 'axios';
-import { useApi, PaginatedList, RequestBody, ApiContext, ApiError } from '../../api';
+import { ApiContext, ApiError, PaginatedList, RequestBody, useApi } from '../../api';
 import { PaymentMethod } from './model';
 
 export type PaymentMethodList = PaginatedList<'payment_methods', PaymentMethod>;

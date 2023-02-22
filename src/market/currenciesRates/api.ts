@@ -11,8 +11,7 @@ import {
   useApi,
 } from '../../api';
 import { CurrenciesRate } from './model';
-import { resolveFridayCoinsAmount } from '../currencies/fridayCoins';
-import { adaptEtherAmount } from '../currencies/ether';
+import { adaptEtherAmount, resolveFridayCoinsAmount } from '../currencies';
 
 export type GetCurrenciesRateQuery = RequestQuery;
 
@@ -28,7 +27,7 @@ export async function getCurrenciesRate(
 export function useCurrenciesRate(
   id?: string,
   query?: GetCurrenciesRateQuery,
-  options?: Omit<UseQueryOptions<CurrenciesRate, ApiError | AxiosError>, 'queryFn' | 'queryFn'>,
+  options?: Omit<UseQueryOptions<CurrenciesRate, ApiError | AxiosError>, 'queryKey' | 'queryKey'>,
 ): UseQueryResult<CurrenciesRate, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<CurrenciesRate, ApiError | AxiosError>(
@@ -58,7 +57,10 @@ export async function getCurrenciesRates(
 
 export function useCurrenciesRates(
   query?: GetCurrenciesRatesQuery,
-  options?: Omit<UseQueryOptions<CurrenciesRateList, ApiError | AxiosError>, 'queryFn' | 'queryFn'>,
+  options?: Omit<
+    UseQueryOptions<CurrenciesRateList, ApiError | AxiosError>,
+    'queryFn' | 'queryKey'
+  >,
 ): UseQueryResult<CurrenciesRateList, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<CurrenciesRateList, ApiError | AxiosError>(

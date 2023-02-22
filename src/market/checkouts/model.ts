@@ -1,11 +1,9 @@
 import { DateTime } from 'luxon';
 import { Model } from '../../api';
-import { User } from '../../auth/users/model';
-import { Item } from '../items/model';
-import { Session } from '../../auth/sessions/model';
-import { Billing } from '../billings/model';
-import { PaymentMethod } from '../../payment/methods/model';
-import { PaymentIntent, PaymentIntentStatus } from '../../payment/intents/model';
+import { Session, User } from '../../auth';
+import { Item } from '../items';
+import { Billing } from '../billings';
+import { PaymentIntent, PaymentIntentStatus, PaymentMethod } from '../../payment';
 
 export interface Checkout extends Model<'checkout'> {
   session?: Session | string;

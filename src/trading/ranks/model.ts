@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Ranking } from '../rankings/model';
+import { Ranking } from '../rankings';
 
 export interface Rank extends Model<'rank'> {
   ranking?: Ranking | string;

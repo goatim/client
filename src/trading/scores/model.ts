@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { Wallet } from '../../market/wallets/model';
+import { Wallet } from '../../market';
 
 export interface Score {
   wallet?: Wallet | string;

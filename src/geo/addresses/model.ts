@@ -1,5 +1,5 @@
-import { City } from '../cities/model';
-import { Country } from '../countries/model';
+import { City } from '../cities';
+import { Country } from '../countries';
 import { Model } from '../../api';
 
 export interface GeoLocation {

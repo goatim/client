@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import { Club } from '../clubs/model';
-import { Image } from '../../medias/image';
+import { Club } from '../clubs';
+import { Image } from '../../medias';
 
 export interface League extends Model<'league'> {
   name?: string;

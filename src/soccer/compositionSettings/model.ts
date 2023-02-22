@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { PlayerPosition } from '../players/model';
+import { PlayerPosition } from '../players';
 
 export interface CompositionSettingPosition {
   id: string;

@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import { Wallet } from '../../market/wallets/model';
-import { Composition } from '../compositions/model';
+import { Wallet } from '../../market';
+import { Composition } from '../compositions';
 
 export type MatchStatus =
   | 'created'

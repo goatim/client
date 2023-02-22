@@ -7,7 +7,7 @@ import {
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { AxiosError } from 'axios/index';
+import { AxiosError } from 'axios';
 import { ApiContext, ApiError, PaginatedList, RequestBody, useApi } from '../../api';
 import { Rank } from './model';
 

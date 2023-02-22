@@ -17,8 +17,8 @@ import {
   RequestQuery,
   useApi,
 } from '../../api';
-import { Player } from '../players/model';
-import { useActiveWallet } from '../../market/wallets/api';
+import { Player } from '../players';
+import { useActiveWallet } from '../../market';
 import { Composition } from './model';
 
 export interface GetCompositionQuery extends RequestQuery {

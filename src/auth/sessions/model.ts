@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { User } from '../users/model';
+import { User } from '../users';
 
 export interface Session extends Model<'session'> {
   expiration?: string;

@@ -1,12 +1,8 @@
 import { Model } from '../../api';
-import { User } from '../../auth/users/model';
-import { Wallet } from '../../market/wallets/model';
-import { Asset } from '../../trading/assets/model';
-import { Match } from '../../soccer/matches/model';
-import { OrderType } from '../../trading/orders/model';
-import { Transaction } from '../../trading/transactions/model';
-import { Pack } from '../../trading/packs/model';
-import { Composition } from '../../soccer/compositions/model';
+import { User } from '../../auth';
+import { Wallet } from '../../market';
+import { Asset, OrderType, Pack, Transaction } from '../../trading';
+import { Composition, Match } from '../../soccer';
 
 export interface OrderPostPayload {
   id: string;

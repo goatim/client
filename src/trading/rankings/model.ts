@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { Model } from '../../api';
-import { Rank } from '../ranks/model';
+import { Rank } from '../ranks';
 
 export type RankingPeriod =
   | 'day'

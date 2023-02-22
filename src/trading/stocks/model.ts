@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Asset } from '../assets/model';
+import { Asset } from '../assets';
 
 export interface Stock extends Model<'stock'> {
   asset?: Asset | string;

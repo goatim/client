@@ -17,7 +17,7 @@ import {
   useApi,
 } from '../../api';
 import { BoosterFactory } from './model';
-import { useActiveWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market';
 
 export async function getBoosterFactory(api: ApiContext, id: string): Promise<BoosterFactory> {
   const { data } = await api.get<BoosterFactory>(`/booster_factories/${id}`);

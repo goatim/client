@@ -3,7 +3,7 @@ import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Portfolio } from './model';
-import { useActiveWallet } from '../../market/wallets/api';
+import { useActiveWallet } from '../../market';
 
 export async function getPortfolio(api: ApiContext, id: string): Promise<Portfolio> {
   const { data } = await api.get<Portfolio>(`/portfolios/${id}`);

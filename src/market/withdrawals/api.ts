@@ -18,7 +18,7 @@ import {
   useApi,
 } from '../../api';
 import { Withdrawal } from './model';
-import { useActiveWallet } from '../wallets/api';
+import { useActiveWallet } from '../wallets';
 
 export type GetWithdrawalQuery = RequestQuery;
 
