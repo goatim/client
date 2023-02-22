@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { Model } from '../../api';
-import Rank from '../ranks/model';
+import { Rank } from '../ranks/model';
 
 export type RankingPeriod =
   | 'day'
@@ -13,7 +13,7 @@ export type RankingPeriod =
   | 'millennium'
   | 'custom';
 
-export default interface Ranking extends Model<'ranking'> {
+export interface Ranking extends Model<'ranking'> {
   name?: string;
   slug?: string;
   description?: string;

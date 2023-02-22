@@ -1,28 +1,37 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
-import Ipo, { IpoType } from './model';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  useApi,
+} from '../../api';
+import { Ipo, IpoType } from './model';
+
+export async function getIpo(api: ApiContext, id: string): Promise<Ipo> {
+  const { data } = await api.get<Ipo>(`/ipos/${id}`);
+  return data;
+}
 
 export function useIpo(
-  ipoId?: string,
-  query?: RequestQuery,
-  initialData?: Ipo,
-): UseQueryResult<Ipo> {
+  id?: string,
+  options?: Omit<UseQueryOptions<Ipo, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Ipo, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Ipo>(
-    ['ipos', ipoId],
-    async () => {
-      const { data } = await api.get<Ipo>(`/ipos/${ipoId}`, query);
-      return data;
-    },
-    { enabled: !!ipoId, initialData },
-  );
+  return useQuery<Ipo, ApiError | AxiosError>(['ipos', id], () => getIpo(api, id as string), {
+    ...options,
+    enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
+  });
 }
 
 export type IpoList = PaginatedList<'ipos', Ipo>;
@@ -31,17 +40,19 @@ export interface GetIposQuery extends ListRequestQuery {
   asset?: string;
 }
 
+export async function getIpos(api: ApiContext, query?: GetIposQuery): Promise<IpoList> {
+  const { data } = await api.get<IpoList>('/ipos', query);
+  return data;
+}
+
 export function useIpos(
   query?: GetIposQuery,
-  options?: UseQueryOptions<IpoList>,
-): UseQueryResult<IpoList> {
+  options?: Omit<UseQueryOptions<IpoList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<IpoList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<IpoList>(
+  return useQuery<IpoList, ApiError | AxiosError>(
     ['ipos', query],
-    async () => {
-      const { data } = await api.get<IpoList>('/ipos', query);
-      return data;
-    },
+    () => getIpos(api, query),
     options,
   );
 }
@@ -57,36 +68,43 @@ export interface IpoBody extends RequestBody {
   description?: string | null;
 }
 
-export function usePostIpo(): UseMutationResult<Ipo, unknown, IpoBody> {
+export async function postIpo(api: ApiContext, body: IpoBody): Promise<Ipo> {
+  const { data } = await api.post<Ipo, IpoBody>('/ipos', body);
+  return data;
+}
+
+export function usePostIpo(
+  options?: Omit<UseMutationOptions<Ipo, ApiError | AxiosError, IpoBody>, 'mutationFn'>,
+): UseMutationResult<Ipo, ApiError | AxiosError, IpoBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Ipo, unknown, IpoBody>(
-    async (body: IpoBody) => {
-      const { data } = await api.post<Ipo, IpoBody>('/ipos', body);
-      return data;
+  return useMutation<Ipo, ApiError | AxiosError, IpoBody>((body: IpoBody) => postIpo(api, body), {
+    onSuccess(ipo: Ipo) {
+      queryClient.setQueryData(['ipos', ipo.id], ipo);
     },
-    {
-      onSuccess(ipo: Ipo) {
-        queryClient.setQueryData(['ipos', ipo.id], ipo);
-      },
-    },
-  );
+    ...options,
+  });
+}
+
+export async function putIpo(api: ApiContext, id: string, body: IpoBody): Promise<Ipo> {
+  const { data } = await api.put<Ipo, IpoBody>(`/ipos/${id}`, body);
+  return data;
 }
 
 export type PutIpoVariables = IpoBody & { id: string };
 
-export function usePutIpo(): UseMutationResult<Ipo, unknown, PutIpoVariables> {
+export function usePutIpo(
+  options?: Omit<UseMutationOptions<Ipo, ApiError | AxiosError, PutIpoVariables>, 'mutationFn'>,
+): UseMutationResult<Ipo, ApiError | AxiosError, PutIpoVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Ipo, unknown, PutIpoVariables>(
-    async ({ id, ...body }: PutIpoVariables) => {
-      const { data } = await api.put<Ipo, IpoBody>(`/ipos/${id}`, body);
-      return data;
-    },
+  return useMutation<Ipo, ApiError | AxiosError, PutIpoVariables>(
+    ({ id, ...body }: PutIpoVariables) => putIpo(api, id, body),
     {
       onSuccess(ipo: Ipo) {
         queryClient.setQueryData(['ipos', ipo.id], ipo);
       },
+      ...options,
     },
   );
 }

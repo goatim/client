@@ -9,7 +9,7 @@ export interface CompositionSettingPosition {
   only?: PlayerPosition[];
 }
 
-export default interface CompositionSetting extends Model<'composition_setting'> {
+export interface CompositionSetting extends Model<'composition_setting'> {
   name?: string;
   description?: string;
   positions?: CompositionSettingPosition[];

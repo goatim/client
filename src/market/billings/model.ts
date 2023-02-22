@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import Address, { MinifiedAddress } from '../../geo/addresses/model';
+import { Address, MinifiedAddress } from '../../geo/addresses/model';
 
 export interface MinifiedBilling {
   id?: string;
@@ -12,7 +12,7 @@ export interface MinifiedBilling {
   vat_code?: string;
 }
 
-export default interface Billing extends Model<'billing'> {
+export interface Billing extends Model<'billing'> {
   first_name?: string;
   last_name?: string;
   company_name?: string;

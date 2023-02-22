@@ -1,43 +1,55 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useMemo } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
-import Player from '../players/model';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  RequestQuery,
+  useApi,
+} from '../../api';
+import { Player } from '../players/model';
 import { useActiveWallet } from '../../market/wallets/api';
-import Composition from './model';
+import { Composition } from './model';
 
 export interface GetCompositionQuery extends RequestQuery {
   match?: string;
   wallet?: string;
 }
 
-export function useComposition(
-  id = 'current',
+export async function getComposition(
+  api: ApiContext,
+  id: string,
   query?: GetCompositionQuery,
+): Promise<Composition> {
+  const { data } = await api.get<Composition>(`/compositions/${id}`, query);
+  return data;
+}
+
+export function useComposition(
+  id?: string,
+  query?: GetCompositionQuery,
+  options?: Omit<UseQueryOptions<Composition, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<Composition> {
   const api = useApi();
-  const wallet = useActiveWallet();
 
-  const memoizedQuery = useMemo<GetCompositionQuery | undefined>(() => {
-    if (query?.wallet) {
-      return query;
-    }
-    return {
-      ...query,
-      wallet: wallet.data?.id,
-    };
-  }, [query, wallet.data?.id]);
-
-  return useQuery<Composition>(['compositions', id, memoizedQuery], async () => {
-    const { data } = await api.get<Composition>(`/compositions/${id}`, memoizedQuery);
-    return data;
-  });
+  return useQuery<Composition, ApiError | AxiosError>(
+    ['compositions', id, query],
+    () => getComposition(api, id as string, query),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
+    },
+  );
 }
 
 export interface GetCompositionsQuery extends ListRequestQuery {
@@ -49,18 +61,95 @@ export interface GetCompositionsQuery extends ListRequestQuery {
 
 export type CompositionList = PaginatedList<'compositions', Composition>;
 
+export function mergeCompositionInList(
+  composition: Composition,
+  compositionList?: CompositionList,
+): CompositionList {
+  if (!compositionList?.compositions.length) {
+    return {
+      ...compositionList,
+      total: compositionList?.total || 1,
+      compositions: [composition],
+    };
+  }
+
+  const index = compositionList.compositions.findIndex(({ id }) => id === composition.id);
+
+  if (index === -1) {
+    return {
+      ...compositionList,
+      total: (compositionList.total || 0) + 1,
+      compositions: compositionList.compositions
+        ? [composition, ...compositionList.compositions]
+        : [composition],
+    };
+  }
+
+  compositionList.compositions[index] = composition;
+
+  return compositionList;
+}
+
+export function removeCompositionFromList(
+  id: string,
+  compositionList?: CompositionList,
+): CompositionList {
+  if (!compositionList?.compositions.length) {
+    return {
+      ...compositionList,
+      total: 0,
+      compositions: [],
+    };
+  }
+
+  const index = compositionList.compositions.findIndex((composition) => id === composition.id);
+
+  if (index === -1) {
+    return compositionList;
+  }
+
+  compositionList.compositions.splice(index, 1);
+  if (compositionList.total) {
+    compositionList.total -= 1;
+  }
+
+  return compositionList;
+}
+
+export async function getCompositions(
+  api: ApiContext,
+  query?: GetCompositionsQuery,
+): Promise<CompositionList> {
+  const { data } = await api.get<CompositionList>('/compositions', query);
+  return data;
+}
+
 export function useCompositions(
   query?: GetCompositionsQuery,
-  options?: UseQueryOptions<CompositionList>,
+  options?: Omit<UseQueryOptions<CompositionList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<CompositionList> {
   const api = useApi();
-  return useQuery<CompositionList>(
+  return useQuery<CompositionList, ApiError | AxiosError>(
     ['compositions', query],
-    async () => {
-      const { data } = await api.get<CompositionList>('/compositions', query);
-      return data;
-    },
+    () => getCompositions(api, query),
     options,
+  );
+}
+
+export function useActiveWalletCompositions(
+  query?: GetCompositionsQuery,
+  options?: Omit<UseQueryOptions<CompositionList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<CompositionList> {
+  const api = useApi();
+  const wallet = useActiveWallet();
+  return useQuery<CompositionList, ApiError | AxiosError>(
+    ['compositions', query],
+    () => getCompositions(api, { wallet: wallet.data?.id, ...query }),
+    {
+      ...options,
+      enabled:
+        options?.enabled !== undefined ? options.enabled && !!wallet.data?.id : !!wallet.data?.id,
+    },
   );
 }
 
@@ -78,93 +167,143 @@ export interface CompositionBody extends RequestBody {
   is_active?: boolean;
 }
 
+export async function postComposition(
+  api: ApiContext,
+  body: CompositionBody,
+): Promise<Composition> {
+  const { data } = await api.post<Composition, CompositionBody>('/compositions', body);
+  return data;
+}
+
 export function usePostComposition(
-  compositionKey?: string,
-): UseMutationResult<Composition, unknown, CompositionBody> {
+  options?: Omit<
+    UseMutationOptions<Composition, ApiError | AxiosError, CompositionBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<Composition, ApiError | AxiosError, CompositionBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const wallet = useActiveWallet();
-  return useMutation<Composition, unknown, CompositionBody>(
-    async (body: CompositionBody) => {
-      const saneBody = JSON.parse(JSON.stringify(body)) as CompositionBody;
-
-      if (!saneBody.wallet) {
-        saneBody.wallet = wallet.data?.id;
-      }
-
-      if (!body.wallet) {
-        body.wallet = wallet.data?.id;
-      }
-      const { data } = await api.post<Composition, CompositionBody>('/compositions', saneBody);
-      return data;
-    },
+  return useMutation<Composition, ApiError | AxiosError, CompositionBody>(
+    (body: CompositionBody) => postComposition(api, body),
     {
       onSuccess(composition: Composition) {
-        queryClient.setQueryData(['compositions', compositionKey || composition.id], composition);
+        queryClient.setQueryData(['compositions', composition.id], composition);
       },
+      ...options,
     },
   );
 }
+
+export function usePostActiveWalletComposition(
+  query?: Omit<GetCompositionsQuery, 'wallet'>,
+  options?: Omit<
+    UseMutationOptions<Composition, ApiError | AxiosError, CompositionBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<Composition, ApiError | AxiosError, CompositionBody> {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  const wallet = useActiveWallet();
+
+  return useMutation<Composition, ApiError | AxiosError, CompositionBody>(
+    (body: CompositionBody) => postComposition(api, { wallet: wallet.data?.id, ...body }),
+    {
+      onSuccess(composition: Composition) {
+        queryClient.setQueryData<CompositionList>(
+          ['compositions', { wallet: wallet.data?.id, ...query }],
+          (compositionList) => mergeCompositionInList(composition, compositionList),
+        );
+      },
+      ...options,
+    },
+  );
+}
+
+export async function putComposition(
+  api: ApiContext,
+  id: string,
+  body: CompositionBody,
+): Promise<Composition> {
+  const { data } = await api.put<Composition, CompositionBody>(`/compositions/${id}`, body);
+  return data;
+}
+
+export type UsePutCompositionVariables = CompositionBody & { id: string };
 
 export function usePutComposition(
-  id = 'current',
-  query?: GetCompositionQuery,
-): UseMutationResult<Composition, unknown, CompositionBody> {
-  const wallet = useActiveWallet();
+  options?: Omit<
+    UseMutationOptions<Composition, ApiError | AxiosError, UsePutCompositionVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Composition, ApiError | AxiosError, UsePutCompositionVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
 
-  const memoizedQuery = useMemo<GetCompositionQuery | undefined>(() => {
-    if (query?.wallet) {
-      return query;
-    }
-    return {
-      ...query,
-      wallet: wallet.data?.id,
-    };
-  }, [query, wallet.data?.id]);
-
-  return useMutation<Composition, unknown, CompositionBody>(
-    async (body: CompositionBody) => {
-      const saneBody = JSON.parse(JSON.stringify(body)) as CompositionBody;
-
-      if (!saneBody.wallet) {
-        saneBody.wallet = wallet.data?.id;
-      }
-
-      const { data } = await api.put<Composition, CompositionBody>(
-        `/compositions/${id}`,
-        saneBody,
-        memoizedQuery,
-      );
-      return data;
-    },
+  return useMutation<Composition, ApiError | AxiosError, UsePutCompositionVariables>(
+    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body),
     {
       onSuccess(composition: Composition) {
-        queryClient.setQueryData<Composition>(['compositions', id, memoizedQuery], composition);
+        queryClient.setQueryData<Composition>(['compositions', composition.id], composition);
       },
+      ...options,
     },
   );
 }
 
-export interface DeleteCompositionQuery extends RequestQuery {
-  wallet?: string;
+export function usePutActiveWalletComposition(
+  query?: Omit<GetCompositionsQuery, 'wallet'>,
+  options?: Omit<
+    UseMutationOptions<Composition, ApiError | AxiosError, UsePutCompositionVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Composition, ApiError | AxiosError, UsePutCompositionVariables> {
+  const api = useApi();
+  const wallet = useActiveWallet();
+  const queryClient = useQueryClient();
+
+  return useMutation<Composition, ApiError | AxiosError, UsePutCompositionVariables>(
+    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body),
+    {
+      onSuccess(composition: Composition) {
+        queryClient.setQueryData<CompositionList>(
+          ['compositions', { wallet: wallet.data?.id, ...query }],
+          (compositionList) => mergeCompositionInList(composition, compositionList),
+        );
+      },
+      ...options,
+    },
+  );
 }
 
-export function useDeleteComposition(id = 'current'): UseMutationResult<void, unknown, void> {
-  const wallet = useActiveWallet();
+export async function deleteComposition(api: ApiContext, id: string): Promise<void> {
+  await api.delete<void>(`/compositions/${id}`);
+}
+
+export function useDeleteComposition(
+  options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
+): UseMutationResult<void, ApiError | AxiosError, string> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<void, unknown, void>(
-    async () => {
-      await api.delete<void, DeleteCompositionQuery>(`/checkouts/${id}`, {
-        wallet: wallet.data?.id,
-      });
+  return useMutation<void, ApiError | AxiosError, string>((id) => deleteComposition(api, id), {
+    onSuccess(res, id) {
+      queryClient.removeQueries(['compositions', id]);
     },
-    {
-      onSuccess() {
-        queryClient.removeQueries(['compositions', id], { exact: true });
-      },
+    ...options,
+  });
+}
+
+export function useDeleteActiveWalletComposition(
+  query?: Omit<GetCompositionsQuery, 'wallet'>,
+  options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
+): UseMutationResult<void, ApiError | AxiosError, string> {
+  const api = useApi();
+  const wallet = useActiveWallet();
+  const queryClient = useQueryClient();
+  return useMutation<void, ApiError | AxiosError, string>((id) => deleteComposition(api, id), {
+    onSuccess(res, id) {
+      queryClient.removeQueries(['compositions', id]);
+      queryClient.removeQueries(['compositions', { wallet: wallet.data?.id, ...query }]);
     },
-  );
+    ...options,
+  });
 }

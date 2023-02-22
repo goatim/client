@@ -41,7 +41,7 @@ export interface MinifiedPaymentMethod {
   card?: Card;
 }
 
-export default interface PaymentMethod {
+export interface PaymentMethod {
   service?: PaymentService;
   id: string;
   type?: PaymentMethodType;

@@ -1,9 +1,9 @@
 import { Model } from '../../api';
-import Wallet from '../../market/wallets/model';
-import Asset from '../assets/model';
-import Booster from '../boosters/model';
+import { Wallet } from '../../market/wallets/model';
+import { Asset } from '../assets/model';
+import { Booster } from '../boosters/model';
 
-export default interface Portfolio extends Model<'portfolio'> {
+export interface Portfolio extends Model<'portfolio'> {
   wallet?: Wallet | string;
   asset?: Asset | string;
   buy_price?: number;

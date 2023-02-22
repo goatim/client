@@ -1,25 +1,37 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
-import Pack from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  useApi,
+  PaginatedList,
+  ListRequestQuery,
+  RequestBody,
+  ApiContext,
+  ApiError,
+} from '../../api';
+import { Pack } from './model';
 
-export function usePack(id?: string): UseQueryResult<Pack> {
+export async function getPack(api: ApiContext, id: string): Promise<Pack> {
+  const { data } = await api.get<Pack>(`/packs/${id}`);
+  return data;
+}
+
+export function usePack(
+  id?: string,
+  options?: Omit<UseQueryOptions<Pack, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Pack, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Pack>(
-    ['packs', id],
-    async () => {
-      const { data } = await api.get<Pack>(`/packs/${id}`);
-      return data;
-    },
-    {
-      enabled: !!id,
-    },
-  );
+  return useQuery<Pack, ApiError | AxiosError>(['packs', id], () => getPack(api, id as string), {
+    ...options,
+    enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
+  });
 }
 
 export type PackList = PaginatedList<'packs', Pack>;
@@ -31,12 +43,21 @@ export interface GetPacksQuery extends ListRequestQuery {
   asset?: string;
 }
 
-export function usePacks(query?: GetPacksQuery): UseQueryResult<PackList> {
+export async function getPacks(api: ApiContext, query?: GetPacksQuery): Promise<PackList> {
+  const { data } = await api.get<PackList>('/packs', query);
+  return data;
+}
+
+export function usePacks(
+  query?: GetPacksQuery,
+  options?: Omit<UseQueryOptions<PackList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<PackList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<PackList>(['packs', query], async () => {
-    const { data } = await api.get<PackList>('/packs', query);
-    return data;
-  });
+  return useQuery<PackList, ApiError | AxiosError>(
+    ['packs', query],
+    () => getPacks(api, query),
+    options,
+  );
 }
 
 export interface PostPackBody extends RequestBody {
@@ -48,18 +69,23 @@ export interface PostPackBody extends RequestBody {
   message?: string | null;
 }
 
-export function usePostPack(): UseMutationResult<Pack, unknown, PostPackBody> {
+export async function postPack(api: ApiContext, body: PostPackBody): Promise<Pack> {
+  const { data } = await api.post<Pack, PostPackBody>('/packs', body);
+  return data;
+}
+
+export function usePostPack(
+  options?: Omit<UseMutationOptions<Pack, ApiError | AxiosError, PostPackBody>, 'mutationFn'>,
+): UseMutationResult<Pack, ApiError | AxiosError, PostPackBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Pack, unknown, PostPackBody>(
-    async (body: PostPackBody) => {
-      const { data } = await api.post<Pack, PostPackBody>('/packs', body);
-      return data;
-    },
+  return useMutation<Pack, ApiError | AxiosError, PostPackBody>(
+    (body: PostPackBody) => postPack(api, body),
     {
       onSuccess(pack: Pack) {
         queryClient.setQueryData(['packs', pack.id], pack);
       },
+      ...options,
     },
   );
 }
@@ -70,20 +96,25 @@ export interface PutPackBody extends RequestBody {
   message?: string | null;
 }
 
+export async function putPack(api: ApiContext, id: string, body: PutPackBody): Promise<Pack> {
+  const { data } = await api.put<Pack, PostPackBody>(`/packs/${id}`, body);
+  return data;
+}
+
 export type PutPackVariables = PutPackBody & { id: string };
 
-export function usePutPack(): UseMutationResult<Pack, unknown, PutPackVariables> {
+export function usePutPack(
+  options?: Omit<UseMutationOptions<Pack, ApiError | AxiosError, PutPackVariables>, 'mutationFn'>,
+): UseMutationResult<Pack, ApiError | AxiosError, PutPackVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Pack, unknown, PutPackVariables>(
-    async ({ id, ...body }: PutPackVariables) => {
-      const { data } = await api.put<Pack, PostPackBody>(`/packs/${id}`, body);
-      return data;
-    },
+  return useMutation<Pack, ApiError | AxiosError, PutPackVariables>(
+    ({ id, ...body }: PutPackVariables) => putPack(api, id, body),
     {
       onSuccess(pack: Pack) {
         queryClient.setQueryData(['packs', pack.id], pack);
       },
+      ...options,
     },
   );
 }

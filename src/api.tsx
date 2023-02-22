@@ -372,13 +372,17 @@ function hydrateConfig(config?: ApiConfig): ApiConfig | undefined {
   return config;
 }
 
-export interface Props {
+export interface ApiProviderProps {
   children?: ReactElement;
   config?: ApiConfig;
   persistConfig?: boolean;
 }
 
-export function ApiProvider({ children, config, persistConfig = true }: Props): ReactElement {
+export function ApiProvider({
+  children,
+  config,
+  persistConfig = true,
+}: ApiProviderProps): ReactElement {
   const [apiConfig, setApiConfig] = useState<ApiConfig | undefined>(
     persistConfig ? hydrateConfig(config) : config,
   );

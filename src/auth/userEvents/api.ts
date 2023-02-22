@@ -1,65 +1,97 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import UserEvent from './model';
-import { PaginatedList, RequestQuery, useApi } from '../../api';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import { UserEvent } from './model';
+import { ApiContext, ApiError, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
 
-export function useUserEvent(id?: string): UseQueryResult<UserEvent> {
+export async function getUserEvent(api: ApiContext, id: string): Promise<UserEvent> {
+  const { data } = await api.get<UserEvent>(`/user_events/${id}`);
+  return data;
+}
+
+export function useUserEvent(
+  id?: string,
+  options?: Omit<UseQueryOptions<UserEvent, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<UserEvent, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<UserEvent>(
+  return useQuery<UserEvent, ApiError | AxiosError>(
     ['user_events', id],
-    async () => {
-      const { data } = await api.get<UserEvent>(`/user_events/${id}`);
-      return data;
-    },
+    () => getUserEvent(api, id as string),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
     },
   );
 }
 
-export interface UserEventsQuery extends RequestQuery {
+export interface GetUserEventsQuery extends RequestQuery {
   user?: string;
   code?: string;
 }
 
 export type UserEventList = PaginatedList<'user_events', UserEvent>;
 
-export function useUserEvents(query?: UserEventsQuery): UseQueryResult<UserEventList> {
-  const api = useApi();
-  return useQuery<UserEventList>(['user_events', query], async () => {
-    const { data } = await api.get<UserEventList, UserEventsQuery>('/user_events', query);
-    return data;
-  });
+export async function getUserEvents(
+  api: ApiContext,
+  query?: GetUserEventsQuery,
+): Promise<UserEventList> {
+  const { data } = await api.get<UserEventList, GetUserEventsQuery>('/user_events', query);
+  return data;
 }
 
-export function useDoesUserEventExists(query?: UserEventsQuery): UseQueryResult<boolean> {
+export function useUserEvents(
+  query?: GetUserEventsQuery,
+  options?: Omit<UseQueryOptions<UserEventList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<UserEventList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<boolean>(['user_events', 'any', 'exists', query], async () => {
-    const { data } = await api.get<boolean>('/user_events/any/exists', query);
-    return data;
-  });
+  return useQuery<UserEventList, ApiError | AxiosError>(
+    ['user_events', query],
+    () => getUserEvents(api, query),
+    options,
+  );
 }
 
-export interface UserEventBody {
+export async function doesUserEventExists(
+  api: ApiContext,
+  query?: GetUserEventsQuery,
+): Promise<boolean> {
+  const { data } = await api.get<boolean>('/user_events/any/exists', query);
+  return data;
+}
+
+export function useDoesUserEventExists(
+  query?: GetUserEventsQuery,
+): UseQueryResult<boolean, ApiError | AxiosError> {
+  const api = useApi();
+  return useQuery<boolean, ApiError | AxiosError>(['user_events', 'any', 'exists', query], () =>
+    doesUserEventExists(api, query),
+  );
+}
+
+export interface UserEventBody extends RequestBody {
   user?: string | null;
-  code?: string | null;
+  code: string | null;
+}
+
+export async function postUserEvent(api: ApiContext, body: UserEventBody): Promise<UserEvent> {
+  const { data } = await api.post<UserEvent>('/user_events', body);
+  return data;
 }
 
 export function usePostUserEvent(
-  initialBody?: UserEventBody,
-): UseMutationResult<UserEvent, unknown, UserEventBody | undefined> {
+  options?: Omit<UseMutationOptions<UserEvent, ApiError | AxiosError, UserEventBody>, 'mutationFn'>,
+): UseMutationResult<UserEvent, ApiError | AxiosError, UserEventBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<UserEvent, unknown, UserEventBody | undefined>(
-    async (body?: UserEventBody) => {
-      const { data } = await api.post<UserEvent>('/user_events', { ...initialBody, ...body });
-      return data;
-    },
+  return useMutation<UserEvent, ApiError | AxiosError, UserEventBody>(
+    (body: UserEventBody) => postUserEvent(api, body),
     {
       onSuccess: (userEvent: UserEvent) => {
         const query = {
@@ -69,6 +101,7 @@ export function usePostUserEvent(
         queryClient.setQueryData(['user_events', query], userEvent);
         queryClient.setQueryData(['user_events', 'any', 'exists', query], true);
       },
+      ...options,
     },
   );
 }

@@ -1,23 +1,42 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { useCallback } from 'react';
-import { ListRequestQuery, PaginatedList, RequestQuery, useApi } from '../../api';
-import CurrenciesRate from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestQuery,
+  useApi,
+} from '../../api';
+import { CurrenciesRate } from './model';
 import { resolveFridayCoinsAmount } from '../currencies/fridayCoins';
 import { adaptEtherAmount } from '../currencies/ether';
 
+export type GetCurrenciesRateQuery = RequestQuery;
+
+export async function getCurrenciesRate(
+  api: ApiContext,
+  id: string,
+  query?: GetCurrenciesRateQuery,
+): Promise<CurrenciesRate> {
+  const { data } = await api.get<CurrenciesRate>(`/currencies_rates/${id}`, query);
+  return data;
+}
+
 export function useCurrenciesRate(
   id?: string,
-  query?: RequestQuery,
-): UseQueryResult<CurrenciesRate> {
+  query?: GetCurrenciesRateQuery,
+  options?: Omit<UseQueryOptions<CurrenciesRate, ApiError | AxiosError>, 'queryFn' | 'queryFn'>,
+): UseQueryResult<CurrenciesRate, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<CurrenciesRate>(
+  return useQuery<CurrenciesRate, ApiError | AxiosError>(
     ['currencies_rates', id],
-    async () => {
-      const { data } = await api.get<CurrenciesRate>(`/currencies_rates/${id}`, query);
-      return data;
-    },
+    () => getCurrenciesRate(api, id as string, query),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
     },
   );
 }
@@ -26,17 +45,27 @@ export type CurrenciesRateList = PaginatedList<'currencies_rates', CurrenciesRat
 
 export type GetCurrenciesRatesQuery = ListRequestQuery;
 
+export async function getCurrenciesRates(
+  api: ApiContext,
+  query?: GetCurrenciesRatesQuery,
+): Promise<CurrenciesRateList> {
+  const { data } = await api.get<CurrenciesRateList, GetCurrenciesRatesQuery>(
+    '/currencies_rates',
+    query,
+  );
+  return data;
+}
+
 export function useCurrenciesRates(
   query?: GetCurrenciesRatesQuery,
-): UseQueryResult<CurrenciesRateList> | undefined {
+  options?: Omit<UseQueryOptions<CurrenciesRateList, ApiError | AxiosError>, 'queryFn' | 'queryFn'>,
+): UseQueryResult<CurrenciesRateList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<CurrenciesRateList>(['currencies_rates', query], async () => {
-    const { data } = await api.get<CurrenciesRateList, GetCurrenciesRatesQuery>(
-      '/currencies_rates',
-      query,
-    );
-    return data;
-  });
+  return useQuery<CurrenciesRateList, ApiError | AxiosError>(
+    ['currencies_rates', query],
+    () => getCurrenciesRates(api, query),
+    options,
+  );
 }
 
 export function useFridayCoinOverEtherConvertor(): (amount: number) => number | undefined {

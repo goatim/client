@@ -1,20 +1,35 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { useApi, ListRequestQuery } from '../api';
-import Search from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import { useApi, ListRequestQuery, ApiContext, ApiError } from '../api';
+import { Search } from './model';
 
 export interface SearchQuery extends ListRequestQuery {
   q?: string;
   types?: string;
 }
 
-export function useSearch(q?: string, query?: SearchQuery): UseQueryResult<Search> {
+export async function getSearch(
+  api: ApiContext,
+  q: string,
+  query?: Omit<SearchQuery, 'q'>,
+): Promise<Search> {
+  const { data } = await api.get<Search, SearchQuery>('/search', { q, ...query });
+  return data;
+}
+
+export function useSearch(
+  q?: string,
+  query?: Omit<SearchQuery, 'q'>,
+  options?: Omit<UseQueryOptions<Search, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Search, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Search>(
+  return useQuery<Search, ApiError | AxiosError>(
     ['search', q, query],
-    async () => {
-      const { data } = await api.get<Search>('/search', { q, ...query });
-      return data;
+    () => getSearch(api, q as string, query),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!q : !!q,
     },
-    { enabled: !!q },
   );
 }

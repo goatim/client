@@ -1,18 +1,27 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, useApi } from '../../api';
-import Portfolio from './model';
+import { AxiosError } from 'axios';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
+import { Portfolio } from './model';
 import { useActiveWallet } from '../../market/wallets/api';
 
-export function usePortfolio(id?: string): UseQueryResult<Portfolio> {
+export async function getPortfolio(api: ApiContext, id: string): Promise<Portfolio> {
+  const { data } = await api.get<Portfolio>(`/portfolios/${id}`);
+  return data;
+}
+
+export function usePortfolio(
+  id?: string,
+  options?: Omit<UseQueryOptions<Portfolio, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Portfolio, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Portfolio>(
+  return useQuery<Portfolio, ApiError | AxiosError>(
     ['portfolios', id],
-    async () => {
-      const { data } = await api.get<Portfolio>(`/portfolios/${id}`);
-      return data;
+    () => getPortfolio(api, id as string),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
-    { enabled: !!id },
   );
 }
 
@@ -22,22 +31,33 @@ export interface GetPortfoliosQuery extends ListRequestQuery {
   wallet?: string;
 }
 
+export async function getPortfolios(
+  api: ApiContext,
+  query?: GetPortfoliosQuery,
+): Promise<PortfolioList> {
+  const { data } = await api.get<PortfolioList>('/portfolios', query);
+  return data;
+}
+
 export function usePortfolios(
   query?: GetPortfoliosQuery,
-  options?: UseQueryOptions<PortfolioList>,
-): UseQueryResult<PortfolioList> {
+  options?: Omit<UseQueryOptions<PortfolioList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<PortfolioList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<PortfolioList>(
+  return useQuery<PortfolioList, ApiError | AxiosError>(
     ['portfolios', query],
-    async () => {
-      const { data } = await api.get<PortfolioList>('/portfolios', query);
-      return data;
-    },
+    () => getPortfolios(api, query),
     options,
   );
 }
 
-export function useActiveWalletPortfolios(query?: Omit<GetPortfoliosQuery, 'wallet'>) {
+export function useActiveWalletPortfolios(
+  query?: Omit<GetPortfoliosQuery, 'wallet'>,
+  options?: Omit<UseQueryOptions<PortfolioList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+) {
   const wallet = useActiveWallet();
-  return usePortfolios({ ...query, wallet: wallet.data?.id }, { enabled: !!wallet.data?.id });
+  return usePortfolios(
+    { ...query, wallet: wallet.data?.id },
+    { enabled: !!wallet.data?.id, ...options },
+  );
 }

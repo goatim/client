@@ -1,23 +1,39 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import Spotlight from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  useApi,
+} from '../../api';
+import { Spotlight } from './model';
 
-export function useSpotlight(id?: string): UseQueryResult<Spotlight> {
+export async function getSpotlight(api: ApiContext, id: string): Promise<Spotlight> {
+  const { data } = await api.get<Spotlight>(`/spotlights/${id}`);
+  return data;
+}
+
+export function useSpotlight(
+  id?: string,
+  options?: Omit<UseQueryOptions<Spotlight, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Spotlight, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Spotlight>(
+  return useQuery<Spotlight, ApiError | AxiosError>(
     ['spotlights', id],
-    async () => {
-      const { data } = await api.get<Spotlight>(`/spotlights/${id}`);
-      return data;
-    },
+    () => getSpotlight(api, id as string),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
   );
 }
@@ -30,12 +46,24 @@ export interface GetSpotlightsQuery extends ListRequestQuery {
   league?: string;
 }
 
-export function useSpotlights(query?: GetSpotlightsQuery): UseQueryResult<SpotlightList> {
+export async function getSpotlights(
+  api: ApiContext,
+  query?: GetSpotlightsQuery,
+): Promise<SpotlightList> {
+  const { data } = await api.get<SpotlightList>('/spotlights', query);
+  return data;
+}
+
+export function useSpotlights(
+  query?: GetSpotlightsQuery,
+  options?: Omit<UseQueryOptions<SpotlightList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<SpotlightList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<SpotlightList>(['spotlights', query], async () => {
-    const { data } = await api.get<SpotlightList>('/spotlights', query);
-    return data;
-  });
+  return useQuery<SpotlightList, ApiError | AxiosError>(
+    ['spotlights', query],
+    () => getSpotlights(api, query),
+    options,
+  );
 }
 
 export interface SpotlightBody extends RequestBody {
@@ -52,62 +80,88 @@ export interface SpotlightBody extends RequestBody {
   secondary_assets?: string;
 }
 
-export function usePostSpotlight(): UseMutationResult<Spotlight, unknown, SpotlightBody> {
+export async function postSpotlight(api: ApiContext, body: SpotlightBody): Promise<Spotlight> {
+  const { data } = await api.post<Spotlight, SpotlightBody>('/spotlights', body);
+  return data;
+}
+
+export function usePostSpotlight(
+  options?: Omit<UseMutationOptions<Spotlight, ApiError | AxiosError, SpotlightBody>, 'mutationFn'>,
+): UseMutationResult<Spotlight, ApiError | AxiosError, SpotlightBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Spotlight, unknown, SpotlightBody>(
-    async (body: SpotlightBody) => {
-      const { data } = await api.post<Spotlight, SpotlightBody>('/spotlights', body);
-      return data;
-    },
+  return useMutation<Spotlight, ApiError | AxiosError, SpotlightBody>(
+    (body: SpotlightBody) => postSpotlight(api, body),
     {
       onSuccess(spotlight: Spotlight) {
         queryClient.setQueryData(['spotlights', spotlight.id], spotlight);
       },
+      ...options,
     },
   );
+}
+
+export async function putSpotlight(
+  api: ApiContext,
+  id: string,
+  body: SpotlightBody,
+): Promise<Spotlight> {
+  const { data } = await api.put<Spotlight, SpotlightBody>(`/spotlights/${id}`, body);
+  return data;
 }
 
 export type PutSpotlightVariables = SpotlightBody & { id: string };
 
-export function usePutSpotlight(): UseMutationResult<Spotlight, unknown, PutSpotlightVariables> {
+export function usePutSpotlight(
+  options?: Omit<
+    UseMutationOptions<Spotlight, ApiError | AxiosError, PutSpotlightVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Spotlight, ApiError | AxiosError, PutSpotlightVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Spotlight, unknown, PutSpotlightVariables>(
-    async ({ id, ...body }: PutSpotlightVariables) => {
-      const { data } = await api.put<Spotlight, SpotlightBody>(`/spotlights/${id}`, body);
-      return data;
-    },
+  return useMutation<Spotlight, ApiError | AxiosError, PutSpotlightVariables>(
+    ({ id, ...body }: PutSpotlightVariables) => putSpotlight(api, id, body),
     {
       onSuccess(spotlight: Spotlight) {
         queryClient.setQueryData(['spotlights', spotlight.id], spotlight);
       },
+      ...options,
     },
   );
 }
 
-export type AddSpotlightIllustrationBody = { illustration: File };
+export interface PostSpotlightIllustrationBody extends RequestBody {
+  illustration: File;
+}
 
-export type AddSpotlightIllustrationVariables = AddSpotlightIllustrationBody & { id: string };
+export async function postSpotlightIllustration(
+  api: ApiContext,
+  id: string,
+  body: PostSpotlightIllustrationBody,
+): Promise<Spotlight> {
+  const { data } = await api.post<Spotlight>(`/spotlights/${id}/illustration`, body);
+  return data;
+}
 
-export function useAddSpotlightIllustration(): UseMutationResult<
-  Spotlight,
-  unknown,
-  AddSpotlightIllustrationVariables
-> {
+export type PostSpotlightIllustrationVariables = PostSpotlightIllustrationBody & { id: string };
+
+export function usePostSpotlightIllustration(
+  options?: Omit<
+    UseMutationOptions<Spotlight, ApiError | AxiosError, PostSpotlightIllustrationBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<Spotlight, ApiError | AxiosError, PostSpotlightIllustrationVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Spotlight, unknown, AddSpotlightIllustrationVariables>(
-    async ({ id, illustration }: AddSpotlightIllustrationVariables) => {
-      const { data } = await api.post<Spotlight>(`/spotlights/${id}/illustration`, {
-        illustration,
-      });
-      return data;
-    },
+  return useMutation<Spotlight, ApiError | AxiosError, PostSpotlightIllustrationVariables>(
+    ({ id, ...body }: PostSpotlightIllustrationVariables) =>
+      postSpotlightIllustration(api, id, body),
     {
       onSuccess(spotlight: Spotlight) {
         queryClient.setQueryData(['spotlights', spotlight.id], spotlight);
       },
+      ...options,
     },
   );
 }

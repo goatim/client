@@ -28,7 +28,7 @@ export type PaymentIntentStatus =
   | 'refunded'
   | 'succeeded';
 
-export default interface PaymentIntent {
+export interface PaymentIntent {
   id?: string;
   amount?: number;
   status?: PaymentIntentStatus;

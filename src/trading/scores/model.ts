@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
-import Wallet from '../../market/wallets/model';
+import { Wallet } from '../../market/wallets/model';
 
-export default interface Score {
+export interface Score {
   wallet?: Wallet | string;
   date?: DateTime;
   portfolios_gains?: number;

@@ -1,29 +1,49 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useEffect } from 'react';
-import Notification from './model';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { useEffect, useRef } from 'react';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import { Socket } from 'socket.io-client';
+import { Notification } from './model';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  RequestQuery,
+  useApi,
+} from '../../api';
 
 export type GetNotificationQuery = RequestQuery;
+
+export async function getNotification(
+  api: ApiContext,
+  id: string,
+  query?: GetNotificationQuery,
+): Promise<Notification> {
+  const { data } = await api.get<Notification, RequestQuery>(`/notifications/${id}`, query);
+  return data;
+}
 
 export function useNotification(
   id?: string,
   query?: GetNotificationQuery,
-): UseQueryResult<Notification> {
+  options?: Omit<UseQueryOptions<Notification, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Notification, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Notification>(
+  return useQuery<Notification, ApiError | AxiosError>(
     ['notifications', id],
-    async () => {
-      const { data } = await api.get<Notification, RequestQuery>(`/notifications/${id}`, query);
-      return data;
-    },
+    () => getNotification(api, id as string, query),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
     },
   );
 }
@@ -38,6 +58,14 @@ export interface GetNotificationsQuery extends ListRequestQuery {
   is_read?: boolean;
 }
 
+export async function getNotifications(
+  api: ApiContext,
+  query?: GetNotificationsQuery,
+): Promise<NotificationList> {
+  const { data } = await api.get<NotificationList>('/notifications', query);
+  return data;
+}
+
 export interface UseNotificationsOptions {
   onCreated?: (notification: Notification) => unknown;
   onUpdated?: (notification: Notification) => unknown;
@@ -46,44 +74,47 @@ export interface UseNotificationsOptions {
 export function useNotifications(
   query?: GetNotificationsQuery,
   options?: UseNotificationsOptions,
-): UseQueryResult<NotificationList> {
+): UseQueryResult<NotificationList, ApiError | AxiosError> {
   const api = useApi();
   const queryClient = useQueryClient();
+  const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket = api.createSocket('/notifications', {
-      query,
-    });
+    if (!socket.current) {
+      socket.current = api.createSocket('/notifications', {
+        query,
+      });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+      socket.current.on('connect_error', (error) => {
+        console.error(error);
+      });
 
-    socket.on('created', async (notification: Notification) => {
-      if (options?.onCreated) {
-        options.onCreated(notification);
-      }
-      await queryClient.invalidateQueries(['notifications', query]);
-    });
+      socket.current.on('created', async (notification: Notification) => {
+        if (options?.onCreated) {
+          options.onCreated(notification);
+        }
+        await queryClient.invalidateQueries(['notifications', query]);
+      });
 
-    socket.on('updated', async (notification: Notification) => {
-      if (options?.onUpdated) {
-        options.onUpdated(notification);
-      }
-      await queryClient.invalidateQueries(['notifications', query]);
-    });
+      socket.current.on('updated', async (notification: Notification) => {
+        if (options?.onUpdated) {
+          options.onUpdated(notification);
+        }
+        await queryClient.invalidateQueries(['notifications', query]);
+      });
+    }
 
     return () => {
-      socket.close();
+      if (socket.current) {
+        socket.current.close();
+        socket.current = null;
+      }
     };
   }, [api, options, query, queryClient]);
 
-  return useQuery<NotificationList>(
+  return useQuery<NotificationList, ApiError | AxiosError>(
     ['notifications', query],
-    async () => {
-      const { data } = await api.get<NotificationList>('/notifications', query);
-      return data;
-    },
+    () => getNotifications(api, query),
     {
       staleTime: Infinity,
     },
@@ -95,42 +126,57 @@ export interface NotificationBody extends RequestBody {
   is_read?: boolean | string;
 }
 
+export async function putNotification(
+  api: ApiContext,
+  id: string,
+  body: NotificationBody,
+): Promise<Notification> {
+  const { data } = await api.put<Notification, NotificationBody>(`/notifications/${id}`, body);
+  return data;
+}
+
 export type PutNotificationVariables = NotificationBody & { id: string };
 
-export function usePutNotification(): UseMutationResult<
-  Notification,
-  unknown,
-  PutNotificationVariables
-> {
+export function usePutNotification(
+  options?: Omit<
+    UseMutationOptions<Notification, ApiError | AxiosError, NotificationBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<Notification, ApiError | AxiosError, PutNotificationVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Notification, unknown, PutNotificationVariables>(
-    async ({ id, ...body }: PutNotificationVariables) => {
-      const { data } = await api.put<Notification, NotificationBody>(`/notifications/${id}`, body);
-      return data;
-    },
+  return useMutation<Notification, ApiError | AxiosError, PutNotificationVariables>(
+    ({ id, ...body }: PutNotificationVariables) => putNotification(api, id, body),
     {
       onSuccess(notification: Notification) {
         queryClient.setQueryData(['notifications', notification.id], notification);
       },
+      ...options,
     },
   );
 }
 
+export async function seeAllNotifications(
+  api: ApiContext,
+  query?: GetNotificationsQuery,
+): Promise<NotificationList> {
+  const { data } = await api.put<NotificationList>('/notifications/all/see', undefined, query);
+  return data;
+}
+
 export function useSeeAllNotifications(
   query?: GetNotificationsQuery,
-): UseMutationResult<NotificationList, unknown, void> {
+  options?: Omit<UseMutationOptions<NotificationList, ApiError | AxiosError>, 'mutationFn'>,
+): UseMutationResult<NotificationList, ApiError | AxiosError, void> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<NotificationList>(
-    async () => {
-      const { data } = await api.put<NotificationList>('/notifications/all/see');
-      return data;
-    },
+  return useMutation<NotificationList, ApiError | AxiosError, void>(
+    () => seeAllNotifications(api),
     {
       onSuccess(notifications) {
         queryClient.setQueryData(['notifications', query], notifications);
       },
+      ...options,
     },
   );
 }

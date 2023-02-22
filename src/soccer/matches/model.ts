@@ -1,6 +1,6 @@
 import { Model } from '../../api';
-import Wallet from '../../market/wallets/model';
-import Composition from '../compositions/model';
+import { Wallet } from '../../market/wallets/model';
+import { Composition } from '../compositions/model';
 
 export type MatchStatus =
   | 'created'
@@ -11,7 +11,7 @@ export type MatchStatus =
   | 'closed'
   | 'cancelled';
 
-export default interface Match extends Model<'match'> {
+export interface Match extends Model<'match'> {
   creator?: Wallet | string;
   title?: string;
   slug?: string;

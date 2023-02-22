@@ -1,26 +1,48 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
-import Withdrawal from './model';
+import { AxiosError } from 'axios';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  RequestQuery,
+  useApi,
+} from '../../api';
+import { Withdrawal } from './model';
 import { useActiveWallet } from '../wallets/api';
-import { useActiveSession } from '../../auth/sessions/api';
 
-export function useWithdrawal(id?: string, query?: RequestQuery): UseQueryResult<Withdrawal> {
+export type GetWithdrawalQuery = RequestQuery;
+
+export async function getWithdrawal(
+  api: ApiContext,
+  id: string,
+  query?: GetWithdrawalQuery,
+): Promise<Withdrawal> {
+  const { data } = await api.get<Withdrawal>(`/withdrawals/${id}`, query);
+  return data;
+}
+
+export function useWithdrawal(
+  id?: string,
+  query?: GetWithdrawalQuery,
+  options?: Omit<UseQueryOptions<Withdrawal, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Withdrawal, ApiError | AxiosError> {
   const api = useApi();
-  const session = useActiveSession();
-  return useQuery<Withdrawal>(
+  return useQuery<Withdrawal, ApiError | AxiosError>(
     ['withdrawals', id],
-    async () => {
-      const { data } = await api.get<Withdrawal>(`/withdrawals/${id}`, query);
-      return data;
-    },
+    () => getWithdrawal(api, id as string, query),
     {
-      enabled: !!id && !!session,
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
   );
 }
@@ -31,14 +53,24 @@ export interface GetWithdrawalsQuery extends ListRequestQuery {
   wallet?: string;
 }
 
+export async function getWithdrawals(
+  api: ApiContext,
+  query?: GetWithdrawalsQuery,
+): Promise<WithdrawalList> {
+  const { data } = await api.get<WithdrawalList>('/withdrawals', query);
+  return data;
+}
+
 export function useWithdrawals(
   query?: GetWithdrawalsQuery,
-): UseQueryResult<WithdrawalList> | undefined {
+  options?: Omit<UseQueryOptions<WithdrawalList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<WithdrawalList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<WithdrawalList>(['withdrawals', query], async () => {
-    const { data } = await api.get<WithdrawalList>('/withdrawals', query);
-    return data;
-  });
+  return useQuery<WithdrawalList, ApiError | AxiosError>(
+    ['withdrawals', query],
+    () => getWithdrawals(api, query),
+    options,
+  );
 }
 
 export function useActiveWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'wallet'>) {
@@ -53,36 +85,56 @@ export interface WithdrawalBody extends RequestBody {
   receiver_wallet?: string | null;
 }
 
-export function usePostWithdrawal(): UseMutationResult<Withdrawal, unknown, WithdrawalBody> {
+export async function postWithdrawal(api: ApiContext, body: WithdrawalBody): Promise<Withdrawal> {
+  const { data } = await api.post<Withdrawal, WithdrawalBody>('/withdrawals', body);
+  return data;
+}
+
+export function usePostWithdrawal(
+  options?: Omit<
+    UseMutationOptions<Withdrawal, ApiError | AxiosError, WithdrawalBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<Withdrawal, ApiError | AxiosError, WithdrawalBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Withdrawal, unknown, WithdrawalBody>(
-    async (body: WithdrawalBody) => {
-      const { data } = await api.post<Withdrawal, WithdrawalBody>('/withdrawals', body);
-      return data;
-    },
+  return useMutation<Withdrawal, ApiError | AxiosError, WithdrawalBody>(
+    (body: WithdrawalBody) => postWithdrawal(api, body),
     {
       onSuccess(withdrawal: Withdrawal) {
         queryClient.setQueryData(['withdrawals', withdrawal.id], withdrawal);
       },
+      ...options,
     },
   );
 }
 
+export async function putWithdrawal(
+  api: ApiContext,
+  id: string,
+  body: WithdrawalBody,
+): Promise<Withdrawal> {
+  const { data } = await api.put<Withdrawal, WithdrawalBody>(`/withdrawals/${id}`, body);
+  return data;
+}
+
 export type PutWithdrawalVariables = WithdrawalBody & { id: string };
 
-export function usePutWithdrawal(): UseMutationResult<Withdrawal, unknown, PutWithdrawalVariables> {
+export function usePutWithdrawal(
+  options?: Omit<
+    UseMutationOptions<Withdrawal, ApiError | AxiosError, WithdrawalBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<Withdrawal, ApiError | AxiosError, PutWithdrawalVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Withdrawal, unknown, PutWithdrawalVariables>(
-    async ({ id, ...body }: PutWithdrawalVariables) => {
-      const { data } = await api.put<Withdrawal, WithdrawalBody>(`/withdrawals/${id}`, body);
-      return data;
-    },
+  return useMutation<Withdrawal, ApiError | AxiosError, PutWithdrawalVariables>(
+    async ({ id, ...body }: PutWithdrawalVariables) => putWithdrawal(api, id, body),
     {
       onSuccess(withdrawal: Withdrawal) {
         queryClient.setQueryData(['withdrawals', withdrawal.id], withdrawal);
       },
+      ...options,
     },
   );
 }

@@ -1,7 +1,7 @@
-import Asset from '../../trading/assets/model';
-import BoosterFactory from '../../trading/boosterFactories/model';
+import { Asset } from '../../trading/assets/model';
+import { BoosterFactory } from '../../trading/boosterFactories/model';
 import { OrderType } from '../../trading/orders/model';
-import PackFactory from '../../trading/packFactories/model';
+import { PackFactory } from '../../trading/packFactories/model';
 
 export type ItemType = 'order' | 'booster' | 'pack';
 
@@ -40,7 +40,7 @@ export interface PackItem {
   price_limit?: number;
 }
 
-export default interface Item {
+export interface Item {
   id?: string;
   type?: ItemType;
   order?: OrderItem;

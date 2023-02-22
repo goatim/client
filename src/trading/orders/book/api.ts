@@ -1,23 +1,26 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, useApi } from '../../../api';
-import OrdersBook from './model';
+import { AxiosError } from 'axios';
+import { ApiContext, ApiError, ListRequestQuery, useApi } from '../../../api';
+import { OrderBook } from './model';
 
 export interface GetOrderBookQuery extends ListRequestQuery {
   asset?: string;
 }
 
+export async function getOrderBook(api: ApiContext, query?: GetOrderBookQuery): Promise<OrderBook> {
+  const { data } = await api.get<OrderBook>('/order_book', query);
+  return data;
+}
+
 export function useOrderBook(
   query: GetOrderBookQuery,
-  options?: UseQueryOptions<OrdersBook>,
-): UseQueryResult<OrdersBook> {
+  options?: Omit<UseQueryOptions<OrderBook, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<OrderBook, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<OrdersBook>(
+  return useQuery<OrderBook, ApiError | AxiosError>(
     ['orders', 'book', query],
-    async () => {
-      const { data } = await api.get<OrdersBook>('/order_book', query);
-      return data;
-    },
+    () => getOrderBook(api, query),
     options,
   );
 }

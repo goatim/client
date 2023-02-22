@@ -1,33 +1,44 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
 import {
   ApiContext,
+  ApiError,
   ListRequestQuery,
   PaginatedList,
   RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
-import Club from './model';
+import { Club } from './model';
+
+export type GetClubQuery = RequestQuery;
+
+export async function getClub(api: ApiContext, id: string, query?: GetClubQuery): Promise<Club> {
+  const { data } = await api.get<Club>(`/clubs/${id}`, query);
+  return data;
+}
 
 export function useClub(
-  clubId?: string,
+  id?: string,
   query?: RequestQuery,
-  initialData?: Club,
-): UseQueryResult<Club> {
+  options?: Omit<UseQueryOptions<Club, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<Club, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Club>(
-    ['clubs', clubId],
-    async () => {
-      const { data } = await api.get<Club>(`/clubs/${clubId}`, query);
-      return data;
+  return useQuery<Club, ApiError | AxiosError>(
+    ['clubs', id],
+    () => getClub(api, id as string, query),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
-    { enabled: !!clubId, initialData },
   );
 }
 
@@ -42,9 +53,16 @@ export async function getClubs(api: ApiContext, query?: GetClubsQuery): Promise<
   return data;
 }
 
-export function useClubs(query?: GetClubsQuery): UseQueryResult<ClubList> {
+export function useClubs(
+  query?: GetClubsQuery,
+  options?: Omit<UseQueryOptions<ClubList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<ClubList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<ClubList>(['clubs', query], () => getClubs(api, query));
+  return useQuery<ClubList, ApiError | AxiosError>(
+    ['clubs', query],
+    () => getClubs(api, query),
+    options,
+  );
 }
 
 export interface ClubBody extends RequestBody {
@@ -54,56 +72,77 @@ export interface ClubBody extends RequestBody {
   league?: string | null;
 }
 
-export function usePostClub(): UseMutationResult<Club, unknown, ClubBody> {
+export async function postClub(api: ApiContext, body: ClubBody): Promise<Club> {
+  const { data } = await api.post<Club, ClubBody>('/clubs', body);
+  return data;
+}
+
+export function usePostClub(
+  options?: Omit<UseMutationOptions<Club, ApiError | AxiosError, ClubBody>, 'mutationFn'>,
+): UseMutationResult<Club, ApiError | AxiosError, ClubBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Club, unknown, ClubBody>(
-    async (body: ClubBody) => {
-      const { data } = await api.post<Club, ClubBody>('/clubs', body);
-      return data;
-    },
+  return useMutation<Club, ApiError | AxiosError, ClubBody>(
+    (body: ClubBody) => postClub(api, body),
     {
       onSuccess(club: Club) {
         queryClient.setQueryData(['clubs', club.id], club);
       },
+      ...options,
     },
   );
+}
+
+export async function putClub(api: ApiContext, id: string, body: ClubBody): Promise<Club> {
+  const { data } = await api.put<Club, ClubBody>(`/clubs/${id}`, body);
+  return data;
 }
 
 export type PutClubVariables = ClubBody & { id: string };
 
-export function usePutClub(): UseMutationResult<Club, unknown, PutClubVariables> {
+export function usePutClub(
+  options?: Omit<UseMutationOptions<Club, ApiError | AxiosError, ClubBody>, 'mutationFn'>,
+): UseMutationResult<Club, ApiError | AxiosError, PutClubVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Club, unknown, PutClubVariables>(
-    async ({ id, ...body }: PutClubVariables) => {
-      const { data } = await api.put<Club, ClubBody>(`/clubs/${id}`, body);
-      return data;
-    },
+  return useMutation<Club, ApiError | AxiosError, PutClubVariables>(
+    ({ id, ...body }: PutClubVariables) => putClub(api, id, body),
     {
       onSuccess(club: Club) {
         queryClient.setQueryData(['clubs', club.id], club);
       },
+      ...options,
     },
   );
 }
 
-export type AddClubPictureBody = { icon: File };
+export interface PostClubIconBody extends RequestBody {
+  icon: File;
+}
 
-export type AddClubPictureVariables = AddClubPictureBody & { id: string };
+export async function postClubIcon(
+  api: ApiContext,
+  id: string,
+  body: PostClubIconBody,
+): Promise<Club> {
+  const { data } = await api.post<Club>(`/clubs/${id}/icon`, body);
+  return data;
+}
 
-export function useAddClubIcon(): UseMutationResult<Club, unknown, AddClubPictureVariables> {
+export type PostClubIconVariables = PostClubIconBody & { id: string };
+
+export function useAddClubIcon(
+  options?: Omit<UseMutationOptions<Club, ApiError | AxiosError, ClubBody>, 'mutationFn'>,
+): UseMutationResult<Club, ApiError | AxiosError, PostClubIconVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Club, unknown, AddClubPictureVariables>(
-    async ({ id, icon }: AddClubPictureVariables) => {
-      const { data } = await api.post<Club>(`/clubs/${id}/icon`, { icon });
-      return data;
-    },
+  return useMutation<Club, ApiError | AxiosError, PostClubIconVariables>(
+    async ({ id, ...body }: PostClubIconVariables) => postClubIcon(api, id, body),
     {
       onSuccess(club: Club) {
         queryClient.setQueryData(['clubs', club.id], club);
       },
+      ...options,
     },
   );
 }

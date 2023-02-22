@@ -1,53 +1,135 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
 import { useCallback } from 'react';
-import { useApi, PaginatedList, RequestQuery, RequestBody } from '../../api';
-import Checkout from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  useApi,
+  PaginatedList,
+  RequestBody,
+  ApiContext,
+  ListRequestQuery,
+  ApiError,
+} from '../../api';
+import { Checkout } from './model';
 import { useActiveWallet } from '../wallets/api';
 import { ItemType } from '../items/model';
-import PaymentIntent from '../../payment/intents/model';
+import { PaymentIntent } from '../../payment/intents/model';
 import { OrderList } from '../../trading/orders/api';
 import { PackList } from '../../trading/packs/api';
 import { BoosterList } from '../../trading/boosters/api';
-import { useActiveSession } from '../../auth/sessions/api';
 
-export interface CheckoutQuery extends RequestQuery {
-  wallet?: string;
+export async function getCheckout(api: ApiContext, id: string): Promise<Checkout> {
+  const { data } = await api.get<Checkout>(`/checkouts/${id}`);
+  return data;
 }
 
-export function useCheckout(id: string, query?: CheckoutQuery): UseQueryResult<Checkout> {
+export function useCheckout(
+  id?: string,
+  options?: Omit<UseQueryOptions<Checkout, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Checkout, ApiError | AxiosError> {
   const api = useApi();
-  const session = useActiveSession();
-  return useQuery<Checkout>(
-    ['checkouts', id, query],
-    async () => {
-      const { data } = await api.get<Checkout, CheckoutQuery>(`/checkouts/${id}`, query);
-      return data;
-    },
+  return useQuery<Checkout, ApiError | AxiosError>(
+    ['checkouts', id],
+    () => getCheckout(api, id as string),
     {
-      enabled: !!id && !!session,
+      ...options,
+      enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
     },
   );
 }
 
-export function useActiveCheckout(): UseQueryResult<Checkout> {
-  const wallet = useActiveWallet();
-  return useCheckout('current', { wallet: wallet.data?.id });
+export interface GetCheckoutsQuery extends ListRequestQuery {
+  wallet?: string;
 }
 
 export type CheckoutList = PaginatedList<'checkouts', Checkout>;
 
-export function useCheckouts(query?: CheckoutQuery): UseQueryResult<CheckoutList> {
+export function mergeCheckoutInList(checkout: Checkout, checkoutList?: CheckoutList): CheckoutList {
+  if (!checkoutList?.checkouts.length) {
+    return {
+      ...checkoutList,
+      total: checkoutList?.total || 1,
+      checkouts: [checkout],
+    };
+  }
+
+  const index = checkoutList.checkouts.findIndex(({ id }) => id === checkout.id);
+
+  if (index === -1) {
+    return {
+      ...checkoutList,
+      total: (checkoutList.total || 0) + 1,
+      checkouts: checkoutList.checkouts ? [checkout, ...checkoutList.checkouts] : [checkout],
+    };
+  }
+
+  checkoutList.checkouts[index] = checkout;
+
+  return checkoutList;
+}
+
+export function removeCheckoutFromList(id: string, checkoutList?: CheckoutList): CheckoutList {
+  if (!checkoutList?.checkouts.length) {
+    return {
+      ...checkoutList,
+      total: 0,
+      checkouts: [],
+    };
+  }
+
+  const index = checkoutList.checkouts.findIndex((checkout) => id === checkout.id);
+
+  if (index === -1) {
+    return checkoutList;
+  }
+
+  checkoutList.checkouts.splice(index, 1);
+  if (checkoutList.total) {
+    checkoutList.total -= 1;
+  }
+
+  return checkoutList;
+}
+
+export async function getCheckouts(
+  api: ApiContext,
+  query?: GetCheckoutsQuery,
+): Promise<CheckoutList> {
+  const { data } = await api.get<CheckoutList>('/checkouts', query);
+  return data;
+}
+
+export function useCheckouts(
+  query?: GetCheckoutsQuery,
+  options?: Omit<UseQueryOptions<CheckoutList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<CheckoutList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<CheckoutList>(['checkouts', query], async () => {
-    const { data } = await api.get<CheckoutList, CheckoutQuery>('/checkouts', query);
-    return data;
-  });
+  return useQuery<CheckoutList, ApiError | AxiosError>(
+    ['checkouts', query],
+    () => getCheckouts(api, query),
+    options,
+  );
+}
+
+export function useActiveWalletCheckouts(
+  options?: Omit<UseQueryOptions<CheckoutList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<CheckoutList, ApiError | AxiosError> {
+  const wallet = useActiveWallet();
+  return useCheckouts(
+    { wallet: wallet.data?.id },
+    {
+      ...options,
+      enabled:
+        options?.enabled !== undefined ? options.enabled && !!wallet.data?.id : !!wallet.data?.id,
+    },
+  );
 }
 
 export interface CheckoutItemBody extends RequestBody {
@@ -64,192 +146,280 @@ export interface CheckoutBody extends RequestBody {
   payment_method?: string;
 }
 
-export function usePostCheckout(
-  query?: CheckoutQuery,
-): UseMutationResult<Checkout, unknown, CheckoutBody> {
-  const wallet = useActiveWallet();
-  const api = useApi();
-  const queryClient = useQueryClient();
-  return useMutation<Checkout, unknown, CheckoutBody>(
-    async (body: CheckoutBody) => {
-      if (body.items && Array.isArray(body.items)) {
-        body.items = JSON.stringify(body.items);
-      }
+export async function postCheckout(api: ApiContext, body: CheckoutBody): Promise<Checkout> {
+  if (body.items && Array.isArray(body.items)) {
+    body.items = JSON.stringify(body.items);
+  }
 
-      if (wallet.data?.id) {
-        body.wallet = wallet.data?.id;
-      }
-      const { data } = await api.post<Checkout, CheckoutBody>('/checkouts', body);
-      return data;
-    },
+  const { data } = await api.post<Checkout, CheckoutBody>('/checkouts', body);
+
+  return data;
+}
+
+export function usePostCheckout(
+  options?: Omit<UseMutationOptions<Checkout, ApiError | AxiosError, CheckoutBody>, 'mutationFn'>,
+): UseMutationResult<Checkout, ApiError | AxiosError, CheckoutBody> {
+  const api = useApi();
+  return useMutation<Checkout, ApiError | AxiosError, CheckoutBody>(
+    (body: CheckoutBody) => postCheckout(api, body),
+    options,
+  );
+}
+
+export function usePostActiveWalletCheckout(
+  options?: Omit<UseMutationOptions<Checkout, ApiError | AxiosError, CheckoutBody>, 'mutationFn'>,
+): UseMutationResult<Checkout, ApiError | AxiosError, CheckoutBody> {
+  const api = useApi();
+  const wallet = useActiveWallet();
+  const queryClient = useQueryClient();
+
+  return useMutation<Checkout, ApiError | AxiosError, CheckoutBody>(
+    (body: CheckoutBody) => postCheckout(api, { ...body, wallet: wallet.data?.id }),
     {
       onSuccess(checkout: Checkout) {
-        queryClient.setQueryData<CheckoutList>(['checkouts', query], (old) => ({
-          ...old,
-          checkouts: [checkout],
-          total: 1,
-        }));
+        queryClient.setQueryData<CheckoutList>(
+          ['checkouts', { wallet: wallet.data?.id }],
+          (checkoutList) => mergeCheckoutInList(checkout, checkoutList),
+        );
       },
+      ...options,
     },
   );
 }
 
+export async function putCheckout(
+  api: ApiContext,
+  id: string,
+  body: CheckoutBody,
+): Promise<Checkout> {
+  if (body.items && Array.isArray(body.items)) {
+    body.items = JSON.stringify(body.items);
+  }
+
+  const { data } = await api.put<Checkout, CheckoutBody, GetCheckoutsQuery>(
+    `/checkouts/${id}`,
+    body,
+  );
+
+  return data;
+}
+
+export type UsePutCheckoutVariables = CheckoutBody & { id: string };
+
 export function usePutCheckout(
-  id = 'current',
-  query?: CheckoutQuery,
-): UseMutationResult<Checkout, unknown, CheckoutBody> {
-  const wallet = useActiveWallet();
+  options?: Omit<UseMutationOptions<Checkout, ApiError | AxiosError, CheckoutBody>, 'mutationFn'>,
+): UseMutationResult<Checkout, ApiError | AxiosError, UsePutCheckoutVariables> {
   const api = useApi();
+  return useMutation<Checkout, ApiError | AxiosError, UsePutCheckoutVariables>(
+    ({ id, ...body }: UsePutCheckoutVariables) => putCheckout(api, id, body),
+    options,
+  );
+}
+
+export function usePutActiveWalletCheckout(
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, UsePutCheckoutVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, UsePutCheckoutVariables> {
+  const api = useApi();
+  const wallet = useActiveWallet();
   const queryClient = useQueryClient();
-  return useMutation<Checkout, unknown, CheckoutBody>(
-    async (body: CheckoutBody) => {
-      if (body.items && Array.isArray(body.items)) {
-        body.items = JSON.stringify(body.items);
-      }
-      const { data } = await api.put<Checkout, CheckoutBody, CheckoutQuery>(
-        `/checkouts/${id}`,
-        body,
-        {
-          wallet: wallet.data?.id,
-        },
-      );
-      return data;
-    },
+
+  return useMutation<Checkout, ApiError | AxiosError, UsePutCheckoutVariables>(
+    ({ id, ...body }: UsePutCheckoutVariables) =>
+      putCheckout(api, id, { ...body, wallet: wallet.data?.id }),
     {
       onSuccess(checkout: Checkout) {
-        queryClient.setQueryData<CheckoutList>(['checkouts', query], (old) => ({
-          ...old,
-          checkouts: [checkout],
-          total: 1,
-        }));
+        queryClient.setQueryData<CheckoutList>(
+          ['checkouts', { wallet: wallet.data?.id }],
+          (checkoutList) => mergeCheckoutInList(checkout, checkoutList),
+        );
       },
+      ...options,
     },
   );
+}
+
+export async function deleteCheckout(api: ApiContext, id: string): Promise<void> {
+  await api.delete<void>(`/checkouts/${id}`);
 }
 
 export function useDeleteCheckout(
-  id = 'current',
-  query?: CheckoutQuery,
-): UseMutationResult<void, unknown, void> {
-  const wallet = useActiveWallet();
+  options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
+): UseMutationResult<void, ApiError | AxiosError, string> {
   const api = useApi();
-  const queryClient = useQueryClient();
-  return useMutation<void, unknown, void>(
-    async () => {
-      await api.delete<void, CheckoutQuery>(`/checkouts/${id}`, {
-        wallet: wallet.data?.id,
-      });
-    },
-    {
-      onSuccess() {
-        queryClient.removeQueries(['checkouts', query], { exact: true });
-      },
-    },
+  return useMutation<void, ApiError | AxiosError, string>(
+    (id: string) => deleteCheckout(api, id),
+    options,
   );
 }
+
+export function useDeleteActiveWalletCheckout(
+  id: string,
+  options?: Omit<UseMutationOptions<void, ApiError | AxiosError>, 'mutationFn'>,
+): UseMutationResult<void, ApiError | AxiosError, void> {
+  const api = useApi();
+  const wallet = useActiveWallet();
+  const queryClient = useQueryClient();
+  return useMutation<void, ApiError | AxiosError, void>(() => deleteCheckout(api, id), {
+    onSuccess() {
+      queryClient.setQueryData(
+        ['checkouts', { wallet: wallet.data?.id }],
+        (checkoutList?: CheckoutList) => removeCheckoutFromList(id, checkoutList),
+      );
+    },
+    ...options,
+  });
+}
+
+export async function postCheckoutItem(
+  api: ApiContext,
+  id: string,
+  body: CheckoutItemBody,
+): Promise<Checkout> {
+  const { data } = await api.post<Checkout, CheckoutItemBody>(`/checkouts/${id}/items`, body);
+  return data;
+}
+
+export type UsePostCheckoutVariables = CheckoutItemBody & { checkoutId: string };
 
 export function useAddCheckoutItem(
-  id = 'current',
-  query?: CheckoutQuery,
-): UseMutationResult<Checkout, unknown, CheckoutItemBody> {
-  const wallet = useActiveWallet();
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, UsePostCheckoutVariables> {
   const api = useApi();
+  return useMutation<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>(
+    ({ checkoutId, ...body }: UsePostCheckoutVariables) => postCheckoutItem(api, checkoutId, body),
+    options,
+  );
+}
+
+export function useAddActiveWalletCheckoutItem(
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, UsePostCheckoutVariables> {
+  const api = useApi();
+  const wallet = useActiveWallet();
   const queryClient = useQueryClient();
-  return useMutation<Checkout, unknown, CheckoutItemBody>(
-    async (body: CheckoutItemBody) => {
-      const { data } = await api.post<Checkout, CheckoutItemBody, CheckoutQuery>(
-        `/checkouts/${id}/items`,
-        body,
-        {
-          wallet: wallet.data?.id,
-        },
-      );
-      return data;
-    },
+  return useMutation<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>(
+    ({ checkoutId, ...body }: UsePostCheckoutVariables) => postCheckoutItem(api, checkoutId, body),
     {
       onSuccess(checkout: Checkout) {
-        queryClient.setQueryData<CheckoutList>(['checkouts', query], (old) => ({
-          ...old,
-          checkouts: [checkout],
-          total: 1,
-        }));
+        queryClient.setQueryData<CheckoutList>(
+          ['checkouts', { wallet: wallet.data?.id }],
+          (checkoutList) => mergeCheckoutInList(checkout, checkoutList),
+        );
       },
-      onError() {
-        // if (['invalid_checkout_token', 'not_found'].includes((error as ApiError).code || '')) {
-        //   data = null;
-        // }
-      },
+      ...options,
     },
   );
 }
 
-export type PutCheckoutItemVariables = CheckoutItemBody & { id: string };
+export async function putCheckoutItem(
+  api: ApiContext,
+  checkoutId: string,
+  itemId: string,
+  body: CheckoutItemBody,
+): Promise<Checkout> {
+  const { data } = await api.put<Checkout, CheckoutItemBody>(
+    `/checkouts/${checkoutId}/items/${itemId}`,
+    body,
+  );
+  return data;
+}
+
+export type PutCheckoutItemVariables = CheckoutItemBody & { checkoutId: string; itemId: string };
 
 export function usePutCheckoutItem(
-  id = 'current',
-  query?: CheckoutQuery,
-): UseMutationResult<Checkout, unknown, PutCheckoutItemVariables> {
-  const wallet = useActiveWallet();
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, PutCheckoutItemVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, PutCheckoutItemVariables> {
   const api = useApi();
+  return useMutation<Checkout, ApiError | AxiosError, PutCheckoutItemVariables>(
+    ({ checkoutId, itemId, ...body }: PutCheckoutItemVariables) =>
+      putCheckoutItem(api, checkoutId, itemId, body),
+    options,
+  );
+}
+
+export function usePutActiveWalletCheckoutItem(
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, PutCheckoutItemVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, PutCheckoutItemVariables> {
+  const api = useApi();
+  const wallet = useActiveWallet();
   const queryClient = useQueryClient();
-  return useMutation<Checkout, unknown, PutCheckoutItemVariables>(
-    async ({ id: itemId, ...body }: PutCheckoutItemVariables) => {
-      const { data } = await api.put<Checkout, CheckoutItemBody, CheckoutQuery>(
-        `/checkouts/${id}/items/${itemId}`,
-        body,
-        {
-          wallet: wallet.data?.id,
-        },
-      );
-      return data;
-    },
+
+  return useMutation<Checkout, ApiError | AxiosError, PutCheckoutItemVariables>(
+    ({ checkoutId, itemId, ...body }: PutCheckoutItemVariables) =>
+      putCheckoutItem(api, checkoutId, itemId, body),
     {
       onSuccess(checkout: Checkout) {
-        queryClient.setQueryData<CheckoutList>(['checkouts', query], (old) => ({
-          ...old,
-          checkouts: [checkout],
-          total: 1,
-        }));
+        queryClient.setQueryData<CheckoutList>(
+          ['checkouts', { wallet: wallet.data?.id }],
+          (checkoutList) => mergeCheckoutInList(checkout, checkoutList),
+        );
       },
-      onError() {
-        // if (['invalid_checkout_token', 'not_found'].includes((error as ApiError).code || '')) {
-        //   data = null;
-        // }
-      },
+      ...options,
     },
   );
 }
 
+export async function removeCheckoutItem(
+  api: ApiContext,
+  checkoutId: string,
+  itemId: string,
+): Promise<Checkout> {
+  const { data } = await api.delete<Checkout>(`/checkouts/${checkoutId}/items/${itemId}`);
+  return data;
+}
+
+export type UseRemoveCheckoutItemVariables = { checkoutId: string; itemId: string };
+
 export function useRemoveCheckoutItem(
-  id = 'current',
-  query?: CheckoutQuery,
-): UseMutationResult<Checkout, unknown, string> {
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables> {
   const api = useApi();
-  const queryClient = useQueryClient();
+  return useMutation<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables>(
+    ({ checkoutId, itemId }: UseRemoveCheckoutItemVariables) =>
+      removeCheckoutItem(api, checkoutId, itemId),
+    options,
+  );
+}
+
+export function useRemoveActiveWalletCheckoutItem(
+  options?: Omit<
+    UseMutationOptions<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables> {
+  const api = useApi();
   const wallet = useActiveWallet();
-  return useMutation<Checkout, unknown, string>(
-    async (itemId: string) => {
-      const { data } = await api.delete<Checkout, CheckoutQuery>(
-        `/checkouts/${id}/items/${itemId}`,
-        {
-          wallet: wallet.data?.id,
-        },
-      );
-      return data;
-    },
+  const queryClient = useQueryClient();
+
+  return useMutation<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables>(
+    ({ checkoutId, itemId }: UseRemoveCheckoutItemVariables) =>
+      removeCheckoutItem(api, checkoutId, itemId),
     {
       onSuccess(checkout: Checkout) {
-        queryClient.setQueryData<CheckoutList>(['checkouts', query], (old) => ({
-          ...old,
-          checkouts: [checkout],
-          total: 1,
-        }));
+        queryClient.setQueryData<CheckoutList>(
+          ['checkouts', { wallet: wallet.data?.id }],
+          (checkoutList) => mergeCheckoutInList(checkout, checkoutList),
+        );
       },
-      onError() {
-        // if (['invalid_checkout_token', 'not_found'].includes((error as ApiError).code || '')) {
-        //   data = null;
-        // }
-      },
+      ...options,
     },
   );
 }
@@ -267,35 +437,44 @@ export interface ConfirmCheckoutBody extends RequestBody {
   save_payment_method?: boolean;
 }
 
-export interface CheckoutConfirmation extends RequestBody {
+export interface CheckoutConfirmation {
   payment_intent?: PaymentIntent;
   orders?: OrderList;
   packs?: PackList;
   boosters?: BoosterList;
 }
 
+export async function confirmCheckout(
+  api: ApiContext,
+  id: string,
+  body: ConfirmCheckoutBody,
+): Promise<CheckoutConfirmation> {
+  const { data } = await api.post<CheckoutConfirmation, ConfirmCheckoutBody>(
+    `/checkouts/${id}/confirm`,
+    body,
+  );
+  return data;
+}
+
+export type UseConfirmCheckoutVariables = ConfirmCheckoutBody & { id: string };
+
 export function useConfirmCheckout(
-  id = 'current',
-): UseMutationResult<CheckoutConfirmation, unknown, ConfirmCheckoutBody> {
-  const wallet = useActiveWallet();
+  options?: Omit<
+    UseMutationOptions<CheckoutConfirmation, ApiError | AxiosError, UseConfirmCheckoutVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<CheckoutConfirmation, ApiError | AxiosError, UseConfirmCheckoutVariables> {
   const api = useApi();
-  return useMutation<CheckoutConfirmation, unknown, ConfirmCheckoutBody>(
-    async (body: ConfirmCheckoutBody) => {
-      const { data } = await api.post<CheckoutConfirmation, ConfirmCheckoutBody, CheckoutQuery>(
-        `/checkouts/${id}/confirm`,
-        body,
-        {
-          wallet: wallet.data?.id,
-        },
-      );
-      return data;
-    },
+  return useMutation<CheckoutConfirmation, ApiError | AxiosError, UseConfirmCheckoutVariables>(
+    ({ id, ...body }: UseConfirmCheckoutVariables) => confirmCheckout(api, id, body),
+    options,
   );
 }
 
-export function useClearCheckouts(query?: CheckoutQuery): () => void {
+export function useClearActiveWalletCheckouts(): () => void {
+  const wallet = useActiveWallet();
   const queryClient = useQueryClient();
   return useCallback(() => {
-    queryClient.removeQueries(['checkouts', query], { exact: true });
-  }, [query, queryClient]);
+    queryClient.removeQueries(['checkouts', { wallet: wallet.data?.id }]);
+  }, [queryClient, wallet.data?.id]);
 }

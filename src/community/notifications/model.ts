@@ -1,10 +1,10 @@
 import { Model } from '../../api';
-import User from '../../auth/users/model';
-import Wallet from '../../market/wallets/model';
-import Asset from '../../trading/assets/model';
+import { User } from '../../auth/users/model';
+import { Wallet } from '../../market/wallets/model';
+import { Asset } from '../../trading/assets/model';
 import { OrderType } from '../../trading/orders/model';
-import Match from '../../soccer/matches/model';
-import Composition from '../../soccer/compositions/model';
+import { Match } from '../../soccer/matches/model';
+import { Composition } from '../../soccer/compositions/model';
 
 export interface OrderMatchNotificationPayload {
   type?: OrderType;
@@ -23,9 +23,8 @@ export interface NotificationEventMap {
   closed_match: ClosedMatchNotificationPayload;
 }
 
-export default interface Notification<
-  E extends keyof NotificationEventMap = keyof NotificationEventMap,
-> extends Model<'notification'> {
+export interface Notification<E extends keyof NotificationEventMap = keyof NotificationEventMap>
+  extends Model<'notification'> {
   user?: User | string;
   wallet?: Wallet | string;
   event?: string;

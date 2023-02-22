@@ -1,14 +1,14 @@
 import { Model } from '../../api';
-import Session from '../../auth/sessions/model';
-import Wallet from '../wallets/model';
-import Capture from '../captures/model';
-import CurrenciesRate from '../currenciesRates/model';
+import { Session } from '../../auth/sessions/model';
+import { Wallet } from '../wallets/model';
+import { Capture } from '../captures/model';
+import { CurrenciesRate } from '../currenciesRates/model';
 
 export type WithdrawalStatus = 'created' | 'accepted' | 'refused' | 'done';
 
 export type WithdrawalCurrencyIso = 'ETH';
 
-export default interface Withdrawal extends Model<'withdrawal'> {
+export interface Withdrawal extends Model<'withdrawal'> {
   session?: Session | string;
   wallet?: Wallet | string;
   status?: WithdrawalStatus;

@@ -1,17 +1,25 @@
 import { useQuery, UseQueryResult } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery } from '../../api';
-import Transaction from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import { useApi, PaginatedList, ListRequestQuery, ApiContext, ApiError } from '../../api';
+import { Transaction } from './model';
 
-export function useTransaction(id?: string): UseQueryResult<Transaction> {
+export async function getTransaction(api: ApiContext, id: string): Promise<Transaction> {
+  const { data } = await api.get<Transaction>(`/transactions/${id}`);
+  return data;
+}
+
+export function useTransaction(
+  id?: string,
+  options?: Omit<UseQueryOptions<Transaction, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Transaction, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Transaction>(
+  return useQuery<Transaction, ApiError | AxiosError>(
     ['transactions', id],
-    async () => {
-      const { data } = await api.get<Transaction>(`/transactions/${id}`);
-      return data;
-    },
+    () => getTransaction(api, id as string),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
   );
 }
@@ -22,10 +30,22 @@ export interface GetTransactionsQuery extends ListRequestQuery {
   order?: string;
 }
 
-export function useTransactions(query?: GetTransactionsQuery): UseQueryResult<TransactionList> {
+export async function getTransactions(
+  api: ApiContext,
+  query?: GetTransactionsQuery,
+): Promise<TransactionList> {
+  const { data } = await api.get<TransactionList>('/transactions', query);
+  return data;
+}
+
+export function useTransactions(
+  query?: GetTransactionsQuery,
+  options?: Omit<UseQueryOptions<TransactionList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<TransactionList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<TransactionList>(['transactions', query], async () => {
-    const { data } = await api.get<TransactionList>('/transactions', query);
-    return data;
-  });
+  return useQuery<TransactionList, ApiError | AxiosError>(
+    ['transactions', query],
+    () => getTransactions(api, query),
+    options,
+  );
 }

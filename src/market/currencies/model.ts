@@ -1,6 +1,6 @@
 import { Model } from '../../api';
 
-export default interface Currency extends Model<'currency'> {
+export interface Currency extends Model<'currency'> {
   name?: string;
   iso?: string;
   symbol?: string;

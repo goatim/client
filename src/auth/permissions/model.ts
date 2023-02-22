@@ -37,7 +37,7 @@ export enum PermissionLevel {
   HUMAN = 6,
 }
 
-export default interface Permission extends Model<'permission'> {
+export interface Permission extends Model<'permission'> {
   expiration?: string;
   is_revoked?: boolean;
   user?: string;

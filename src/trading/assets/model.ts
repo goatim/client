@@ -1,12 +1,12 @@
 import { Model } from '../../api';
-import Player from '../../soccer/players/model';
-import Club from '../../soccer/clubs/model';
-import League from '../../soccer/leagues/model';
+import { Player } from '../../soccer/players/model';
+import { Club } from '../../soccer/clubs/model';
+import { League } from '../../soccer/leagues/model';
 import { QuotationHistory } from '../quotations/model';
 
 export type AssetType = 'player' | 'club' | 'league';
 
-export default interface Asset extends Model<'asset'> {
+export interface Asset extends Model<'asset'> {
   entity?: string;
   type?: AssetType;
   name?: string;

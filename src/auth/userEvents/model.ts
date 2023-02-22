@@ -1,8 +1,8 @@
-import Session from '../sessions/model';
+import { Session } from '../sessions/model';
 import { Model } from '../../api';
-import User from '../users/model';
+import { User } from '../users/model';
 
-export default interface UserEvent extends Model<'user_event'> {
+export interface UserEvent extends Model<'user_event'> {
   user?: User | string;
   session?: Session | string;
   code?: string;

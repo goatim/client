@@ -1,20 +1,41 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import Match, { MatchStatus } from './model';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  useApi,
+} from '../../api';
+import { Match, MatchStatus } from './model';
 
-export function useMatch(id?: string): UseQueryResult<Match> {
+export async function getMatch(api: ApiContext, id: string): Promise<Match> {
+  const { data } = await api.get<Match>(`/matches/${id}`);
+  return data;
+}
+
+export function useMatch(
+  id?: string,
+  options?: Omit<UseQueryOptions<Match, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Match, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery(['matches', id], async () => {
-    const { data } = await api.get<Match>(`/matches/${id}`);
-    return data;
-  });
+  return useQuery<Match, ApiError | AxiosError>(
+    ['matches', id],
+    () => getMatch(api, id as string),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
+    },
+  );
 }
 
 export type MatchList = PaginatedList<'matches', Match>;
@@ -26,23 +47,28 @@ export interface GetMatchesQuery extends ListRequestQuery {
   search?: string;
 }
 
+export async function getMatches(api: ApiContext, query?: GetMatchesQuery): Promise<MatchList> {
+  const { data } = await api.get<MatchList>('/matches', query);
+  return data;
+}
+
 export function useMatches(
   query?: GetMatchesQuery,
-  options?: UseQueryOptions<MatchList>,
-): UseQueryResult<MatchList> {
+  options?: Omit<UseQueryOptions<MatchList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<MatchList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<MatchList>(
+  return useQuery<MatchList, ApiError | AxiosError>(
     ['matches', query],
-    async () => {
-      const { data } = await api.get<MatchList>('/matches', query);
-      return data;
-    },
+    () => getMatches(api, query),
     options,
   );
 }
 
-export function useSpotlightMatches(): UseQueryResult<MatchList> {
-  return useMatches({ spotlight: true });
+export function useSpotlightMatches(
+  query?: Omit<GetMatchesQuery, 'spotlight'>,
+  options?: Omit<UseQueryOptions<MatchList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<MatchList> {
+  return useMatches({ spotlight: true, ...query }, options);
 }
 
 export interface MatchBody extends RequestBody {
@@ -54,56 +80,80 @@ export interface MatchBody extends RequestBody {
   status?: MatchStatus | null;
 }
 
-export function usePostMatch(): UseMutationResult<Match, unknown, MatchBody> {
+export async function postMatch(api: ApiContext, body: MatchBody): Promise<Match> {
+  const { data } = await api.post<Match, MatchBody>('/matches', body);
+  return data;
+}
+
+export function usePostMatch(
+  options?: Omit<UseMutationOptions<Match, ApiError | AxiosError, MatchBody>, 'mutationFn'>,
+): UseMutationResult<Match, ApiError | AxiosError, MatchBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Match, unknown, MatchBody>(
-    async (body: MatchBody) => {
-      const { data } = await api.post<Match, MatchBody>('/matches', body);
-      return data;
-    },
+  return useMutation<Match, ApiError | AxiosError, MatchBody>(
+    (body: MatchBody) => postMatch(api, body),
     {
       onSuccess(match: Match) {
         queryClient.setQueryData(['matches', match.id], match);
       },
+      ...options,
     },
   );
+}
+
+export async function putMatch(api: ApiContext, id: string, body: MatchBody): Promise<Match> {
+  const { data } = await api.put<Match, MatchBody>(`/matches/${id}`, body);
+  return data;
 }
 
 export type PutMatchVariables = MatchBody & { id: string };
 
-export function usePutMatch(): UseMutationResult<Match, unknown, PutMatchVariables> {
+export function usePutMatch(
+  options?: Omit<UseMutationOptions<Match, ApiError | AxiosError, PutMatchVariables>, 'mutationFn'>,
+): UseMutationResult<Match, ApiError | AxiosError, PutMatchVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Match, unknown, PutMatchVariables>(
-    async ({ id, ...body }: PutMatchVariables) => {
-      const { data } = await api.put<Match, MatchBody>(`/matches/${id}`, body);
-      return data;
-    },
+  return useMutation<Match, ApiError | AxiosError, PutMatchVariables>(
+    async ({ id, ...body }: PutMatchVariables) => putMatch(api, id, body),
     {
       onSuccess(match: Match) {
         queryClient.setQueryData(['matches', match.id], match);
       },
+      ...options,
     },
   );
 }
 
-export type AddMatchPictureBody = { icon: File };
+export interface PostMatchIconBody extends RequestBody {
+  icon: File;
+}
 
-export type AddMatchPictureVariables = AddMatchPictureBody & { id: string };
+export async function postMatchIcon(
+  api: ApiContext,
+  id: string,
+  body: PostMatchIconBody,
+): Promise<Match> {
+  const { data } = await api.post<Match>(`/matches/${id}/icon`, body);
+  return data;
+}
 
-export function useAddMatchIcon(): UseMutationResult<Match, unknown, AddMatchPictureVariables> {
+export type PostMatchIconVariables = PostMatchIconBody & { id: string };
+
+export function usePostMatchIcon(
+  options?: Omit<
+    UseMutationOptions<Match, ApiError | AxiosError, PostMatchIconVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Match, ApiError | AxiosError, PostMatchIconVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Match, unknown, AddMatchPictureVariables>(
-    async ({ id, icon }: AddMatchPictureVariables) => {
-      const { data } = await api.post<Match>(`/matches/${id}/icon`, { icon });
-      return data;
-    },
+  return useMutation<Match, ApiError | AxiosError, PostMatchIconVariables>(
+    ({ id, ...body }: PostMatchIconVariables) => postMatchIcon(api, id, body),
     {
       onSuccess(match: Match) {
         queryClient.setQueryData(['matches', match.id], match);
       },
+      ...options,
     },
   );
 }

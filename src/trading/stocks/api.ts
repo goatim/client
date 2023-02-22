@@ -1,25 +1,37 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
-import Stock from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  useApi,
+  PaginatedList,
+  ListRequestQuery,
+  RequestBody,
+  ApiContext,
+  ApiError,
+} from '../../api';
+import { Stock } from './model';
 
-export function useStock(id?: string): UseQueryResult<Stock> {
+export async function getStock(api: ApiContext, id: string): Promise<Stock> {
+  const { data } = await api.get<Stock>(`/stocks/${id}`);
+  return data;
+}
+
+export function useStock(
+  id?: string,
+  options?: Omit<UseQueryOptions<Stock, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Stock, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Stock>(
-    ['stocks', id],
-    async () => {
-      const { data } = await api.get<Stock>(`/stocks/${id}`);
-      return data;
-    },
-    {
-      enabled: !!id,
-    },
-  );
+  return useQuery<Stock, ApiError | AxiosError>(['stocks', id], () => getStock(api, id as string), {
+    ...options,
+    enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
+  });
 }
 
 export type StockList = PaginatedList<'stocks', Stock>;
@@ -29,12 +41,21 @@ export interface GetStocksQuery extends ListRequestQuery {
   tags?: string;
 }
 
-export function useStocks(query?: GetStocksQuery): UseQueryResult<StockList> {
+export async function getStocks(api: ApiContext, query?: GetStocksQuery): Promise<StockList> {
+  const { data } = await api.get<StockList>('/stocks', query);
+  return data;
+}
+
+export function useStocks(
+  query?: GetStocksQuery,
+  options?: Omit<UseQueryOptions<StockList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<StockList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<StockList>(['stocks', query], async () => {
-    const { data } = await api.get<StockList>('/stocks', query);
-    return data;
-  });
+  return useQuery<StockList, ApiError | AxiosError>(
+    ['stocks', query],
+    () => getStocks(api, query),
+    options,
+  );
 }
 
 export interface PostStockBody extends RequestBody {
@@ -43,18 +64,23 @@ export interface PostStockBody extends RequestBody {
   initial_shares?: number;
 }
 
-export function usePostStock(): UseMutationResult<Stock, unknown, PostStockBody> {
+export async function postStock(api: ApiContext, body: PostStockBody): Promise<Stock> {
+  const { data } = await api.post<Stock, PostStockBody>('/stocks', body);
+  return data;
+}
+
+export function usePostStock(
+  options?: Omit<UseMutationOptions<Stock, ApiError | AxiosError, PostStockBody>, 'mutationFn'>,
+): UseMutationResult<Stock, ApiError | AxiosError, PostStockBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Stock, unknown, PostStockBody>(
-    async (body: PostStockBody) => {
-      const { data } = await api.post<Stock, PostStockBody>('/stocks', body);
-      return data;
-    },
+  return useMutation<Stock, ApiError | AxiosError, PostStockBody>(
+    (body: PostStockBody) => postStock(api, body),
     {
       onSuccess(stock: Stock) {
         queryClient.setQueryData(['stocks', stock.id], stock);
       },
+      ...options,
     },
   );
 }
@@ -63,20 +89,25 @@ export interface PutStockBody extends RequestBody {
   tags?: string | null;
 }
 
+export async function putStock(api: ApiContext, id: string, body: PutStockBody): Promise<Stock> {
+  const { data } = await api.put<Stock, PostStockBody>(`/stocks/${id}`, body);
+  return data;
+}
+
 export type PutStockVariables = PutStockBody & { id: string };
 
-export function usePutStock(): UseMutationResult<Stock, unknown, PutStockVariables> {
+export function usePutStock(
+  options?: Omit<UseMutationOptions<Stock, ApiError | AxiosError, PutStockVariables>, 'mutationFn'>,
+): UseMutationResult<Stock, ApiError | AxiosError, PutStockVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Stock, unknown, PutStockVariables>(
-    async ({ id, ...body }: PutStockVariables) => {
-      const { data } = await api.put<Stock, PostStockBody>(`/stocks/${id}`, body);
-      return data;
-    },
+  return useMutation<Stock, ApiError | AxiosError, PutStockVariables>(
+    ({ id, ...body }: PutStockVariables) => putStock(api, id, body),
     {
       onSuccess(stock: Stock) {
         queryClient.setQueryData(['stocks', stock.id], stock);
       },
+      ...options,
     },
   );
 }

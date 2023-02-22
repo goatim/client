@@ -1,23 +1,45 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import TournamentParticipant from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  useApi,
+} from '../../api';
+import { TournamentParticipant } from './model';
 
-export function useTournamentParticipant(id?: string): UseQueryResult<TournamentParticipant> {
+export async function getTournamentParticipant(
+  api: ApiContext,
+  id: string,
+): Promise<TournamentParticipant> {
+  const { data } = await api.get<TournamentParticipant>(`/tournament_participants/${id}`);
+  return data;
+}
+
+export function useTournamentParticipant(
+  id?: string,
+  options?: Omit<
+    UseQueryOptions<TournamentParticipant, ApiError | AxiosError>,
+    'queryFn' | 'queryKey'
+  >,
+): UseQueryResult<TournamentParticipant, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<TournamentParticipant>(
+  return useQuery<TournamentParticipant, ApiError | AxiosError>(
     ['tournament_participants', id],
-    async () => {
-      const { data } = await api.get<TournamentParticipant>(`/tournament_participants/${id}`);
-      return data;
-    },
+    () => getTournamentParticipant(api, id as string),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
   );
 }
@@ -29,17 +51,30 @@ export type TournamentParticipantList = PaginatedList<
 
 export type GetTournamentParticipantsQuery = ListRequestQuery;
 
+export async function getTournamentParticipants(
+  api: ApiContext,
+  query?: GetTournamentParticipantsQuery,
+): Promise<TournamentParticipantList> {
+  const { data } = await api.get<TournamentParticipantList, GetTournamentParticipantsQuery>(
+    '/tournament_participants',
+    query,
+  );
+  return data;
+}
+
 export function useTournamentParticipants(
   query?: GetTournamentParticipantsQuery,
-): UseQueryResult<TournamentParticipantList> {
+  options?: Omit<
+    UseQueryOptions<TournamentParticipantList, ApiError | AxiosError>,
+    'queryFn' | 'queryKey'
+  >,
+): UseQueryResult<TournamentParticipantList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<TournamentParticipantList>(['tournament_participants', query], async () => {
-    const { data } = await api.get<TournamentParticipantList, GetTournamentParticipantsQuery>(
-      '/tournament_participants',
-      query,
-    );
-    return data;
-  });
+  return useQuery<TournamentParticipantList, ApiError | AxiosError>(
+    ['tournament_participants', query],
+    () => getTournamentParticipants(api, query),
+    options,
+  );
 }
 
 export interface TournamentParticipantBody extends RequestBody {
@@ -47,21 +82,27 @@ export interface TournamentParticipantBody extends RequestBody {
   wallet?: string | null;
 }
 
-export function usePostTournamentParticipant(): UseMutationResult<
-  TournamentParticipant,
-  unknown,
-  TournamentParticipantBody
-> {
+export async function postTournamentParticipant(
+  api: ApiContext,
+  body: TournamentParticipantBody,
+): Promise<TournamentParticipant> {
+  const { data } = await api.post<TournamentParticipant, TournamentParticipantBody>(
+    '/tournament_participants',
+    body,
+  );
+  return data;
+}
+
+export function usePostTournamentParticipant(
+  options?: Omit<
+    UseMutationOptions<TournamentParticipant, ApiError | AxiosError, TournamentParticipantBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<TournamentParticipant, ApiError | AxiosError, TournamentParticipantBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<TournamentParticipant, unknown, TournamentParticipantBody>(
-    async (body: TournamentParticipantBody) => {
-      const { data } = await api.post<TournamentParticipant, TournamentParticipantBody>(
-        '/tournament_participants',
-        body,
-      );
-      return data;
-    },
+  return useMutation<TournamentParticipant, ApiError | AxiosError, TournamentParticipantBody>(
+    (body: TournamentParticipantBody) => postTournamentParticipant(api, body),
     {
       onSuccess(tournamentParticipant: TournamentParticipant) {
         queryClient.setQueryData(
@@ -69,27 +110,47 @@ export function usePostTournamentParticipant(): UseMutationResult<
           tournamentParticipant,
         );
       },
+      ...options,
     },
   );
 }
 
+export async function putTournamentParticipant(
+  api: ApiContext,
+  id: string,
+  body: TournamentParticipantBody,
+): Promise<TournamentParticipant> {
+  const { data } = await api.put<TournamentParticipant, TournamentParticipantBody>(
+    `/tournament_participants/${id}`,
+    body,
+  );
+  return data;
+}
+
 export type PutTournamentParticipantVariables = TournamentParticipantBody & { id: string };
 
-export function usePutTournamentParticipant(): UseMutationResult<
+export function usePutTournamentParticipant(
+  options?: Omit<
+    UseMutationOptions<
+      TournamentParticipant,
+      ApiError | AxiosError,
+      PutTournamentParticipantVariables
+    >,
+    'mutationFn'
+  >,
+): UseMutationResult<
   TournamentParticipant,
-  unknown,
+  ApiError | AxiosError,
   PutTournamentParticipantVariables
 > {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<TournamentParticipant, unknown, PutTournamentParticipantVariables>(
-    async ({ id, ...body }: PutTournamentParticipantVariables) => {
-      const { data } = await api.put<TournamentParticipant, TournamentParticipantBody>(
-        `/tournament_participants/${id}`,
-        body,
-      );
-      return data;
-    },
+  return useMutation<
+    TournamentParticipant,
+    ApiError | AxiosError,
+    PutTournamentParticipantVariables
+  >(
+    ({ id, ...body }: PutTournamentParticipantVariables) => putTournamentParticipant(api, id, body),
     {
       onSuccess(tournamentParticipant: TournamentParticipant) {
         queryClient.setQueryData(
@@ -97,6 +158,7 @@ export function usePutTournamentParticipant(): UseMutationResult<
           tournamentParticipant,
         );
       },
+      ...options,
     },
   );
 }

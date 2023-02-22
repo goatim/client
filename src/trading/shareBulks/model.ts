@@ -1,6 +1,6 @@
-import Asset from '../assets/model';
+import { Asset } from '../assets/model';
 
-export default interface ShareBulk {
+export interface ShareBulk {
   asset: Asset | string;
   nb_shares: number;
 }

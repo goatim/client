@@ -20,19 +20,19 @@ export function useFridayClient(): FridayClientContext {
   return context;
 }
 
-export interface Props {
+export interface FridayClientProps {
   apiKey: string;
   host?: string;
   locale?: string;
   children: ReactElement;
 }
 
-export default function FridayClient({
+export function FridayClient({
   children,
   host = 'https://api.fridaygame.fr',
   apiKey,
   locale = 'fr',
-}: Props): ReactElement {
+}: FridayClientProps): ReactElement {
   const [wallet, setWallet] = useState<string>('default');
 
   const value = useMemo<FridayClientContext>(

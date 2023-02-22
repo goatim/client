@@ -1,4 +1,4 @@
-export default function unSlugify(slug?: string): string | undefined {
+export function unSlugify(slug?: string): string | undefined {
   if (!slug) {
     return undefined;
   }

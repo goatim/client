@@ -1,6 +1,6 @@
 import { Model } from '../../api';
 
-export default interface Tax extends Model<'tax'> {
+export interface Tax extends Model<'tax'> {
   tags?: string[];
   name?: string;
   amount?: number;

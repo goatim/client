@@ -4,31 +4,39 @@ import {
   useQueryClient,
   UseMutationResult,
   UseQueryResult,
+  UseMutationOptions,
 } from 'react-query';
 import { useCallback } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
-import Session from './model';
-import { ApiError, RequestBody, RequestQuery, useApi } from '../../api';
+import { Session } from './model';
+import { ApiContext, ApiError, RequestBody, RequestQuery, useApi } from '../../api';
 
 export interface GetSessionQuery extends RequestQuery {
   auto_refresh?: boolean;
 }
 
-export function useSession(
+export async function getSession(
+  api: ApiContext,
   id: string,
   query?: GetSessionQuery,
-  options?: UseQueryOptions<Session, ApiError | AxiosError>,
+): Promise<Session> {
+  const { data } = await api.get<Session, GetSessionQuery>(`/sessions/${id}`, query);
+  return data;
+}
+
+export function useSession(
+  id?: string,
+  query?: GetSessionQuery,
+  options?: Omit<UseQueryOptions<Session, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<Session, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<Session, ApiError | AxiosError>(
     ['sessions', id],
-    async () => {
-      const { data } = await api.get<Session, GetSessionQuery>(`/sessions/${id}`, query);
-      return data;
-    },
+    () => getSession(api, id as string, query),
     {
       ...options,
+      enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
     },
   );
 }
@@ -54,23 +62,28 @@ export function useActiveSession(): UseQueryResult<Session> {
 }
 
 export interface SignInBody extends RequestBody {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
-export function useSignIn(): UseMutationResult<Session, unknown, SignInBody> {
+export async function signIn(api: ApiContext, body: SignInBody): Promise<Session> {
+  const { data } = await api.post<Session, SignInBody>('/sessions', body);
+  return data;
+}
+
+export function useSignIn(
+  options?: Omit<UseMutationOptions<Session, ApiError | AxiosError, SignInBody>, 'mutationFn'>,
+): UseMutationResult<Session, ApiError | AxiosError, SignInBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Session, unknown, SignInBody>(
-    async (body: SignInBody) => {
-      const { data } = await api.post<Session, SignInBody>('/sessions', body);
-      return data;
-    },
+  return useMutation<Session, ApiError | AxiosError, SignInBody>(
+    (body: SignInBody) => signIn(api, body),
     {
       onSuccess(session: Session) {
         queryClient.setQueryData(['sessions', 'active'], session);
         api.setBearerToken(session.bearer_token);
       },
+      ...options,
     },
   );
 }

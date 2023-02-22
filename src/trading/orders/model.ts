@@ -1,11 +1,11 @@
 import { Model } from '../../api';
-import Asset from '../assets/model';
-import Wallet from '../../market/wallets/model';
-import Booster from '../boosters/model';
+import { Asset } from '../assets/model';
+import { Wallet } from '../../market/wallets/model';
+import { Booster } from '../boosters/model';
 
 export type OrderType = 'buy' | 'sell';
 
-export default interface Order extends Model<'order'> {
+export interface Order extends Model<'order'> {
   wallet?: Wallet | string;
   asset?: Asset | string;
   type?: OrderType;

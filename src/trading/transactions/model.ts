@@ -1,8 +1,8 @@
 import { Model } from '../../api';
-import Wallet from '../../market/wallets/model';
-import Asset from '../assets/model';
+import { Wallet } from '../../market/wallets/model';
+import { Asset } from '../assets/model';
 
-export default interface Transaction extends Model<'transaction'> {
+export interface Transaction extends Model<'transaction'> {
   asset?: Asset | string;
   from?: Wallet | string;
   to?: Wallet | string;

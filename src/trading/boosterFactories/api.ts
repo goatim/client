@@ -1,23 +1,41 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import BoosterFactory from './model';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  useApi,
+} from '../../api';
+import { BoosterFactory } from './model';
 import { useActiveWallet } from '../../market/wallets/api';
 
-export function useBoosterFactory(id?: string): UseQueryResult<BoosterFactory> {
+export async function getBoosterFactory(api: ApiContext, id: string): Promise<BoosterFactory> {
+  const { data } = await api.get<BoosterFactory>(`/booster_factories/${id}`);
+  return data;
+}
+
+export function useBoosterFactory(
+  id?: string,
+  options?: Omit<UseQueryOptions<BoosterFactory, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<BoosterFactory, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<BoosterFactory>(
+  return useQuery<BoosterFactory, ApiError | AxiosError>(
     ['booster_factories', id],
-    async () => {
-      const { data } = await api.get<BoosterFactory>(`/booster_factories/${id}`);
-      return data;
+    () => getBoosterFactory(api, id as string),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options && !!id : !!id,
     },
-    { enabled: !!id },
   );
 }
 
@@ -27,21 +45,38 @@ export interface GetBoosterFactoriesQuery extends ListRequestQuery {
   wallet?: string;
 }
 
+export async function getBoosterFactories(
+  api: ApiContext,
+  query?: GetBoosterFactoriesQuery,
+): Promise<BoosterFactoryList> {
+  const { data } = await api.get<BoosterFactoryList>('/booster_factories', query);
+  return data;
+}
+
 export function useBoosterFactories(
   query?: GetBoosterFactoriesQuery,
-): UseQueryResult<BoosterFactoryList> {
+  options?: Omit<
+    UseQueryOptions<BoosterFactoryList, ApiError | AxiosError>,
+    'queryFn' | 'queryKey'
+  >,
+): UseQueryResult<BoosterFactoryList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<BoosterFactoryList>(['booster_factories', query], async () => {
-    const { data } = await api.get<BoosterFactoryList>('/booster_factories', query);
-    return data;
-  });
+  return useQuery<BoosterFactoryList, ApiError | AxiosError>(
+    ['booster_factories', query],
+    () => getBoosterFactories(api, query),
+    options,
+  );
 }
 
 export function useActiveWalletBoosterFactories(
   query: Omit<GetBoosterFactoriesQuery, 'wallet'>,
-): UseQueryResult<BoosterFactoryList> {
+  options?: Omit<
+    UseQueryOptions<BoosterFactoryList, ApiError | AxiosError>,
+    'queryFn' | 'queryKey'
+  >,
+): UseQueryResult<BoosterFactoryList, ApiError | AxiosError> {
   const wallet = useActiveWallet();
-  return useBoosterFactories({ ...query, wallet: wallet.data?.id });
+  return useBoosterFactories({ ...query, wallet: wallet.data?.id }, options);
 }
 
 export interface BoosterFactoryBody extends RequestBody {
@@ -53,66 +88,80 @@ export interface BoosterFactoryBody extends RequestBody {
   duration?: number;
 }
 
-export function usePostBoosterFactory(): UseMutationResult<
-  BoosterFactory,
-  unknown,
-  BoosterFactoryBody
-> {
+export async function postBoosterFactory(
+  api: ApiContext,
+  body: BoosterFactoryBody,
+): Promise<BoosterFactory> {
+  const { data } = await api.post<BoosterFactory, BoosterFactoryBody>('/booster_factories', body);
+  return data;
+}
+
+export function usePostBoosterFactory(
+  options?: Omit<
+    UseMutationOptions<BoosterFactory, ApiError | AxiosError, BoosterFactoryBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<BoosterFactory, ApiError | AxiosError, BoosterFactoryBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<BoosterFactory, unknown, BoosterFactoryBody>(
-    async (body: BoosterFactoryBody) => {
-      const { data } = await api.post<BoosterFactory, BoosterFactoryBody>(
-        '/booster_factories',
-        body,
-      );
-      return data;
-    },
+  return useMutation<BoosterFactory, ApiError | AxiosError, BoosterFactoryBody>(
+    (body: BoosterFactoryBody) => postBoosterFactory(api, body),
     {
       onSuccess(boosterFactory: BoosterFactory) {
         queryClient.setQueryData(['booster_factories', boosterFactory.id], boosterFactory);
       },
+      ...options,
     },
   );
+}
+
+export async function putBoosterFactory(
+  api: ApiContext,
+  id: string,
+  body: BoosterFactoryBody,
+): Promise<BoosterFactory> {
+  const { data } = await api.put<BoosterFactory, BoosterFactoryBody>(
+    `/booster_factories/${id}`,
+    body,
+  );
+  return data;
 }
 
 export type PutBoosterFactoryVariables = BoosterFactoryBody & { id: string };
 
-export function usePutBoosterFactory(): UseMutationResult<
-  BoosterFactory,
-  unknown,
-  PutBoosterFactoryVariables
-> {
+export function usePutBoosterFactory(
+  options?: Omit<
+    UseMutationOptions<BoosterFactory, ApiError | AxiosError, PutBoosterFactoryVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<BoosterFactory, ApiError | AxiosError, PutBoosterFactoryVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<BoosterFactory, unknown, PutBoosterFactoryVariables>(
-    async ({ id, ...body }: PutBoosterFactoryVariables) => {
-      const { data } = await api.put<BoosterFactory, BoosterFactoryBody>(
-        `/booster_factories/${id}`,
-        body,
-      );
-      return data;
-    },
+  return useMutation<BoosterFactory, ApiError | AxiosError, PutBoosterFactoryVariables>(
+    ({ id, ...body }: PutBoosterFactoryVariables) => putBoosterFactory(api, id, body),
     {
       onSuccess(boosterFactory: BoosterFactory) {
         queryClient.setQueryData(['booster_factories', boosterFactory.id], boosterFactory);
       },
+      ...options,
     },
   );
 }
 
-export function useDeleteBoosterFactory(id: string): UseMutationResult<void, unknown, void> {
+export async function deleteBoosterFactory(api: ApiContext, id: string): Promise<void> {
+  await api.delete<void>(`/booster_factories/${id}`);
+}
+
+export function useDeleteBoosterFactory(
+  options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
+): UseMutationResult<void, ApiError | AxiosError, string> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<void, unknown, void>(
-    async () => {
-      await api.delete<void>(`/booster_factories/${id}`);
+  return useMutation<void, ApiError | AxiosError, string>((id) => deleteBoosterFactory(api, id), {
+    onSuccess(res, id) {
+      queryClient.removeQueries(['booster_factories', id], { exact: true });
+      // TODO : Remove in list
     },
-    {
-      onSuccess() {
-        queryClient.removeQueries(['booster_factories', id], { exact: true });
-        // TODO : Remove in list
-      },
-    },
-  );
+    ...options,
+  });
 }

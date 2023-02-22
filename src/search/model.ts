@@ -1,4 +1,4 @@
-import Asset from '../trading/assets/model';
+import { Asset } from '../trading/assets/model';
 
 export type SearchResultType = 'player-asset';
 
@@ -8,6 +8,6 @@ export interface SearchResult {
   asset?: Asset;
 }
 
-export default interface Search {
+export interface Search {
   results: SearchResult[];
 }

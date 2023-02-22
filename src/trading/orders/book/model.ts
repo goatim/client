@@ -4,7 +4,7 @@ interface AggregatedOrders {
   price_limit?: number;
 }
 
-export default interface OrderBook {
+export interface OrderBook {
   buying?: AggregatedOrders[];
   selling?: AggregatedOrders[];
 }

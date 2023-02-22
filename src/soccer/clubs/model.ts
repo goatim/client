@@ -1,10 +1,10 @@
 import { Model } from '../../api';
-import City from '../../geo/cities/model';
-import League from '../leagues/model';
-import Player from '../players/model';
+import { City } from '../../geo/cities/model';
+import { League } from '../leagues/model';
+import { Player } from '../players/model';
 import { Image } from '../../medias/image';
 
-export default interface Club extends Model<'club'> {
+export interface Club extends Model<'club'> {
   league?: League | string;
   city?: City | string;
   name?: string;

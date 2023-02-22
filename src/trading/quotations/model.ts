@@ -17,7 +17,7 @@ export interface QuotationHistory {
   resolved_interval?: string;
 }
 
-export default interface Quotation {
+export interface Quotation {
   value: number;
   day_variation?: number;
   last_variation?: number;

@@ -1,11 +1,11 @@
 import { Model } from '../../api';
-import Wallet from '../../market/wallets/model';
-import PackFactory from '../packFactories/model';
-import ShareBulk from '../shareBulks/model';
-import MinifiedShareBulk from '../shareBulks/minified';
+import { Wallet } from '../../market/wallets/model';
+import { PackFactory } from '../packFactories/model';
+import { ShareBulk } from '../shareBulks/model';
+import { MinifiedShareBulk } from '../shareBulks/minified';
 import { Image } from '../../medias/image';
 
-export default interface Pack extends Model<'pack'> {
+export interface Pack extends Model<'pack'> {
   factory?: PackFactory | string;
   wallet?: Wallet | string;
   share_bulks?: ShareBulk[] | MinifiedShareBulk[] | string;

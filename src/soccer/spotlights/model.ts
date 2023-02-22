@@ -1,12 +1,12 @@
-import League from '../leagues/model';
-import Club from '../clubs/model';
-import Asset from '../../trading/assets/model';
+import { League } from '../leagues/model';
+import { Club } from '../clubs/model';
+import { Asset } from '../../trading/assets/model';
 import { Image } from '../../medias/image';
 import { Model } from '../../api';
 
 export type SpotlightType = 'simple' | 'duo';
 
-export default interface Spotlight extends Model<'spotlight'> {
+export interface Spotlight extends Model<'spotlight'> {
   tags?: string[];
   type?: SpotlightType;
   subtitle?: string;

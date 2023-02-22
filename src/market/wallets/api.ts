@@ -1,30 +1,50 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import Wallet from './model';
-import { ListRequestQuery, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import { AxiosError } from 'axios';
+import { Wallet } from './model';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  RequestQuery,
+  useApi,
+} from '../../api';
 import { useFridayClient } from '../../client';
-import { useActiveSession } from '../../auth/sessions/api';
 
 export interface GetWalletQuery extends RequestQuery {
   ranking?: string;
 }
 
-export function useWallet(id?: string, query?: GetWalletQuery): UseQueryResult<Wallet> {
+export async function getWallet(
+  api: ApiContext,
+  id: string,
+  query?: GetWalletQuery,
+): Promise<Wallet> {
+  const { data } = await api.get<Wallet, RequestQuery>(`/wallets/${id}`, query);
+  return data;
+}
+
+export function useWallet(
+  id?: string,
+  query?: GetWalletQuery,
+  options?: Omit<UseQueryOptions<Wallet, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Wallet, ApiError | AxiosError> {
   const api = useApi();
-  const session = useActiveSession();
-  return useQuery<Wallet>(
+  return useQuery<Wallet, ApiError | AxiosError>(
     ['wallets', id, query],
-    async () => {
-      const { data } = await api.get<Wallet, RequestQuery>(`/wallets/${id}`, query);
-      return data;
-    },
+    () => getWallet(api, id as string, query),
     {
-      enabled: !!id && !!session,
+      ...options,
+      enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
     },
   );
 }
@@ -40,12 +60,21 @@ export interface GetWalletsQuery extends ListRequestQuery {
   rank?: string;
 }
 
-export function useWallets(query?: GetWalletsQuery): UseQueryResult<WalletList> | undefined {
+export async function getWallets(api: ApiContext, query?: GetWalletsQuery): Promise<WalletList> {
+  const { data } = await api.get<WalletList>('/wallets', query);
+  return data;
+}
+
+export function useWallets(
+  query?: GetWalletsQuery,
+  options?: Omit<UseQueryOptions<WalletList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<WalletList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<WalletList>(['wallets', query], async () => {
-    const { data } = await api.get<WalletList>('/wallets', query);
-    return data;
-  });
+  return useQuery<WalletList, ApiError | AxiosError>(
+    ['wallets', query],
+    () => getWallets(api, query),
+    options,
+  );
 }
 
 export interface WalletBody extends RequestBody {
@@ -56,60 +85,80 @@ export interface WalletBody extends RequestBody {
   ethereum_address?: string | null;
 }
 
-export function usePostWallet(): UseMutationResult<Wallet, unknown, WalletBody> {
+export async function postWallet(api: ApiContext, body: WalletBody): Promise<Wallet> {
+  const { data } = await api.post<Wallet, WalletBody>('/wallets', body);
+  return data;
+}
+
+export function usePostWallet(
+  options?: Omit<UseMutationOptions<Wallet, ApiError | AxiosError, WalletBody>, 'mutationFn'>,
+): UseMutationResult<Wallet, ApiError | AxiosError, WalletBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Wallet, unknown, WalletBody>(
-    async (body: WalletBody) => {
-      const { data } = await api.post<Wallet, WalletBody>('/wallets', body);
-      return data;
-    },
+  return useMutation<Wallet, ApiError | AxiosError, WalletBody>(
+    (body: WalletBody) => postWallet(api, body),
     {
       onSuccess(wallet: Wallet) {
         queryClient.setQueryData(['wallets', wallet.id], wallet);
       },
+      ...options,
     },
   );
+}
+
+export async function putWallet(api: ApiContext, id: string, body: WalletBody) {
+  const { data } = await api.put<Wallet, WalletBody>(`/wallets/${id}`, body);
+  return data;
 }
 
 export type PutWalletVariables = WalletBody & { id: string };
 
-export function usePutWallet(): UseMutationResult<Wallet, unknown, PutWalletVariables> {
+export function usePutWallet(
+  options?: Omit<UseMutationOptions<Wallet, ApiError | AxiosError, WalletBody>, 'mutationFn'>,
+): UseMutationResult<Wallet, ApiError | AxiosError, PutWalletVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Wallet, unknown, PutWalletVariables>(
-    async ({ id, ...body }: PutWalletVariables) => {
-      const { data } = await api.put<Wallet, WalletBody>(`/wallets/${id}`, body);
-      return data;
-    },
+  return useMutation<Wallet, ApiError | AxiosError, PutWalletVariables>(
+    ({ id, ...body }: PutWalletVariables) => putWallet(api, id, body),
     {
       onSuccess(wallet: Wallet) {
         queryClient.setQueryData(['wallets', wallet.id], wallet);
       },
+      ...options,
     },
   );
 }
 
-export type AddWalletPictureBody = { picture: File };
+export interface PostWalletPictureBody extends RequestBody {
+  picture: File;
+}
 
-export type AddWalletPictureVariables = AddWalletPictureBody & { id: string };
+export async function postWalletPicture(
+  api: ApiContext,
+  id: string,
+  body: PostWalletPictureBody,
+): Promise<Wallet> {
+  const { data } = await api.post<Wallet>(`/wallets/${id}/picture`, body);
+  return data;
+}
 
-export function useAddWalletPicture(): UseMutationResult<
-  Wallet,
-  unknown,
-  AddWalletPictureVariables
-> {
+export type PostWalletPictureVariables = PostWalletPictureBody & { id: string };
+
+export function usePostWalletPicture(
+  options?: Omit<
+    UseMutationOptions<Wallet, ApiError | AxiosError, PostWalletPictureVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Wallet, ApiError | AxiosError, PostWalletPictureVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Wallet, unknown, AddWalletPictureVariables>(
-    async ({ id, picture }: AddWalletPictureVariables) => {
-      const { data } = await api.post<Wallet>(`/wallets/${id}/picture`, { picture });
-      return data;
-    },
+  return useMutation<Wallet, ApiError | AxiosError, PostWalletPictureVariables>(
+    ({ id, ...body }: PostWalletPictureVariables) => postWalletPicture(api, id, body),
     {
       onSuccess(wallet: Wallet) {
         queryClient.setQueryData(['wallets', wallet.id], wallet);
       },
+      ...options,
     },
   );
 }

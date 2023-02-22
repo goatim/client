@@ -1,12 +1,12 @@
 import { Model } from '../../api';
 import { Image } from '../../medias/image';
-import Tax from '../../market/taxes/model';
+import { Tax } from '../../market/taxes/model';
 
 export interface PackFactoryOdds {
   [key: string]: number;
 }
 
-export default interface PackFactory extends Model<'pack_factory'> {
+export interface PackFactory extends Model<'pack_factory'> {
   name?: string;
   description?: string;
   price?: number;

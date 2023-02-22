@@ -1,13 +1,13 @@
 import { DateTime } from 'luxon';
 import { Model } from '../../api';
-import User from '../../auth/users/model';
-import Item from '../items/model';
-import Session from '../../auth/sessions/model';
-import Billing from '../billings/model';
-import PaymentMethod from '../../payment/methods/model';
-import PaymentIntent, { PaymentIntentStatus } from '../../payment/intents/model';
+import { User } from '../../auth/users/model';
+import { Item } from '../items/model';
+import { Session } from '../../auth/sessions/model';
+import { Billing } from '../billings/model';
+import { PaymentMethod } from '../../payment/methods/model';
+import { PaymentIntent, PaymentIntentStatus } from '../../payment/intents/model';
 
-export default interface Checkout extends Model<'checkout'> {
+export interface Checkout extends Model<'checkout'> {
   session?: Session | string;
   user?: User | string;
   items?: Item[];

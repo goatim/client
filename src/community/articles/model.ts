@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
-import User from '../../auth/users/model';
-import Paragraph from '../paragraphs/model';
+import { User } from '../../auth/users/model';
+import { Paragraph } from '../paragraphs/model';
 import { Model } from '../../api';
 import { Image } from '../../medias/image';
 
@@ -13,7 +13,7 @@ export type ArticleType =
   | 'content'
   | 'unknown';
 
-export default interface Article extends Model<'article'> {
+export interface Article extends Model<'article'> {
   publication?: DateTime;
   is_published?: boolean;
   type?: ArticleType;

@@ -1,11 +1,11 @@
 import { Model } from '../../api';
-import User from '../../auth/users/model';
-import Rank from '../../trading/ranks/model';
+import { User } from '../../auth/users/model';
+import { Rank } from '../../trading/ranks/model';
 import { Image } from '../../medias/image';
 
 export type WalletType = 'user' | 'team' | 'broker';
 
-export default interface Wallet extends Model<'wallet'> {
+export interface Wallet extends Model<'wallet'> {
   owner?: User | string;
   name?: string;
   slug?: string;

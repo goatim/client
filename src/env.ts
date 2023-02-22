@@ -102,6 +102,4 @@ function parseEnv(): Env {
   return env;
 }
 
-const env: Env = parseEnv();
-
-export default env;
+export const env: Env = parseEnv();

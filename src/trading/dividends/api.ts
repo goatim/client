@@ -1,20 +1,41 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { useApi, PaginatedList, ListRequestQuery, RequestBody } from '../../api';
-import Dividend, { DividendType } from './model';
+import { AxiosError } from 'axios';
+import {
+  useApi,
+  PaginatedList,
+  ListRequestQuery,
+  RequestBody,
+  ApiContext,
+  ApiError,
+} from '../../api';
+import { Dividend, DividendType } from './model';
 
-export function useDividend(id?: string): UseQueryResult<Dividend> {
+export async function getDividend(api: ApiContext, id: string): Promise<Dividend> {
+  const { data } = await api.get<Dividend>(`/dividends/${id}`);
+  return data;
+}
+
+export function useDividend(
+  id?: string,
+  options?: Omit<UseQueryOptions<Dividend, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Dividend, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Dividend>(['dividends', id], async () => {
-    const { data } = await api.get<Dividend>(`/dividends/${id}`);
-    return data;
-  });
+  return useQuery<Dividend, ApiError | AxiosError>(
+    ['dividends', id],
+    () => getDividend(api, id as string),
+    {
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
+    },
+  );
 }
 
 export interface GetDividendsQuery extends ListRequestQuery {
@@ -23,15 +44,24 @@ export interface GetDividendsQuery extends ListRequestQuery {
 
 export type DividendList = PaginatedList<'dividends', Dividend>;
 
+export async function getDividends(
+  api: ApiContext,
+  query?: GetDividendsQuery,
+): Promise<DividendList> {
+  const { data } = await api.get<DividendList>('/dividends', query);
+  return data;
+}
+
 export function useDividends(
   query?: GetDividendsQuery,
-  options?: UseQueryOptions<DividendList>,
-): UseQueryResult<DividendList> {
+  options?: Omit<UseQueryOptions<DividendList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<DividendList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<DividendList>(['dividends', query], async () => {
-    const { data } = await api.get<DividendList>('/dividends', query);
-    return data;
-  });
+  return useQuery<DividendList, ApiError | AxiosError>(
+    ['dividends', query],
+    async () => getDividends(api, query),
+    options,
+  );
 }
 
 export interface DividendBody extends RequestBody {
@@ -41,52 +71,71 @@ export interface DividendBody extends RequestBody {
   percentage?: number | null;
 }
 
-export function usePostDividend(): UseMutationResult<Dividend, unknown, DividendBody> {
+export async function postDividend(api: ApiContext, body: DividendBody): Promise<Dividend> {
+  const { data } = await api.post<Dividend, DividendBody>('/dividends', body);
+  return data;
+}
+
+export function usePostDividend(
+  options?: Omit<UseMutationOptions<Dividend, ApiError | AxiosError, DividendBody>, 'mutationFn'>,
+): UseMutationResult<Dividend, ApiError | AxiosError, DividendBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Dividend, unknown, DividendBody>(
-    async (body: DividendBody) => {
-      const { data } = await api.post<Dividend, DividendBody>('/dividends', body);
-      return data;
-    },
+  return useMutation<Dividend, ApiError | AxiosError, DividendBody>(
+    (body: DividendBody) => postDividend(api, body),
     {
       onSuccess(dividend: Dividend) {
         queryClient.setQueryData(['dividends', dividend.id], dividend);
       },
+      ...options,
     },
   );
 }
 
-export function useDistributeDividend(): UseMutationResult<Dividend, unknown, string> {
+export async function distributeDividend(api: ApiContext, id: string) {
+  const { data } = await api.post<Dividend>(`/dividends/${id}/distribute`);
+  return data;
+}
+
+export function useDistributeDividend(
+  options?: Omit<UseMutationOptions<Dividend, ApiError | AxiosError, string>, 'mutationFn'>,
+): UseMutationResult<Dividend, ApiError | AxiosError, string> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Dividend, unknown, string>(
-    async (id) => {
-      const { data } = await api.post<Dividend>(`/dividends/${id}/distribute`);
-      return data;
+  return useMutation<Dividend, ApiError | AxiosError, string>((id) => distributeDividend(api, id), {
+    onSuccess(dividend: Dividend) {
+      queryClient.setQueryData(['dividends', dividend.id], dividend);
     },
-    {
-      onSuccess(dividend: Dividend) {
-        queryClient.setQueryData(['dividends', dividend.id], dividend);
-      },
-    },
-  );
+    ...options,
+  });
+}
+
+export async function putDividend(
+  api: ApiContext,
+  id: string,
+  body: DividendBody,
+): Promise<Dividend> {
+  const { data } = await api.put<Dividend, DividendBody>(`/dividends/${id}`, body);
+  return data;
 }
 
 export type PutDividendVariables = DividendBody & { id: string };
 
-export function usePutDividend(): UseMutationResult<Dividend, unknown, PutDividendVariables> {
+export function usePutDividend(
+  options?: Omit<
+    UseMutationOptions<Dividend, ApiError | AxiosError, PutDividendVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Dividend, ApiError | AxiosError, PutDividendVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Dividend, unknown, PutDividendVariables>(
-    async ({ id, ...body }: PutDividendVariables) => {
-      const { data } = await api.put<Dividend, DividendBody>(`/dividends/${id}`, body);
-      return data;
-    },
+  return useMutation<Dividend, ApiError | AxiosError, PutDividendVariables>(
+    ({ id, ...body }: PutDividendVariables) => putDividend(api, id, body),
     {
       onSuccess(dividend: Dividend) {
         queryClient.setQueryData(['dividends', dividend.id], dividend);
       },
+      ...options,
     },
   );
 }
@@ -100,19 +149,26 @@ export interface PostDividendBulkResponse {
   created: number;
 }
 
-export function usePostDividendBulk(): UseMutationResult<
-  PostDividendBulkResponse,
-  unknown,
-  PostDividendBulkBody
-> {
+export async function postDividendBulk(
+  api: ApiContext,
+  body: PostDividendBulkBody,
+): Promise<PostDividendBulkResponse> {
+  const { data } = await api.post<PostDividendBulkResponse, PostDividendBulkBody>(
+    '/dividends/bulk',
+    body,
+  );
+  return data;
+}
+
+export function usePostDividendBulk(
+  options?: Omit<
+    UseMutationOptions<PostDividendBulkResponse, ApiError | AxiosError, PostDividendBulkBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<PostDividendBulkResponse, ApiError | AxiosError, PostDividendBulkBody> {
   const api = useApi();
-  return useMutation<PostDividendBulkResponse, unknown, PostDividendBulkBody>(
-    async (body: PostDividendBulkBody) => {
-      const { data } = await api.post<PostDividendBulkResponse, PostDividendBulkBody>(
-        '/dividends/bulk',
-        body,
-      );
-      return data;
-    },
+  return useMutation<PostDividendBulkResponse, ApiError | AxiosError, PostDividendBulkBody>(
+    (body: PostDividendBulkBody) => postDividendBulk(api, body),
+    options,
   );
 }

@@ -1,24 +1,39 @@
 import {
   useMutation,
+  UseMutationOptions,
   UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { AxiosResponse } from 'axios';
-import { ApiContext, ListRequestQuery, PaginatedList, RequestBody, useApi } from '../../api';
-import Player, { PlayerPosition } from './model';
+import { AxiosError } from 'axios';
+import { UseQueryOptions } from 'react-query/types/react/types';
+import {
+  ApiContext,
+  ApiError,
+  ListRequestQuery,
+  PaginatedList,
+  RequestBody,
+  useApi,
+} from '../../api';
+import { Player, PlayerPosition } from './model';
 
-export function usePlayer(id?: string): UseQueryResult<Player> {
+export async function getPlayer(api: ApiContext, id: string): Promise<Player> {
+  const { data } = await api.get<Player>(`/players/${id}`);
+  return data;
+}
+
+export function usePlayer(
+  id?: string,
+  options?: Omit<UseQueryOptions<Player, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<Player, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<Player>(
+  return useQuery<Player, ApiError | AxiosError>(
     ['players', id],
-    async () => {
-      const { data } = await api.get<Player>(`/players/${id}`);
-      return data;
-    },
+    () => getPlayer(api, id as string),
     {
-      enabled: !!id,
+      ...options,
+      enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
     },
   );
 }
@@ -35,37 +50,21 @@ export interface GetPlayersQuery extends ListRequestQuery {
   search?: string;
 }
 
-export function usePlayers(query?: GetPlayersQuery): UseQueryResult<PlayerList> {
-  const api = useApi();
-  return useQuery<PlayerList>(['players', query], async () => {
-    const { data } = await api.get<PlayerList, GetPlayersQuery>('/players', query);
-    return data;
-  });
+export async function getPlayers(api: ApiContext, query?: GetPlayersQuery): Promise<PlayerList> {
+  const { data } = await api.get<PlayerList, GetPlayersQuery>('/players', query);
+  return data;
 }
 
-export async function getPlayers(
-  api: ApiContext,
-  {
-    club,
-    league,
-    wallet = 'default',
-    match,
-    composition,
-    position,
-    search,
-    expand = 'club',
-  }: GetPlayersQuery,
-): Promise<AxiosResponse<PlayerList>> {
-  return api.get<PlayerList, GetPlayersQuery>('/players', {
-    club,
-    league,
-    wallet,
-    match,
-    composition,
-    position,
-    search,
-    expand,
-  });
+export function usePlayers(
+  query?: GetPlayersQuery,
+  options?: Omit<UseQueryOptions<PlayerList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+): UseQueryResult<PlayerList, ApiError | AxiosError> {
+  const api = useApi();
+  return useQuery<PlayerList, ApiError | AxiosError>(
+    ['players', query],
+    () => getPlayers(api, query),
+    options,
+  );
 }
 
 export interface PlayerBody extends RequestBody {
@@ -78,60 +77,49 @@ export interface PlayerBody extends RequestBody {
   number?: number;
 }
 
-export function usePostPlayer(): UseMutationResult<Player, unknown, PlayerBody> {
+export async function postPlayer(api: ApiContext, body: PlayerBody): Promise<Player> {
+  const { data } = await api.post<Player, PlayerBody>('/players', body);
+  return data;
+}
+
+export function usePostPlayer(
+  options?: Omit<UseMutationOptions<Player, ApiError | AxiosError, PlayerBody>, 'mutationFn'>,
+): UseMutationResult<Player, ApiError | AxiosError, PlayerBody> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Player, unknown, PlayerBody>(
-    async (body: PlayerBody) => {
-      const { data } = await api.post<Player, PlayerBody>('/players', body);
-      return data;
-    },
+  return useMutation<Player, ApiError | AxiosError, PlayerBody>(
+    (body: PlayerBody) => postPlayer(api, body),
     {
       onSuccess(player: Player) {
         queryClient.setQueryData(['players', player.id], player);
       },
+      ...options,
     },
   );
+}
+
+export async function putPlayer(api: ApiContext, id: string, body: PlayerBody): Promise<Player> {
+  const { data } = await api.put<Player, PlayerBody>(`/players/${id}`, body);
+  return data;
 }
 
 export type PutPlayerVariables = PlayerBody & { id: string };
 
-export function usePutPlayer(): UseMutationResult<Player, unknown, PutPlayerVariables> {
+export function usePutPlayer(
+  options?: Omit<
+    UseMutationOptions<Player, ApiError | AxiosError, PutPlayerVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Player, ApiError | AxiosError, PutPlayerVariables> {
   const api = useApi();
   const queryClient = useQueryClient();
-  return useMutation<Player, unknown, PutPlayerVariables>(
-    async ({ id, ...body }: PutPlayerVariables) => {
-      const { data } = await api.put<Player, PlayerBody>(`/players/${id}`, body);
-      return data;
-    },
+  return useMutation<Player, ApiError | AxiosError, PutPlayerVariables>(
+    async ({ id, ...body }: PutPlayerVariables) => putPlayer(api, id, body),
     {
       onSuccess(player: Player) {
         queryClient.setQueryData(['players', player.id], player);
       },
-    },
-  );
-}
-
-export type AddPlayerPictureBody = { illustration: File };
-
-export type AddPlayerPictureVariables = AddPlayerPictureBody & { id: string };
-
-export function useAddPlayerIllustration(): UseMutationResult<
-  Player,
-  unknown,
-  AddPlayerPictureVariables
-> {
-  const api = useApi();
-  const queryClient = useQueryClient();
-  return useMutation<Player, unknown, AddPlayerPictureVariables>(
-    async ({ id, illustration }: AddPlayerPictureVariables) => {
-      const { data } = await api.post<Player>(`/players/${id}/illustration`, { illustration });
-      return data;
-    },
-    {
-      onSuccess(player: Player) {
-        queryClient.setQueryData(['players', player.id], player);
-      },
+      ...options,
     },
   );
 }
@@ -142,19 +130,26 @@ export interface PostPlayerBulkBody extends RequestBody {
 
 export type PostPlayerBulkResponse = { created: number };
 
-export function usePostPlayerBulk(): UseMutationResult<
-  PostPlayerBulkResponse,
-  unknown,
-  PostPlayerBulkBody
-> {
+export async function postPlayerBulk(
+  api: ApiContext,
+  body: PostPlayerBulkBody,
+): Promise<PostPlayerBulkResponse> {
+  const { data } = await api.post<PostPlayerBulkResponse, PostPlayerBulkBody>(
+    '/players/bulk',
+    body,
+  );
+  return data;
+}
+
+export function usePostPlayerBulk(
+  options?: Omit<
+    UseMutationOptions<PostPlayerBulkResponse, ApiError | AxiosError, PostPlayerBulkBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<PostPlayerBulkResponse, ApiError | AxiosError, PostPlayerBulkBody> {
   const api = useApi();
-  return useMutation<PostPlayerBulkResponse, unknown, PostPlayerBulkBody>(
-    async (body: PostPlayerBulkBody) => {
-      const { data } = await api.post<PostPlayerBulkResponse, PostPlayerBulkBody>(
-        '/players/bulk',
-        body,
-      );
-      return data;
-    },
+  return useMutation<PostPlayerBulkResponse, ApiError | AxiosError, PostPlayerBulkBody>(
+    (body: PostPlayerBulkBody) => postPlayerBulk(api, body),
+    options,
   );
 }

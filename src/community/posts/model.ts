@@ -1,12 +1,12 @@
 import { Model } from '../../api';
-import User from '../../auth/users/model';
-import Wallet from '../../market/wallets/model';
-import Asset from '../../trading/assets/model';
-import Match from '../../soccer/matches/model';
+import { User } from '../../auth/users/model';
+import { Wallet } from '../../market/wallets/model';
+import { Asset } from '../../trading/assets/model';
+import { Match } from '../../soccer/matches/model';
 import { OrderType } from '../../trading/orders/model';
-import Transaction from '../../trading/transactions/model';
-import Pack from '../../trading/packs/model';
-import Composition from '../../soccer/compositions/model';
+import { Transaction } from '../../trading/transactions/model';
+import { Pack } from '../../trading/packs/model';
+import { Composition } from '../../soccer/compositions/model';
 
 export interface OrderPostPayload {
   id: string;
@@ -37,8 +37,7 @@ export interface PostTypeMap {
   match_summary: MatchSummaryPostPayload;
 }
 
-export default interface Post<T extends keyof PostTypeMap = keyof PostTypeMap>
-  extends Model<'post'> {
+export interface Post<T extends keyof PostTypeMap = keyof PostTypeMap> extends Model<'post'> {
   user?: User | string;
   author?: Wallet | string;
   wallet?: Wallet | string;
