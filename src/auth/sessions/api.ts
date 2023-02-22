@@ -53,7 +53,7 @@ export function useActiveSession(): UseQueryResult<Session> {
         api.setBearerToken(session.bearer_token);
       },
       onError: (error) => {
-        if (error.code === 'invalid_bearer_token') {
+        if (error.code === 'invalid_bearer_token' || error.code === 'not_found') {
           api.setBearerToken(null);
         }
       },
