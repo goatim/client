@@ -19,6 +19,7 @@ import {
   useApi,
 } from '../../api';
 import { useFridayClient } from '../../client';
+import { useActiveSession, useDoesActiveSessionUserHasVerifiedEmail } from '../../auth';
 
 export interface GetWalletQuery extends RequestQuery {
   ranking?: string;
@@ -54,7 +55,14 @@ export function useActiveWallet(
   options?: Omit<UseQueryOptions<Wallet, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<Wallet> {
   const { wallet } = useFridayClient();
-  return useWallet(wallet, query, options);
+  const userHasVerifiedEmail = useDoesActiveSessionUserHasVerifiedEmail();
+  return useWallet(wallet, query, {
+    ...options,
+    enabled:
+      options?.enabled !== undefined
+        ? options.enabled && userHasVerifiedEmail
+        : userHasVerifiedEmail,
+  });
 }
 
 export type WalletList = PaginatedList<'wallets', Wallet>;
