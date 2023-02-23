@@ -71,7 +71,7 @@ export interface UserBody extends RequestBody {
 }
 
 export interface PostUserBody extends UserBody {
-  password: string | null;
+  password?: string | null;
   referrer?: string | null;
 }
 
