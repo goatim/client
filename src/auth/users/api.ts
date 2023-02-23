@@ -68,6 +68,7 @@ export interface UserBody extends RequestBody {
   address?: string | null;
   country?: string | null;
   locale?: string | null;
+  verified_email?: boolean | null;
 }
 
 export interface PostUserBody extends UserBody {
