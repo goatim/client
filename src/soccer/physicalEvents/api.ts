@@ -41,7 +41,6 @@ export function usePhysicalEvent(
 export interface GetPhysicalEventsQuery extends ListRequestQuery {
   match?: string;
   composition?: string;
-  wallet?: string;
 }
 
 export type PhysicalEventList = PaginatedList<'physical_events', PhysicalEvent>;
