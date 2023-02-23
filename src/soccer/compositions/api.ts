@@ -210,6 +210,7 @@ export function usePostActiveWalletComposition(
     (body: CompositionBody) => postComposition(api, { wallet: wallet.data?.id, ...body }),
     {
       onSuccess(composition: Composition) {
+        queryClient.setQueryData(['compositions', composition.id], composition);
         queryClient.setQueryData<CompositionList>(
           ['compositions', { wallet: wallet.data?.id, ...query }],
           (compositionList) => mergeCompositionInList(composition, compositionList),
@@ -266,6 +267,7 @@ export function usePutActiveWalletComposition(
     ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body),
     {
       onSuccess(composition: Composition) {
+        queryClient.setQueryData(['compositions', composition.id], composition);
         queryClient.setQueryData<CompositionList>(
           ['compositions', { wallet: wallet.data?.id, ...query }],
           (compositionList) => mergeCompositionInList(composition, compositionList),
