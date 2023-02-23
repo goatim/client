@@ -14,37 +14,26 @@ import {
   ListRequestQuery,
   PaginatedList,
   RequestBody,
-  RequestQuery,
   useApi,
 } from '../../api';
 import { Player } from '../players';
 import { useActiveWallet } from '../../market';
 import { Composition } from './model';
 
-export interface GetCompositionQuery extends RequestQuery {
-  match?: string;
-  wallet?: string;
-}
-
-export async function getComposition(
-  api: ApiContext,
-  id: string,
-  query?: GetCompositionQuery,
-): Promise<Composition> {
-  const { data } = await api.get<Composition>(`/compositions/${id}`, query);
+export async function getComposition(api: ApiContext, id: string): Promise<Composition> {
+  const { data } = await api.get<Composition>(`/compositions/${id}`);
   return data;
 }
 
 export function useComposition(
   id?: string,
-  query?: GetCompositionQuery,
   options?: Omit<UseQueryOptions<Composition, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<Composition> {
   const api = useApi();
 
   return useQuery<Composition, ApiError | AxiosError>(
-    ['compositions', id, query],
-    () => getComposition(api, id as string, query),
+    ['compositions', id],
+    () => getComposition(api, id as string),
     {
       ...options,
       enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id,
