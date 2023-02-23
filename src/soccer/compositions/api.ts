@@ -142,8 +142,9 @@ export function useActiveWalletCompositions(
 ): UseQueryResult<CompositionList> {
   const api = useApi();
   const wallet = useActiveWallet();
+
   return useQuery<CompositionList, ApiError | AxiosError>(
-    ['compositions', query],
+    ['compositions', { wallet: wallet.data?.id, ...query }],
     () => getCompositions(api, { wallet: wallet.data?.id, ...query }),
     {
       ...options,
