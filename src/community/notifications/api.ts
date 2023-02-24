@@ -93,14 +93,14 @@ export function useNotifications(
         if (options?.onCreated) {
           options.onCreated(notification);
         }
-        await queryClient.invalidateQueries(['notifications', query]);
+        await queryClient.refetchQueries(['notifications', query]);
       });
 
       socket.current.on('updated', async (notification: Notification) => {
         if (options?.onUpdated) {
           options.onUpdated(notification);
         }
-        await queryClient.invalidateQueries(['notifications', query]);
+        await queryClient.refetchQueries(['notifications', query]);
       });
     }
 

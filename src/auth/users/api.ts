@@ -133,9 +133,24 @@ export function usePostUserVerifyEmail(
   return useMutation<void, ApiError | AxiosError, PostUserVerifyEmailBody>(
     (body: PostUserVerifyEmailBody) => postUserVerifyEmail(api, body),
     {
-      onSuccess: () => queryClient.invalidateQueries(['sessions', 'active']),
+      onSuccess: () => queryClient.refetchQueries(['sessions', 'active']),
       ...options,
     },
+  );
+}
+
+export async function postUserArtifacts(api: ApiContext, id: string): Promise<void> {
+  const { data } = await api.post<void>(`/users/${id}/artifacts`);
+  return data;
+}
+
+export function usePostUserArtifacts(
+  options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
+): UseMutationResult<void, ApiError | AxiosError, string> {
+  const api = useApi();
+  return useMutation<void, ApiError | AxiosError, string>(
+    (id) => postUserArtifacts(api, id),
+    options,
   );
 }
 

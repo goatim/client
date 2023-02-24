@@ -82,14 +82,14 @@ export function usePosts(
         if (options?.onCreated) {
           options.onCreated(post);
         }
-        await queryClient.invalidateQueries(['posts', query]);
+        await queryClient.refetchQueries(['posts', query]);
       });
 
       socket.current.on('updated', async (post: Post) => {
         if (options?.onUpdated) {
           options.onUpdated(post);
         }
-        await queryClient.invalidateQueries(['posts', query]);
+        await queryClient.refetchQueries(['posts', query]);
       });
     }
 
