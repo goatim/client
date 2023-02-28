@@ -1,11 +1,11 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { JSXElementConstructor, useCallback, useState } from 'react';
 import { Field, Form, FormContext, FormFields, FormState } from '@cezembre/forms';
-import { FridayClient, useActiveSession, useClubs, useSignIn } from '../../src';
+import { FridayClient, useActiveSession, useSignIn, useSignOut } from '../../src';
 
 interface Credentials extends FormFields {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 interface Props {}
@@ -23,8 +23,12 @@ function App() {
 
   const session = useActiveSession();
   const signIn = useSignIn();
+  const signOut = useSignOut();
 
   const submit = useCallback(async (credentials: Credentials) => {
+    if (!credentials.email || !credentials.password) {
+      return;
+    }
     await signIn.mutateAsync(credentials);
   }, []);
 
@@ -45,6 +49,9 @@ function App() {
         {formState?.error ? <span>{formState.error}</span> : null}
         {formState?.warning ? <span>{formState.warning}</span> : null}
       </Form>
+      <button type="button" onClick={signOut}>
+        Sign out
+      </button>
     </div>
   );
 }

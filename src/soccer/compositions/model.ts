@@ -7,6 +7,8 @@ import { Match } from '../matches';
 export interface CompositionPosition<P = Model<'player'> | string> {
   id: string;
   player: P;
+  nb_shares?: number;
+  leverage?: number;
 }
 
 export interface Composition<P = Player | string> extends Model<'composition'> {
@@ -14,6 +16,8 @@ export interface Composition<P = Player | string> extends Model<'composition'> {
   wallet?: Wallet | string;
   setting?: CompositionSetting | string;
   goalkeeper?: P;
+  goalkeeper_nb_shares?: number;
+  goalkeeper_leverage?: number;
   positions?: CompositionPosition<P>[];
   is_valid?: boolean;
   is_active?: boolean;
