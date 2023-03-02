@@ -190,7 +190,7 @@ export async function postUserPicture(
 
 export type PostUserPictureVariables = PostUserPictureBody & { id: string };
 
-export function useAddUserPicture(
+export function usePostUserPicture(
   options?: Omit<
     UseMutationOptions<User, ApiError | AxiosError, PostUserPictureVariables>,
     'mutationFn'

@@ -146,7 +146,7 @@ export async function postPhysicalEventIcon(
 
 export type PostPhysicalEventIconVariables = PostPhysicalEventIconBody & { id: string };
 
-export function useAddPhysicalEventPicture(
+export function usePostPhysicalEventPicture(
   options?: Omit<
     UseMutationOptions<PhysicalEvent, ApiError | AxiosError, PostPhysicalEventIconVariables>,
     'mutationFn'

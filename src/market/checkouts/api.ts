@@ -282,7 +282,7 @@ export async function postCheckoutItem(
 
 export type UsePostCheckoutVariables = CheckoutItemBody & { checkoutId: string };
 
-export function useAddCheckoutItem(
+export function usePostCheckoutItem(
   options?: Omit<
     UseMutationOptions<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>,
     'mutationFn'
@@ -295,7 +295,7 @@ export function useAddCheckoutItem(
   );
 }
 
-export function useAddActiveWalletCheckoutItem(
+export function usePostActiveWalletCheckoutItem(
   options?: Omit<
     UseMutationOptions<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>,
     'mutationFn'

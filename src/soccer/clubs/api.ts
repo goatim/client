@@ -131,7 +131,7 @@ export async function postClubIcon(
 
 export type PostClubIconVariables = PostClubIconBody & { id: string };
 
-export function useAddClubIcon(
+export function usePostClubIcon(
   options?: Omit<UseMutationOptions<Club, ApiError | AxiosError, ClubBody>, 'mutationFn'>,
 ): UseMutationResult<Club, ApiError | AxiosError, PostClubIconVariables> {
   const api = useApi();
