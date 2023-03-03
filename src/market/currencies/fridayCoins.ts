@@ -17,8 +17,7 @@ export function formatFridayCoinsAmount(
   const resolvedAmount = resolveFridayCoinsAmount(amount);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'FDY',
-    currencyDisplay: displaySymbol ? 'symbol' : 'none',
+    currency: displaySymbol ? 'FDY' : '',
     minimumFractionDigits: decimalDigits,
   }).format(resolvedAmount);
 }
@@ -32,8 +31,7 @@ export function formatFridayCoinsVariation(
   const resolvedVariation = resolveFridayCoinsAmount(variation);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'FDY',
-    currencyDisplay: displaySymbol ? 'symbol' : 'none',
+    currency: displaySymbol ? 'FDY' : '',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
   }).format(resolvedVariation);

@@ -17,8 +17,7 @@ export function formatEtherAmount(
   const resolvedAmount = resolveEtherAmount(amount);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'ETH',
-    currencyDisplay: displaySymbol ? 'symbol' : 'none',
+    currency: displaySymbol ? 'ETH' : '',
     minimumFractionDigits: decimalDigits,
   }).format(resolvedAmount);
 }
@@ -32,8 +31,7 @@ export function formatEtherVariation(
   const resolvedVariation = resolveEtherAmount(variation);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'ETH',
-    currencyDisplay: displaySymbol ? 'symbol' : 'none',
+    currency: displaySymbol ? 'ETH' : '',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
   }).format(resolvedVariation);

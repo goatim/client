@@ -15,12 +15,11 @@ export function formatCurrencyAmount(
     case 'ETH':
       return formatEtherAmount(amount, decimalDigits, displaySymbol, locale);
     case 'EUR':
-      return formatEurosAmount(amount, decimalDigits, displaySymbol, locale);
+      return formatEurosAmount(amount, decimalDigits, locale);
     default:
       return new Intl.NumberFormat(locale, {
         style: 'currency',
-        currency: iso,
-        currencyDisplay: displaySymbol ? 'symbol' : 'none',
+        currency: displaySymbol ? iso : '',
         minimumFractionDigits: decimalDigits,
       }).format(amount);
   }
@@ -39,12 +38,11 @@ export function formatCurrencyVariation(
     case 'ETH':
       return formatEtherVariation(variation, decimalDigits, displaySymbol, locale);
     case 'EUR':
-      return formatEurosVariation(variation, decimalDigits, displaySymbol, locale);
+      return formatEurosVariation(variation, decimalDigits, locale);
     default:
       return new Intl.NumberFormat(locale, {
         style: 'currency',
-        currency: iso,
-        currencyDisplay: displaySymbol ? 'symbol' : 'none',
+        currency: displaySymbol ? iso : '',
         minimumFractionDigits: decimalDigits,
         signDisplay: 'exceptZero',
       }).format(variation);
