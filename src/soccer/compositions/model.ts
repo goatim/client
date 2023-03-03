@@ -9,6 +9,8 @@ export interface CompositionPosition<P = Model<'player'> | string> {
   player: P;
   nb_shares?: number;
   leverage?: number;
+  score?: number;
+  gains?: number;
 }
 
 export interface Composition<P = Player | string> extends Model<'composition'> {
@@ -18,6 +20,8 @@ export interface Composition<P = Player | string> extends Model<'composition'> {
   goalkeeper?: P;
   goalkeeper_nb_shares?: number;
   goalkeeper_leverage?: number;
+  goalkeeper_score?: number;
+  goalkeeper_gains?: number;
   positions?: CompositionPosition<P>[];
   is_valid?: boolean;
   is_active?: boolean;
