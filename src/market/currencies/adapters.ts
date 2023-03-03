@@ -6,19 +6,21 @@ export function formatCurrencyAmount(
   amount: number,
   iso = 'EUR',
   decimalDigits?: number,
+  displaySymbol = true,
   locale = 'fr-FR',
 ): string {
   switch (iso) {
     case 'FDY':
-      return formatFridayCoinsAmount(amount, decimalDigits, locale);
+      return formatFridayCoinsAmount(amount, decimalDigits, displaySymbol, locale);
     case 'ETH':
-      return formatEtherAmount(amount, decimalDigits, locale);
+      return formatEtherAmount(amount, decimalDigits, displaySymbol, locale);
     case 'EUR':
-      return formatEurosAmount(amount, decimalDigits, locale);
+      return formatEurosAmount(amount, decimalDigits, displaySymbol, locale);
     default:
       return new Intl.NumberFormat(locale, {
         style: 'currency',
         currency: iso,
+        currencyDisplay: displaySymbol ? 'symbol' : 'none',
         minimumFractionDigits: decimalDigits,
       }).format(amount);
   }
@@ -28,19 +30,21 @@ export function formatCurrencyVariation(
   variation: number,
   iso = 'EUR',
   decimalDigits?: number,
+  displaySymbol = true,
   locale = 'fr-FR',
 ): string {
   switch (iso) {
     case 'FDY':
-      return formatFridayCoinsVariation(variation, decimalDigits, locale);
+      return formatFridayCoinsVariation(variation, decimalDigits, displaySymbol, locale);
     case 'ETH':
-      return formatEtherVariation(variation, decimalDigits, locale);
+      return formatEtherVariation(variation, decimalDigits, displaySymbol, locale);
     case 'EUR':
-      return formatEurosVariation(variation, decimalDigits, locale);
+      return formatEurosVariation(variation, decimalDigits, displaySymbol, locale);
     default:
       return new Intl.NumberFormat(locale, {
         style: 'currency',
         currency: iso,
+        currencyDisplay: displaySymbol ? 'symbol' : 'none',
         minimumFractionDigits: decimalDigits,
         signDisplay: 'exceptZero',
       }).format(variation);

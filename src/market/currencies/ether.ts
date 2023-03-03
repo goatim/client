@@ -8,11 +8,17 @@ export function adaptEtherAmount(amount: number): number {
   return Math.round(amount / etherSmallestUnit);
 }
 
-export function formatEtherAmount(amount: number, decimalDigits = 7, locale = 'fr-FR'): string {
+export function formatEtherAmount(
+  amount: number,
+  decimalDigits = 7,
+  displaySymbol = true,
+  locale = 'fr-FR',
+): string {
   const resolvedAmount = resolveEtherAmount(amount);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'ETH',
+    currencyDisplay: displaySymbol ? 'symbol' : 'none',
     minimumFractionDigits: decimalDigits,
   }).format(resolvedAmount);
 }
@@ -20,12 +26,14 @@ export function formatEtherAmount(amount: number, decimalDigits = 7, locale = 'f
 export function formatEtherVariation(
   variation: number,
   decimalDigits = 7,
+  displaySymbol = true,
   locale = 'fr-FR',
 ): string {
   const resolvedVariation = resolveEtherAmount(variation);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'ETH',
+    currencyDisplay: displaySymbol ? 'symbol' : 'none',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
   }).format(resolvedVariation);
