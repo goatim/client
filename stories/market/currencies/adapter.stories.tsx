@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { JSXElementConstructor } from 'react';
-import { formatCurrency } from '../../../src';
+import { formatCurrencyAmount } from '../../../src';
 
 interface Props {}
 
@@ -14,7 +14,7 @@ function App() {
 
 const Template: ComponentStory<JSXElementConstructor<Props>> = ({}: Props) => (
   <div>
-    <h1>Amount: {formatCurrency(500, { iso: 'FDY' })}</h1>
+    <h1>Amount: {formatCurrencyAmount(500, 'FDY', 2, false)}</h1>
   </div>
 );
 

@@ -19,7 +19,7 @@ export function formatCurrencyAmount(
     default:
       return new Intl.NumberFormat(locale, {
         style: 'currency',
-        currency: displaySymbol ? iso : '',
+        currency: iso,
         minimumFractionDigits: decimalDigits,
       }).format(amount);
   }
@@ -42,7 +42,7 @@ export function formatCurrencyVariation(
     default:
       return new Intl.NumberFormat(locale, {
         style: 'currency',
-        currency: displaySymbol ? iso : '',
+        currency: iso,
         minimumFractionDigits: decimalDigits,
         signDisplay: 'exceptZero',
       }).format(variation);

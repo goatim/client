@@ -15,11 +15,15 @@ export function formatEtherAmount(
   locale = 'fr-FR',
 ): string {
   const resolvedAmount = resolveEtherAmount(amount);
-  return new Intl.NumberFormat(locale, {
+  const result = new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: displaySymbol ? 'ETH' : '',
+    currency: 'ETH',
     minimumFractionDigits: decimalDigits,
   }).format(resolvedAmount);
+  if (!displaySymbol) {
+    return result.replace(/ETH/i, '').trim();
+  }
+  return result;
 }
 
 export function formatEtherVariation(
@@ -29,10 +33,14 @@ export function formatEtherVariation(
   locale = 'fr-FR',
 ): string {
   const resolvedVariation = resolveEtherAmount(variation);
-  return new Intl.NumberFormat(locale, {
+  const result = new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: displaySymbol ? 'ETH' : '',
+    currency: 'ETH',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
   }).format(resolvedVariation);
+  if (!displaySymbol) {
+    return result.replace(/ETH/i, '').trim();
+  }
+  return result;
 }
