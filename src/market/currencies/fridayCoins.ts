@@ -11,12 +11,14 @@ export function adaptFridayCoinsAmount(amount: number): number {
 export function formatFridayCoinsAmount(
   amount: number,
   decimalDigits = 2,
+  displaySymbol = true,
   locale = 'fr-FR',
 ): string {
   const resolvedAmount = resolveFridayCoinsAmount(amount);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'FDY',
+    currencyDisplay: displaySymbol ? 'symbol' : 'none',
     minimumFractionDigits: decimalDigits,
   }).format(resolvedAmount);
 }
@@ -24,12 +26,14 @@ export function formatFridayCoinsAmount(
 export function formatFridayCoinsVariation(
   variation: number,
   decimalDigits = 2,
+  displaySymbol = true,
   locale = 'fr-FR',
 ): string {
   const resolvedVariation = resolveFridayCoinsAmount(variation);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'FDY',
+    currencyDisplay: displaySymbol ? 'symbol' : 'none',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
   }).format(resolvedVariation);
