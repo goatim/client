@@ -26,19 +26,19 @@ export function formatFridayCoinsAmount(
   return result;
 }
 
-export function formatFridayCoinsVariation(
-  variation: number,
+export function formatFridayCoinsGains(
+  gains: number,
   decimalDigits = 2,
   displaySymbol = true,
   locale = 'fr-FR',
 ): string {
-  const resolvedVariation = resolveFridayCoinsAmount(variation);
+  const resolvedGains = resolveFridayCoinsAmount(gains);
   const result = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'FDY',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
-  }).format(resolvedVariation);
+  }).format(resolvedGains);
   if (!displaySymbol) {
     return result.replace(/FDY/i, '').trim();
   }

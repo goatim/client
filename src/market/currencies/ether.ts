@@ -26,19 +26,19 @@ export function formatEtherAmount(
   return result;
 }
 
-export function formatEtherVariation(
-  variation: number,
+export function formatEtherGains(
+  gains: number,
   decimalDigits = 7,
   displaySymbol = true,
   locale = 'fr-FR',
 ): string {
-  const resolvedVariation = resolveEtherAmount(variation);
+  const resolvedGains = resolveEtherAmount(gains);
   const result = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'ETH',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
-  }).format(resolvedVariation);
+  }).format(resolvedGains);
   if (!displaySymbol) {
     return result.replace(/ETH/i, '').trim();
   }

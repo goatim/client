@@ -17,16 +17,12 @@ export function formatEurosAmount(amount: number, decimalDigits = 2, locale = 'f
   }).format(resolvedAmount);
 }
 
-export function formatEurosVariation(
-  variation: number,
-  decimalDigits = 2,
-  locale = 'fr-FR',
-): string {
-  const resolvedVariation = resolveEurosAmount(variation);
+export function formatEurosGains(gains: number, decimalDigits = 2, locale = 'fr-FR'): string {
+  const resolvedGains = resolveEurosAmount(gains);
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: decimalDigits,
     signDisplay: 'exceptZero',
-  }).format(resolvedVariation);
+  }).format(resolvedGains);
 }
