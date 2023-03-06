@@ -5,8 +5,8 @@ import { Wallet } from '../../market';
 export interface TournamentParticipant extends Model<'tournament_participant'> {
   tournament?: Tournament | string;
   wallet?: Wallet | string;
-  dividends_gains?: number;
-  dividends_percentage?: number;
+  gains?: number;
+  variation?: number;
   position?: number;
   last_position?: number;
   score?: number;
