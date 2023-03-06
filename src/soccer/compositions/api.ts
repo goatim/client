@@ -152,7 +152,6 @@ export interface CompositionBody extends RequestBody {
   match?: string | null;
   wallet?: string | null;
   setting?: string | null;
-  goalkeeper?: string | null;
   positions?: string | null;
   is_active?: boolean;
 }
