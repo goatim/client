@@ -4,7 +4,7 @@ import { CompositionSetting } from '../compositionSettings';
 import { Player } from '../players';
 import { Match } from '../matches';
 
-export interface CompositionPosition<P = Model<'player'> | string> {
+export interface CompositionPosition<P = Player | string> {
   id: string;
   player: P;
   nb_shares?: number;
