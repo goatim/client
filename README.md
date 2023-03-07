@@ -1,2 +1,2 @@
-# Friday Client
+# Goatim Client
 

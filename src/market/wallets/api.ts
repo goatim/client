@@ -18,7 +18,7 @@ import {
   RequestQuery,
   useApi,
 } from '../../api';
-import { useFridayClient } from '../../client';
+import { useGoatimClient } from '../../client';
 import { useActiveSession, useDoesActiveSessionUserHasVerifiedEmail } from '../../auth';
 
 export interface GetWalletQuery extends RequestQuery {
@@ -54,7 +54,7 @@ export function useActiveWallet(
   query?: GetWalletQuery,
   options?: Omit<UseQueryOptions<Wallet, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<Wallet> {
-  const { wallet } = useFridayClient();
+  const { wallet } = useGoatimClient();
   const userHasVerifiedEmail = useDoesActiveSessionUserHasVerifiedEmail();
   return useWallet(wallet, query, {
     ...options,

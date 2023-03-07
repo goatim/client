@@ -1,10 +1,10 @@
 export interface QuotationDataPoint {
   t: number; // Time (Seconds)
-  o: number; // Opening (FDY)
-  c: number; // Closing (FDY)
-  h: number; // Highest (FDY)
-  l: number; // Lowest (FDY)
-  a: number; // Average (FDY)
+  o: number; // Opening (GTC)
+  c: number; // Closing (GTC)
+  h: number; // Highest (GTC)
+  l: number; // Lowest (GTC)
+  a: number; // Average (GTC)
   v: number; // Volume (Shares)
 }
 

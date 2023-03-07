@@ -1,8 +1,9 @@
 {
-  "name": "@fridaygame/client",
-  "author": "Cézembre",
+  "name": "@goatim/client",
+  "author": "Goatim",
   "version": "0.15.23",
   "license": "MIT",
+  "repository": "git@github.com:goatim/client.git",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "jsnext:main": "dist/index.esm.js",
@@ -11,7 +12,7 @@
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "keywords": [
-    "Friday",
+    "Goatim",
     "React",
     "Client"
   ],

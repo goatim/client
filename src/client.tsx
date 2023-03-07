@@ -5,37 +5,37 @@ import { ApiConfig, ApiProvider } from './api';
 
 const queryClient = new QueryClient();
 
-export interface FridayClientContext extends ApiConfig {
+export interface GoatimClientContext extends ApiConfig {
   wallet: string;
   setWallet(wallet: string): void;
 }
 
-const fridayClientContext = createContext<FridayClientContext | undefined>(undefined);
+const goatimClientContext = createContext<GoatimClientContext | undefined>(undefined);
 
-export function useFridayClient(): FridayClientContext {
-  const context = useContext<FridayClientContext | undefined>(fridayClientContext);
+export function useGoatimClient(): GoatimClientContext {
+  const context = useContext<GoatimClientContext | undefined>(goatimClientContext);
   if (!context) {
-    throw new Error('Friday context not found');
+    throw new Error('Goatim context not found');
   }
   return context;
 }
 
-export interface FridayClientProps {
+export interface GoatimClientProps {
   apiKey: string;
   host?: string;
   locale?: string;
   children: ReactElement;
 }
 
-export function FridayClient({
+export function GoatimClient({
   children,
-  host = 'https://api.fridaygame.fr',
+  host = 'https://api.goatim.com',
   apiKey,
   locale = 'fr',
-}: FridayClientProps): ReactElement {
+}: GoatimClientProps): ReactElement {
   const [wallet, setWallet] = useState<string>('default');
 
-  const value = useMemo<FridayClientContext>(
+  const value = useMemo<GoatimClientContext>(
     () => ({
       wallet,
       setWallet,
@@ -52,13 +52,13 @@ export function FridayClient({
   }, [apiKey, host, locale]);
 
   return (
-    <fridayClientContext.Provider value={value}>
+    <goatimClientContext.Provider value={value}>
       <ApiProvider config={apiConfig}>
         <QueryClientProvider client={queryClient}>
           {children}
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </ApiProvider>
-    </fridayClientContext.Provider>
+    </goatimClientContext.Provider>
   );
 }

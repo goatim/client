@@ -150,4 +150,4 @@ export enum ModelIdLength {
   POST = 30,
 }
 
-export const forbiddenSlugs = ['friday', 'default', 'all', 'any', 'bulk', 'me', 'active'];
+export const forbiddenSlugs = ['goatim', 'default', 'all', 'any', 'bulk', 'me', 'active'];

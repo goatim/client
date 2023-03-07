@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { JSXElementConstructor, useCallback, useState } from 'react';
 import { Field, Form, FormContext, FormFields, FormState } from '@cezembre/forms';
-import { FridayClient, useActiveSession, useSignIn, useSignOut } from '../../src';
+import { GoatimClient, useActiveSession, useSignIn, useSignOut } from '../../src';
 
 interface Credentials extends FormFields {
   email: string;
@@ -57,9 +57,9 @@ function App() {
 }
 
 const Template: ComponentStory<JSXElementConstructor<Props>> = ({}: Props) => (
-  <FridayClient host="http://localhost:4200" apiKey="pk_aXJeQNWOzfe8IsHyzGtN93nzrEFmBFmF9gIakI3W">
+  <GoatimClient host="http://localhost:4200" apiKey="pk_aXJeQNWOzfe8IsHyzGtN93nzrEFmBFmF9gIakI3W">
     <App />
-  </FridayClient>
+  </GoatimClient>
 );
 
 export const Default = Template.bind({});

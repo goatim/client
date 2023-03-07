@@ -11,7 +11,7 @@ import {
   useApi,
 } from '../../api';
 import { CurrenciesRate } from './model';
-import { adaptEtherAmount, resolveFridayCoinsAmount } from '../currencies';
+import { adaptEtherAmount, resolveGoatimCoinsAmount } from '../currencies';
 
 export type GetCurrenciesRateQuery = RequestQuery;
 
@@ -70,18 +70,18 @@ export function useCurrenciesRates(
   );
 }
 
-export function useFridayCoinOverEtherConvertor(): (amount: number) => number | undefined {
-  const fridayOverEther = useCurrenciesRate('FDY_ETH');
+export function useGoatimCoinOverEtherConvertor(): (amount: number) => number | undefined {
+  const goatimOverEther = useCurrenciesRate('GTC_ETH');
   return useCallback(
     (amount: number) => {
-      if (fridayOverEther.data?.rate === undefined) {
+      if (goatimOverEther.data?.rate === undefined) {
         return undefined;
       }
 
-      const resolvedFridayCoins = resolveFridayCoinsAmount(amount);
+      const resolvedGoatimCoins = resolveGoatimCoinsAmount(amount);
 
-      return adaptEtherAmount(resolvedFridayCoins * fridayOverEther.data.rate);
+      return adaptEtherAmount(resolvedGoatimCoins * goatimOverEther.data.rate);
     },
-    [fridayOverEther.data?.rate],
+    [goatimOverEther.data?.rate],
   );
 }

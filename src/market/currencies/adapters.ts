@@ -1,4 +1,4 @@
-import { formatFridayCoinsAmount, formatFridayCoinsGains } from './fridayCoins';
+import { formatGoatimCoinsAmount, formatGoatimCoinsGains } from './goatimCoins';
 import { formatEtherAmount, formatEtherGains } from './ether';
 import { formatEurosAmount, formatEurosGains } from './euros';
 
@@ -10,8 +10,8 @@ export function formatCurrencyAmount(
   locale = 'fr-FR',
 ): string {
   switch (iso) {
-    case 'FDY':
-      return formatFridayCoinsAmount(amount, decimalDigits, displaySymbol, locale);
+    case 'GTC':
+      return formatGoatimCoinsAmount(amount, decimalDigits, displaySymbol, locale);
     case 'ETH':
       return formatEtherAmount(amount, decimalDigits, displaySymbol, locale);
     case 'EUR':
@@ -33,8 +33,8 @@ export function formatCurrencyGains(
   locale = 'fr-FR',
 ): string {
   switch (iso) {
-    case 'FDY':
-      return formatFridayCoinsGains(gains, decimalDigits, displaySymbol, locale);
+    case 'GTC':
+      return formatGoatimCoinsGains(gains, decimalDigits, displaySymbol, locale);
     case 'ETH':
       return formatEtherGains(gains, decimalDigits, displaySymbol, locale);
     case 'EUR':

@@ -19,6 +19,6 @@ export interface Withdrawal extends Model<'withdrawal'> {
   currencies_rate?: CurrenciesRate | string;
   target_amount?: number;
   estimated_fees?: number;
-  fees_paid_by_friday?: boolean;
+  service_fees?: boolean;
   receiver_wallet?: string;
 }

@@ -14,7 +14,7 @@ function App() {
 
 const Template: ComponentStory<JSXElementConstructor<Props>> = ({}: Props) => (
   <div>
-    <h1>Amount: {formatCurrencyAmount(500, 'FDY', 2, false)}</h1>
+    <h1>Amount: {formatCurrencyAmount(500, 'GTC', 2, false)}</h1>
   </div>
 );
 
