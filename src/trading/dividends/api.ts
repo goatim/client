@@ -39,6 +39,7 @@ export function useDividend(
 }
 
 export interface GetDividendsQuery extends ListRequestQuery {
+  asset?: string;
   physical_event?: string;
 }
 
