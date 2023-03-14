@@ -75,6 +75,8 @@ export interface PlayerBody extends RequestBody {
   position?: string | null;
   side?: string | null;
   number?: number;
+  performance_index?: number;
+  tenure_rate?: number;
 }
 
 export async function postPlayer(api: ApiContext, body: PlayerBody): Promise<Player> {

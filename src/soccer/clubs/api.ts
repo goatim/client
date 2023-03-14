@@ -70,6 +70,8 @@ export interface ClubBody extends RequestBody {
   short_name?: string | null;
   description?: string | null;
   league?: string | null;
+  primary_color?: string | null;
+  secondary_color?: string | null;
 }
 
 export async function postClub(api: ApiContext, body: ClubBody): Promise<Club> {

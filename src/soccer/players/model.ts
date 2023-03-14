@@ -19,4 +19,6 @@ export interface Player extends Model<'player'> {
   number?: number;
   resolved_position?: string;
   resolved_short_position?: string;
+  performance_index?: number;
+  tenure_rate?: number;
 }
