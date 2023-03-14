@@ -13,4 +13,6 @@ export interface Club extends Model<'club'> {
   slug?: string;
   description?: string;
   players?: Player[];
+  primary_color?: string;
+  secondary_color?: string;
 }
