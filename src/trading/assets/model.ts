@@ -20,4 +20,7 @@ export interface Asset extends Model<'asset'> {
   league?: League | string;
   quotation_history?: QuotationHistory;
   bank_proposal_quotation?: number;
+  average_dividends_percentage?: number;
+  average_dividends_amount?: number;
+  total_dividends_distributed?: number;
 }
