@@ -283,9 +283,7 @@ export function useApi(): ApiContext {
 function storeHost(host: string | null, duration: DurationLike = { year: 1 }): string | null {
   if (document) {
     document.cookie = cookie.serialize('host', host || '', {
-      expires: host
-        ? DateTime.now().plus(duration).toJSDate()
-        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+      expires: host ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
   }
   return host;
@@ -294,9 +292,7 @@ function storeHost(host: string | null, duration: DurationLike = { year: 1 }): s
 function storeApiKey(apiKey: string | null, duration: DurationLike = { year: 1 }): string | null {
   if (document) {
     document.cookie = cookie.serialize('api_key', apiKey || '', {
-      expires: apiKey
-        ? DateTime.now().plus(duration).toJSDate()
-        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+      expires: apiKey ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
   }
   return apiKey;
@@ -305,9 +301,7 @@ function storeApiKey(apiKey: string | null, duration: DurationLike = { year: 1 }
 function storeLocale(locale: string | null, duration: DurationLike = { year: 1 }): string | null {
   if (document) {
     document.cookie = cookie.serialize('locale', locale || '', {
-      expires: locale
-        ? DateTime.now().plus(duration).toJSDate()
-        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+      expires: locale ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
   }
   return locale;
@@ -319,9 +313,7 @@ function storeBearerToken(
 ): string | null {
   if (document) {
     document.cookie = cookie.serialize('bearer_token', bearerToken || '', {
-      expires: bearerToken
-        ? DateTime.now().plus(duration).toJSDate()
-        : DateTime.now().minus({ minute: 1 }).toJSDate(),
+      expires: bearerToken ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
   }
   return bearerToken;
@@ -389,50 +381,50 @@ export function ApiProvider({
 
   const setConfig = useCallback(
     (_config: ApiConfig, duration?: DurationLike) => {
-      setApiConfig(_config);
       if (persistConfig) {
         storeConfig(_config, duration);
       }
+      setApiConfig(_config);
     },
     [persistConfig],
   );
 
   const setHost = useCallback(
     (host: string | null, duration?: DurationLike) => {
-      setApiConfig((oldConfig) => ({ ...oldConfig, host: host || undefined }));
       if (persistConfig) {
         storeHost(host, duration);
       }
+      setApiConfig((oldConfig) => ({ ...oldConfig, host: host || undefined }));
     },
     [persistConfig],
   );
 
   const setApiKey = useCallback(
     (apiKey: string | null, duration?: DurationLike) => {
-      setApiConfig((oldConfig) => ({ ...oldConfig, api_key: apiKey || undefined }));
       if (persistConfig) {
         storeApiKey(apiKey, duration);
       }
+      setApiConfig((oldConfig) => ({ ...oldConfig, api_key: apiKey || undefined }));
     },
     [persistConfig],
   );
 
   const setLocale = useCallback(
     (locale: string | null, duration?: DurationLike) => {
-      setApiConfig((oldConfig) => ({ ...oldConfig, locale: locale || undefined }));
       if (persistConfig) {
         storeLocale(locale, duration);
       }
+      setApiConfig((oldConfig) => ({ ...oldConfig, locale: locale || undefined }));
     },
     [persistConfig],
   );
 
   const setBearerToken = useCallback(
     (bearerToken: string | null, duration?: DurationLike) => {
-      setApiConfig((oldConfig) => ({ ...oldConfig, bearer_token: bearerToken || undefined }));
       if (persistConfig) {
         storeBearerToken(bearerToken, duration);
       }
+      setApiConfig((oldConfig) => ({ ...oldConfig, bearer_token: bearerToken || undefined }));
     },
     [persistConfig],
   );
