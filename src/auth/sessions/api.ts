@@ -49,8 +49,10 @@ export function useActiveSession(): UseQueryResult<Session> {
     { auto_refresh: true },
     {
       retry: false,
-      onSuccess: (session: Session) => {
-        api.setBearerToken(session.bearer_token);
+      onSuccess: (session: Session | null) => {
+        if (session) {
+          api.setBearerToken(session?.bearer_token);
+        }
       },
       onError: (error) => {
         if (error.code === 'invalid_bearer_token' || error.code === 'not_found') {
