@@ -1,3 +1,9 @@
+import { Model } from '../../api';
+import { User } from '../../auth';
+import { Wallet } from '../../market';
+import { PaymentService } from '../services';
+import { PaymentMethod, PaymentMethodType } from '../paymentMethods';
+
 export interface RedirectToUrl {
   return_url?: string;
   url?: string;
@@ -28,10 +34,15 @@ export type PaymentIntentStatus =
   | 'refunded'
   | 'succeeded';
 
-export interface PaymentIntent {
-  id?: string;
+export interface PaymentIntent extends Model<'payment_intent'> {
+  user?: User | string;
+  wallet?: Wallet | string;
+  service?: PaymentService;
+  external_id?: string;
   amount?: number;
   status?: PaymentIntentStatus;
+  payment_method_type?: PaymentMethodType;
+  payment_method?: PaymentMethod | string;
   next_action?: PaymentIntentNextAction;
   client_secret?: string;
 }

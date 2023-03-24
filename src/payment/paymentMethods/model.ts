@@ -1,4 +1,7 @@
 import { PaymentService } from '../services';
+import { Model } from '../../api';
+import { User } from '../../auth';
+import { Wallet } from '../../market';
 
 export type CardBrand =
   | 'amex'
@@ -37,15 +40,23 @@ export type PaymentMethodType =
   | 'wallet';
 
 export interface MinifiedPaymentMethod {
-  type: PaymentMethodType;
-  card?: Card;
-}
-
-export interface PaymentMethod {
+  public_id?: string;
+  user?: string;
+  wallet?: string;
   service?: PaymentService;
-  id: string;
+  external_id?: string;
   type?: PaymentMethodType;
   card?: Card;
-  metadata?: unknown;
+  is_default?: boolean;
+}
+
+export interface PaymentMethod extends Model<'payment_method'> {
+  user?: User | string;
+  wallet?: Wallet | string;
+  service?: PaymentService;
+  external_id?: string;
+  type?: PaymentMethodType;
+  card?: Card;
+  metadata?: object;
   is_default?: boolean;
 }

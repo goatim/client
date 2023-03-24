@@ -1,22 +1,22 @@
 import { DateTime } from 'luxon';
 import { Model } from '../../api';
-import { Session, User } from '../../auth';
+import { Session } from '../../auth';
 import { Item } from '../items';
-import { Billing } from '../billings';
-import { PaymentIntent, PaymentIntentStatus, PaymentMethod } from '../../payment';
+import { MinifiedBilling } from '../billings';
+import { MinifiedPaymentMethod, PaymentIntent, PaymentIntentStatus } from '../../payment';
+import { Wallet } from '../wallets';
 
 export interface Checkout extends Model<'checkout'> {
   session?: Session | string;
-  user?: User | string;
+  wallet?: Wallet | string;
   items?: Item[];
   total_items?: number;
   expiration?: DateTime;
-  token?: string;
   items_prices?: number;
   items_vats?: number;
   total_to_pay?: number;
-  billing?: Billing;
-  payment_method?: PaymentMethod;
-  payment_intent?: PaymentIntent;
+  billing?: MinifiedBilling;
+  payment_method?: MinifiedPaymentMethod;
+  payment_intent?: PaymentIntent | string;
   payment_status?: PaymentIntentStatus;
 }

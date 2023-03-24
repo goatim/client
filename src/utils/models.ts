@@ -26,14 +26,14 @@ export type ModelName =
   | 'pack'
   | 'pack_factory'
   | 'paragraph'
-  | 'period'
+  | 'payment_intent'
+  | 'payment_method'
   | 'permission'
   | 'physical_event'
   | 'player'
   | 'portfolio'
   | 'rank'
   | 'ranking'
-  | 'score'
   | 'section'
   | 'session'
   | 'spotlight'
@@ -76,7 +76,8 @@ export enum ModelISO {
   PACK = 'pc',
   PACK_FACTORY = 'pf',
   PARAGRAPH = 'pa',
-  PERIOD = 'pi',
+  PAYMENT_INTENT = 'pi',
+  PAYMENT_METHOD = 'pm',
   PERMISSION = 'pe',
   PHYSICAL_EVENT = 'ph',
   PLAYER = 'pl',
@@ -127,14 +128,14 @@ export enum ModelIdLength {
   PACK = 15,
   PACK_FACTORY = 5,
   PARAGRAPH = 30,
-  PERIOD = 15,
+  PAYMENT_INTENT = 40,
+  PAYMENT_METHOD = 40,
   PERMISSION = 15,
   PHYSICAL_EVENT = 12,
   PLAYER = 12,
   PORTFOLIO = 15,
   RANK = 15,
   RANKING = 15,
-  SCORE = 30,
   SECTION = 15,
   SESSION = 32,
   SPOTLIGHT = 8,

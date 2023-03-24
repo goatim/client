@@ -26,9 +26,8 @@ export type PaginatedList<N extends string, D = unknown> = {
   [key in N]: D[];
 } & {
   total: number;
-  url?: string;
-  limit?: number;
   page?: number;
+  limit?: number;
   next_page?: number;
   previous_page?: number;
 };
