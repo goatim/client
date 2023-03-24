@@ -22,6 +22,7 @@ import { useActiveWallet } from '../wallets';
 import { ItemType } from '../items';
 import { PaymentIntent } from '../../payment';
 import { BoosterList, OrderList, PackList } from '../../trading';
+import { Invoice } from '../invoices';
 
 export async function getCheckout(api: ApiContext, id: string): Promise<Checkout> {
   const { data } = await api.get<Checkout>(`/checkouts/${id}`);
@@ -435,8 +436,8 @@ export interface ConfirmCheckoutBody extends RequestBody {
   save_payment_method?: boolean;
 }
 
-export interface CheckoutConfirmation {
-  payment_intent?: PaymentIntent;
+export interface CheckoutConfirmation extends Partial<Checkout> {
+  invoice?: Invoice;
   orders?: OrderList;
   packs?: PackList;
   boosters?: BoosterList;

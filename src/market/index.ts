@@ -1,6 +1,7 @@
 export * from './billings';
 export * from './captures';
 export * from './checkouts';
+export * from './invoices';
 export * from './currencies';
 export * from './currenciesRates';
 export * from './items';
