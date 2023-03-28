@@ -118,9 +118,8 @@ export interface ApiConfig {
 }
 
 export interface RequestQuery {
-  expand?: string;
-  'expand[]'?: string;
-  required_permissions?: string;
+  expand?: string[] | string;
+  required_permissions?: string[] | string;
   required_permissions_mode?: string;
 }
 
