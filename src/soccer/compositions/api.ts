@@ -167,12 +167,14 @@ export interface CompositionBody extends RequestBody {
 export async function postComposition(
   api: ApiContext,
   body: CompositionBody,
+  query?: RequestQuery,
 ): Promise<Composition> {
-  const { data } = await api.post<Composition, CompositionBody>('/compositions', body);
+  const { data } = await api.post<Composition, CompositionBody>('/compositions', body, query);
   return data;
 }
 
 export function usePostComposition(
+  query?: RequestQuery,
   options?: Omit<
     UseMutationOptions<Composition, ApiError | AxiosError, CompositionBody>,
     'mutationFn'
@@ -181,10 +183,10 @@ export function usePostComposition(
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<Composition, ApiError | AxiosError, CompositionBody>(
-    (body: CompositionBody) => postComposition(api, body),
+    (body: CompositionBody) => postComposition(api, body, query),
     {
       onSuccess(composition: Composition) {
-        queryClient.setQueryData(['compositions', composition.id], composition);
+        queryClient.setQueryData(['compositions', composition.id, query], composition);
       },
       ...options,
     },
@@ -221,14 +223,16 @@ export async function putComposition(
   api: ApiContext,
   id: string,
   body: CompositionBody,
+  query?: RequestQuery,
 ): Promise<Composition> {
-  const { data } = await api.put<Composition, CompositionBody>(`/compositions/${id}`, body);
+  const { data } = await api.put<Composition, CompositionBody>(`/compositions/${id}`, body, query);
   return data;
 }
 
 export type UsePutCompositionVariables = CompositionBody & { id: string };
 
 export function usePutComposition(
+  query?: RequestQuery,
   options?: Omit<
     UseMutationOptions<Composition, ApiError | AxiosError, UsePutCompositionVariables>,
     'mutationFn'
@@ -238,7 +242,7 @@ export function usePutComposition(
   const queryClient = useQueryClient();
 
   return useMutation<Composition, ApiError | AxiosError, UsePutCompositionVariables>(
-    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body),
+    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body, query),
     {
       onSuccess(composition: Composition) {
         queryClient.setQueryData<Composition>(['compositions', composition.id], composition);
@@ -279,13 +283,14 @@ export async function deleteComposition(api: ApiContext, id: string): Promise<vo
 }
 
 export function useDeleteComposition(
+  query?: RequestQuery,
   options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
 ): UseMutationResult<void, ApiError | AxiosError, string> {
   const api = useApi();
   const queryClient = useQueryClient();
   return useMutation<void, ApiError | AxiosError, string>((id) => deleteComposition(api, id), {
     onSuccess(res, id) {
-      queryClient.removeQueries(['compositions', id]);
+      queryClient.removeQueries(['compositions', id, query]);
     },
     ...options,
   });
