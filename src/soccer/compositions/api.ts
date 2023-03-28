@@ -3,7 +3,6 @@ import {
   UseMutationOptions,
   UseMutationResult,
   useQuery,
-  useQueryClient,
   UseQueryResult,
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
@@ -181,15 +180,9 @@ export function usePostComposition(
   >,
 ): UseMutationResult<Composition, ApiError | AxiosError, CompositionBody> {
   const api = useApi();
-  const queryClient = useQueryClient();
   return useMutation<Composition, ApiError | AxiosError, CompositionBody>(
     (body: CompositionBody) => postComposition(api, body, query),
-    {
-      onSuccess(composition: Composition) {
-        queryClient.setQueryData(['compositions', composition.id, query], composition);
-      },
-      ...options,
-    },
+    options,
   );
 }
 
@@ -201,21 +194,11 @@ export function usePostActiveWalletComposition(
   >,
 ): UseMutationResult<Composition, ApiError | AxiosError, CompositionBody> {
   const api = useApi();
-  const queryClient = useQueryClient();
   const wallet = useActiveWallet();
 
   return useMutation<Composition, ApiError | AxiosError, CompositionBody>(
     (body: CompositionBody) => postComposition(api, { wallet: wallet.data?.id, ...body }, query),
-    {
-      onSuccess(composition: Composition) {
-        queryClient.setQueryData(['compositions', composition.id], composition);
-        queryClient.setQueryData<CompositionList>(
-          ['compositions', { wallet: wallet.data?.id, ...query }],
-          (compositionList) => mergeCompositionInList(composition, compositionList),
-        );
-      },
-      ...options,
-    },
+    options,
   );
 }
 
@@ -239,42 +222,9 @@ export function usePutComposition(
   >,
 ): UseMutationResult<Composition, ApiError | AxiosError, UsePutCompositionVariables> {
   const api = useApi();
-  const queryClient = useQueryClient();
-
   return useMutation<Composition, ApiError | AxiosError, UsePutCompositionVariables>(
     ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body, query),
-    {
-      onSuccess(composition: Composition) {
-        queryClient.setQueryData<Composition>(['compositions', composition.id], composition);
-      },
-      ...options,
-    },
-  );
-}
-
-export function usePutActiveWalletComposition(
-  query?: Omit<GetCompositionsQuery, 'wallet'>,
-  options?: Omit<
-    UseMutationOptions<Composition, ApiError | AxiosError, UsePutCompositionVariables>,
-    'mutationFn'
-  >,
-): UseMutationResult<Composition, ApiError | AxiosError, UsePutCompositionVariables> {
-  const api = useApi();
-  const wallet = useActiveWallet();
-  const queryClient = useQueryClient();
-
-  return useMutation<Composition, ApiError | AxiosError, UsePutCompositionVariables>(
-    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body, query),
-    {
-      onSuccess(composition: Composition) {
-        queryClient.setQueryData(['compositions', composition.id], composition);
-        queryClient.setQueryData<CompositionList>(
-          ['compositions', { wallet: wallet.data?.id, ...query }],
-          (compositionList) => mergeCompositionInList(composition, compositionList),
-        );
-      },
-      ...options,
-    },
+    options,
   );
 }
 
@@ -283,31 +233,11 @@ export async function deleteComposition(api: ApiContext, id: string): Promise<vo
 }
 
 export function useDeleteComposition(
-  query?: RequestQuery,
   options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
 ): UseMutationResult<void, ApiError | AxiosError, string> {
   const api = useApi();
-  const queryClient = useQueryClient();
-  return useMutation<void, ApiError | AxiosError, string>((id) => deleteComposition(api, id), {
-    onSuccess(res, id) {
-      queryClient.removeQueries(['compositions', id, query]);
-    },
-    ...options,
-  });
-}
-
-export function useDeleteActiveWalletComposition(
-  query?: Omit<GetCompositionsQuery, 'wallet'>,
-  options?: Omit<UseMutationOptions<void, ApiError | AxiosError, string>, 'mutationFn'>,
-): UseMutationResult<void, ApiError | AxiosError, string> {
-  const api = useApi();
-  const wallet = useActiveWallet();
-  const queryClient = useQueryClient();
-  return useMutation<void, ApiError | AxiosError, string>((id) => deleteComposition(api, id), {
-    onSuccess(res, id) {
-      queryClient.removeQueries(['compositions', id]);
-      queryClient.removeQueries(['compositions', { wallet: wallet.data?.id, ...query }]);
-    },
-    ...options,
-  });
+  return useMutation<void, ApiError | AxiosError, string>(
+    (id) => deleteComposition(api, id),
+    options,
+  );
 }
