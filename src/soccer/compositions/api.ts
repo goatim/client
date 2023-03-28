@@ -205,7 +205,7 @@ export function usePostActiveWalletComposition(
   const wallet = useActiveWallet();
 
   return useMutation<Composition, ApiError | AxiosError, CompositionBody>(
-    (body: CompositionBody) => postComposition(api, { wallet: wallet.data?.id, ...body }),
+    (body: CompositionBody) => postComposition(api, { wallet: wallet.data?.id, ...body }, query),
     {
       onSuccess(composition: Composition) {
         queryClient.setQueryData(['compositions', composition.id], composition);
@@ -264,7 +264,7 @@ export function usePutActiveWalletComposition(
   const queryClient = useQueryClient();
 
   return useMutation<Composition, ApiError | AxiosError, UsePutCompositionVariables>(
-    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body),
+    ({ id, ...body }: UsePutCompositionVariables) => putComposition(api, id, body, query),
     {
       onSuccess(composition: Composition) {
         queryClient.setQueryData(['compositions', composition.id], composition);
