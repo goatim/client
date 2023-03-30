@@ -139,6 +139,35 @@ export function usePostUserVerifyEmail(
   );
 }
 
+export interface PostUserVerifyPhoneBody extends RequestBody {
+  code: string;
+}
+
+export async function postUserVerifyPhone(
+  api: ApiContext,
+  body: PostUserVerifyPhoneBody,
+): Promise<void> {
+  const { data } = await api.post<void, PostUserVerifyPhoneBody>('/users/verify_phone', body);
+  return data;
+}
+
+export function usePostUserVerifyPhone(
+  options?: Omit<
+    UseMutationOptions<void, ApiError | AxiosError, PostUserVerifyPhoneBody>,
+    'mutationFn'
+  >,
+): UseMutationResult<void, ApiError | AxiosError, PostUserVerifyPhoneBody> {
+  const api = useApi();
+  const queryClient = useQueryClient();
+  return useMutation<void, ApiError | AxiosError, PostUserVerifyPhoneBody>(
+    (body: PostUserVerifyPhoneBody) => postUserVerifyPhone(api, body),
+    {
+      onSuccess: () => queryClient.refetchQueries(['sessions', 'active']),
+      ...options,
+    },
+  );
+}
+
 export async function postUserArtifacts(api: ApiContext, id: string): Promise<void> {
   const { data } = await api.post<void>(`/users/${id}/artifacts`);
   return data;
