@@ -45,6 +45,8 @@ export interface GetBoostersQuery extends ListRequestQuery {
   wallet?: string;
   order?: string;
   portfolio?: string;
+  composition?: string;
+  composition_position?: string;
 }
 
 export async function getBoosters(api: ApiContext, query?: GetBoostersQuery): Promise<BoosterList> {
@@ -76,6 +78,8 @@ export interface BoosterBody extends RequestBody {
   wallet?: string | null;
   order?: string | null;
   portfolio?: string | null;
+  composition?: string | null;
+  composition_position?: string | null;
   leverage?: number;
   duration?: number;
 }

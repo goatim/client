@@ -16,9 +16,8 @@ import {
   RequestQuery,
   useApi,
 } from '../../api';
-import { Player } from '../players';
 import { useActiveWallet } from '../../market';
-import { Composition } from './model';
+import { Composition, CompositionStatus } from './model';
 
 export type GetCompositionQuery = RequestQuery;
 
@@ -51,8 +50,7 @@ export function useComposition(
 export interface GetCompositionsQuery extends ListRequestQuery {
   match?: string;
   wallet?: string;
-  is_valid?: boolean;
-  is_active?: boolean;
+  status?: CompositionStatus;
 }
 
 export type CompositionList = PaginatedList<'compositions', Composition>;
@@ -152,15 +150,16 @@ export function useActiveWalletCompositions(
 
 export interface CompositionPositionBody {
   id: string;
-  player: Player | string | null;
+  player: string | null;
+  booster_factory: string | null;
 }
 
 export interface CompositionBody extends RequestBody {
   match?: string | null;
   wallet?: string | null;
   setting?: string | null;
-  positions?: string | null;
-  is_active?: boolean;
+  positions?: CompositionPositionBody[] | string | null;
+  status?: CompositionStatus;
 }
 
 export async function postComposition(
@@ -168,6 +167,9 @@ export async function postComposition(
   body: CompositionBody,
   query?: RequestQuery,
 ): Promise<Composition> {
+  if (body.positions && Array.isArray(body.positions)) {
+    body.positions = JSON.stringify(body.positions);
+  }
   const { data } = await api.post<Composition, CompositionBody>('/compositions', body, query);
   return data;
 }
