@@ -11,7 +11,6 @@ export interface CompositionPosition<P = Player | string> {
   nb_shares?: number;
   booster?: Booster | string;
   booster_factory?: BoosterFactory | string;
-  booster_leverage?: number;
   gains?: number;
   variation?: number;
   score?: number;
