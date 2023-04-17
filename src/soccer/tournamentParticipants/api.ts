@@ -49,7 +49,9 @@ export type TournamentParticipantList = PaginatedList<
   TournamentParticipant
 >;
 
-export type GetTournamentParticipantsQuery = ListRequestQuery;
+export interface GetTournamentParticipantsQuery extends ListRequestQuery {
+  tournament?: string;
+}
 
 export async function getTournamentParticipants(
   api: ApiContext,
