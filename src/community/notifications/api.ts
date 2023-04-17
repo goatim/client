@@ -66,7 +66,8 @@ export async function getNotifications(
   return data;
 }
 
-export interface UseNotificationsOptions {
+export interface UseNotificationsOptions
+  extends Omit<UseQueryOptions<NotificationList, ApiError | AxiosError>, 'queryFn' | 'queryKey'> {
   onCreated?: (notification: Notification) => unknown;
   onUpdated?: (notification: Notification) => unknown;
 }
@@ -117,6 +118,7 @@ export function useNotifications(
     () => getNotifications(api, query),
     {
       staleTime: Infinity,
+      ...options,
     },
   );
 }
