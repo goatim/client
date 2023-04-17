@@ -6,9 +6,10 @@ import {
   useQueryClient,
   UseQueryResult,
 } from 'react-query';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
+import { Socket } from 'socket.io-client';
 import {
   ApiContext,
   ApiError,
@@ -20,9 +21,6 @@ import {
 import { Checkout } from './model';
 import { useActiveWallet } from '../wallets';
 import { ItemType } from '../items';
-import { PaymentIntent } from '../../payment';
-import { BoosterList, OrderList, PackList } from '../../trading';
-import { Invoice } from '../invoices';
 
 export async function getCheckout(api: ApiContext, id: string): Promise<Checkout> {
   const { data } = await api.get<Checkout>(`/checkouts/${id}`);
@@ -105,11 +103,52 @@ export async function getCheckouts(
   return data;
 }
 
+export interface UseCheckoutsOptions
+  extends Omit<UseQueryOptions<CheckoutList, ApiError | AxiosError>, 'queryFn' | 'queryKey'> {
+  onCreated?: (checkout: Checkout) => unknown;
+  onUpdated?: (checkout: Checkout) => unknown;
+}
+
 export function useCheckouts(
   query?: GetCheckoutsQuery,
-  options?: Omit<UseQueryOptions<CheckoutList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+  options?: UseCheckoutsOptions,
 ): UseQueryResult<CheckoutList, ApiError | AxiosError> {
   const api = useApi();
+  const queryClient = useQueryClient();
+  const socket = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    if (!socket.current) {
+      socket.current = api.createSocket('/checkouts', {
+        query,
+      });
+
+      socket.current.on('connect_error', (error) => {
+        console.error(error);
+      });
+
+      socket.current.on('created', async (checkout: Checkout) => {
+        if (options?.onCreated) {
+          options.onCreated(checkout);
+        }
+        await queryClient.refetchQueries(['checkouts', query]);
+      });
+
+      socket.current.on('updated', async (checkout: Checkout) => {
+        if (options?.onUpdated) {
+          options.onUpdated(checkout);
+        }
+        await queryClient.refetchQueries(['checkouts', query]);
+      });
+    }
+
+    return () => {
+      if (socket.current) {
+        socket.current.close();
+        socket.current = null;
+      }
+    };
+  }, [api, options, query, queryClient]);
   return useQuery<CheckoutList, ApiError | AxiosError>(
     ['checkouts', query],
     () => getCheckouts(api, query),
@@ -118,7 +157,7 @@ export function useCheckouts(
 }
 
 export function useActiveWalletCheckouts(
-  options?: Omit<UseQueryOptions<CheckoutList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+  options?: UseCheckoutsOptions,
 ): UseQueryResult<CheckoutList, ApiError | AxiosError> {
   const wallet = useActiveWallet();
   return useCheckouts(
@@ -436,22 +475,12 @@ export interface ConfirmCheckoutBody extends RequestBody {
   save_payment_method?: boolean;
 }
 
-export interface CheckoutConfirmation extends Partial<Checkout> {
-  invoice?: Invoice;
-  orders?: OrderList;
-  packs?: PackList;
-  boosters?: BoosterList;
-}
-
 export async function confirmCheckout(
   api: ApiContext,
   id: string,
   body: ConfirmCheckoutBody,
-): Promise<CheckoutConfirmation> {
-  const { data } = await api.post<CheckoutConfirmation, ConfirmCheckoutBody>(
-    `/checkouts/${id}/confirm`,
-    body,
-  );
+): Promise<Checkout> {
+  const { data } = await api.post<Checkout, ConfirmCheckoutBody>(`/checkouts/${id}/confirm`, body);
   return data;
 }
 
@@ -459,12 +488,12 @@ export type UseConfirmCheckoutVariables = ConfirmCheckoutBody & { id: string };
 
 export function useConfirmCheckout(
   options?: Omit<
-    UseMutationOptions<CheckoutConfirmation, ApiError | AxiosError, UseConfirmCheckoutVariables>,
+    UseMutationOptions<Checkout, ApiError | AxiosError, UseConfirmCheckoutVariables>,
     'mutationFn'
   >,
-): UseMutationResult<CheckoutConfirmation, ApiError | AxiosError, UseConfirmCheckoutVariables> {
+): UseMutationResult<Checkout, ApiError | AxiosError, UseConfirmCheckoutVariables> {
   const api = useApi();
-  return useMutation<CheckoutConfirmation, ApiError | AxiosError, UseConfirmCheckoutVariables>(
+  return useMutation<Checkout, ApiError | AxiosError, UseConfirmCheckoutVariables>(
     ({ id, ...body }: UseConfirmCheckoutVariables) => confirmCheckout(api, id, body),
     options,
   );
