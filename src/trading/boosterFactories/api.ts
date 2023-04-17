@@ -8,6 +8,8 @@ import {
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
+import { useEffect, useRef } from 'react';
+import { Socket } from 'socket.io-client';
 import {
   ApiContext,
   ApiError,
@@ -53,14 +55,53 @@ export async function getBoosterFactories(
   return data;
 }
 
+export interface UseBoosterFactoriesOptions
+  extends Omit<UseQueryOptions<BoosterFactoryList, ApiError | AxiosError>, 'queryFn' | 'queryKey'> {
+  onCreated?: (boosterFactory: BoosterFactory) => unknown;
+  onUpdated?: (boosterFactory: BoosterFactory) => unknown;
+}
+
 export function useBoosterFactories(
   query?: GetBoosterFactoriesQuery,
-  options?: Omit<
-    UseQueryOptions<BoosterFactoryList, ApiError | AxiosError>,
-    'queryFn' | 'queryKey'
-  >,
+  options?: UseBoosterFactoriesOptions,
 ): UseQueryResult<BoosterFactoryList, ApiError | AxiosError> {
   const api = useApi();
+  const queryClient = useQueryClient();
+  const socket = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    if (!socket.current) {
+      socket.current = api.createSocket('/booster_factories', {
+        query,
+      });
+
+      socket.current.on('connect_error', (error) => {
+        console.error(error);
+      });
+
+      socket.current.on('created', async (boosterFactory: BoosterFactory) => {
+        if (options?.onCreated) {
+          options.onCreated(boosterFactory);
+        }
+        await queryClient.refetchQueries(['booster_factories', query]);
+      });
+
+      socket.current.on('updated', async (boosterFactory: BoosterFactory) => {
+        if (options?.onUpdated) {
+          options.onUpdated(boosterFactory);
+        }
+        await queryClient.refetchQueries(['booster_factories', query]);
+      });
+    }
+
+    return () => {
+      if (socket.current) {
+        socket.current.close();
+        socket.current = null;
+      }
+    };
+  }, [api, options, query, queryClient]);
+
   return useQuery<BoosterFactoryList, ApiError | AxiosError>(
     ['booster_factories', query],
     () => getBoosterFactories(api, query),

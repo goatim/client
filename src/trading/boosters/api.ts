@@ -8,6 +8,8 @@ import {
 } from 'react-query';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
+import { useEffect, useRef } from 'react';
+import { Socket } from 'socket.io-client';
 import {
   ApiContext,
   ApiError,
@@ -54,11 +56,53 @@ export async function getBoosters(api: ApiContext, query?: GetBoostersQuery): Pr
   return data;
 }
 
+export interface UseBoostersOptions
+  extends Omit<UseQueryOptions<BoosterList, ApiError | AxiosError>, 'queryFn' | 'queryKey'> {
+  onCreated?: (booster: Booster) => unknown;
+  onUpdated?: (booster: Booster) => unknown;
+}
+
 export function useBoosters(
   query?: GetBoostersQuery,
-  options?: Omit<UseQueryOptions<BoosterList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+  options?: UseBoostersOptions,
 ): UseQueryResult<BoosterList, ApiError | AxiosError> {
   const api = useApi();
+  const queryClient = useQueryClient();
+  const socket = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    if (!socket.current) {
+      socket.current = api.createSocket('/boosters', {
+        query,
+      });
+
+      socket.current.on('connect_error', (error) => {
+        console.error(error);
+      });
+
+      socket.current.on('created', async (booster: Booster) => {
+        if (options?.onCreated) {
+          options.onCreated(booster);
+        }
+        await queryClient.refetchQueries(['boosters', query]);
+      });
+
+      socket.current.on('updated', async (booster: Booster) => {
+        if (options?.onUpdated) {
+          options.onUpdated(booster);
+        }
+        await queryClient.refetchQueries(['boosters', query]);
+      });
+    }
+
+    return () => {
+      if (socket.current) {
+        socket.current.close();
+        socket.current = null;
+      }
+    };
+  }, [api, options, query, queryClient]);
+
   return useQuery<BoosterList, ApiError | AxiosError>(
     ['boosters', query],
     () => getBoosters(api, query),
