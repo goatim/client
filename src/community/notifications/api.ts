@@ -20,6 +20,7 @@ import {
   RequestQuery,
   useApi,
 } from '../../api';
+import { Wallet } from '../../market';
 
 export type GetNotificationQuery = RequestQuery;
 
@@ -54,6 +55,7 @@ export interface NotificationList extends PaginatedList<'notifications', Notific
 }
 
 export interface GetNotificationsQuery extends ListRequestQuery {
+  wallet?: Wallet | string;
   is_seen?: boolean;
   is_read?: boolean;
 }
@@ -81,7 +83,7 @@ export function useNotifications(
   const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current) {
+    if (!socket.current && query?.wallet) {
       socket.current = api.createSocket('/notifications', {
         query,
       });
