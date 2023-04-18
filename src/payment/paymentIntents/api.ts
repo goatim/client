@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import { Socket } from 'socket.io-client';
-import { PaymentIntent } from './model';
+import { PaymentIntent, PaymentIntentStatus } from './model';
 import {
   ApiContext,
   ApiError,
@@ -40,14 +40,11 @@ export function usePaymentIntent(
   );
 }
 
-export interface PaymentIntentList extends PaginatedList<'payment_intents', PaymentIntent> {
-  total_unseen?: number;
-  total_unread?: number;
-}
+export type PaymentIntentList = PaginatedList<'payment_intents', PaymentIntent>;
 
 export interface GetPaymentIntentsQuery extends ListRequestQuery {
-  is_seen?: boolean;
-  is_read?: boolean;
+  wallet?: string;
+  status?: PaymentIntentStatus | PaymentIntentStatus[];
 }
 
 export async function getPaymentIntents(

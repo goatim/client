@@ -131,14 +131,14 @@ export function useCheckouts(
         if (options?.onCreated) {
           options.onCreated(checkout);
         }
-        await queryClient.refetchQueries(['checkouts', query]);
+        await queryClient.setQueryData(['checkouts', checkout.id], checkout);
       });
 
       socket.current.on('updated', async (checkout: Checkout) => {
         if (options?.onUpdated) {
           options.onUpdated(checkout);
         }
-        await queryClient.refetchQueries(['checkouts', query]);
+        await queryClient.setQueryData(['checkouts', checkout.id], checkout);
       });
     }
 
@@ -214,9 +214,16 @@ export function usePutCheckout(
   options?: Omit<UseMutationOptions<Checkout, ApiError | AxiosError, CheckoutBody>, 'mutationFn'>,
 ): UseMutationResult<Checkout, ApiError | AxiosError, UsePutCheckoutVariables> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
   return useMutation<Checkout, ApiError | AxiosError, UsePutCheckoutVariables>(
     ({ id, ...body }: UsePutCheckoutVariables) => putCheckout(api, id, body),
-    options,
+    {
+      onSuccess(checkout) {
+        queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      },
+      ...options,
+    },
   );
 }
 
@@ -252,9 +259,16 @@ export function usePostCheckoutItem(
   >,
 ): UseMutationResult<Checkout, ApiError | AxiosError, UsePostCheckoutVariables> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
   return useMutation<Checkout, ApiError | AxiosError, UsePostCheckoutVariables>(
     ({ checkoutId, ...body }: UsePostCheckoutVariables) => postCheckoutItem(api, checkoutId, body),
-    options,
+    {
+      onSuccess(checkout) {
+        queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      },
+      ...options,
+    },
   );
 }
 
@@ -280,10 +294,17 @@ export function usePutCheckoutItem(
   >,
 ): UseMutationResult<Checkout, ApiError | AxiosError, PutCheckoutItemVariables> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
   return useMutation<Checkout, ApiError | AxiosError, PutCheckoutItemVariables>(
     ({ checkoutId, itemId, ...body }: PutCheckoutItemVariables) =>
       putCheckoutItem(api, checkoutId, itemId, body),
-    options,
+    {
+      onSuccess(checkout) {
+        queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      },
+      ...options,
+    },
   );
 }
 
@@ -305,10 +326,17 @@ export function useRemoveCheckoutItem(
   >,
 ): UseMutationResult<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
   return useMutation<Checkout, ApiError | AxiosError, UseRemoveCheckoutItemVariables>(
     ({ checkoutId, itemId }: UseRemoveCheckoutItemVariables) =>
       removeCheckoutItem(api, checkoutId, itemId),
-    options,
+    {
+      onSuccess(checkout) {
+        queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      },
+      ...options,
+    },
   );
 }
 
@@ -343,8 +371,15 @@ export function useConfirmCheckout(
   >,
 ): UseMutationResult<Checkout, ApiError | AxiosError, UseConfirmCheckoutVariables> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
   return useMutation<Checkout, ApiError | AxiosError, UseConfirmCheckoutVariables>(
     ({ id, ...body }: UseConfirmCheckoutVariables) => confirmCheckout(api, id, body),
-    options,
+    {
+      onSuccess(checkout) {
+        queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      },
+      ...options,
+    },
   );
 }
