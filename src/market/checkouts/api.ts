@@ -132,6 +132,7 @@ export function useCheckouts(
           options.onCreated(checkout);
         }
         await queryClient.setQueryData(['checkouts', checkout.id], checkout);
+        await queryClient.refetchQueries(['checkouts', query]);
       });
 
       socket.current.on('updated', async (checkout: Checkout) => {
@@ -139,6 +140,7 @@ export function useCheckouts(
           options.onUpdated(checkout);
         }
         await queryClient.setQueryData(['checkouts', checkout.id], checkout);
+        await queryClient.refetchQueries(['checkouts', query]);
       });
     }
 

@@ -1,6 +1,6 @@
 import { Model } from '../../api';
 import { User } from '../../auth';
-import { Checkout, Invoice, Wallet } from '../../market';
+import { Wallet } from '../../market';
 import { PaymentService } from '../services';
 import { PaymentMethod, PaymentMethodType } from '../paymentMethods';
 
@@ -46,6 +46,6 @@ export interface PaymentIntent extends Model<'payment_intent'> {
   next_action?: PaymentIntentNextAction;
   client_secret?: string;
   ip?: string;
-  checkout?: Checkout | string;
-  invoice?: Invoice | string;
+  checkout?: string;
+  invoice?: string;
 }
