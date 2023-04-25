@@ -1,6 +1,6 @@
 import { createContext, ReactElement, useContext, useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ApiConfig, ApiProvider } from './api';
 
 const queryClient = new QueryClient();

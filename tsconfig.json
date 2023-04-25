@@ -18,8 +18,5 @@
     "declarationDir": ".",
     "isolatedModules": true,
     "resolveJsonModule": true,
-    "paths": {
-      "react-query/devtools": ["./node_modules/react-query/devtools/index.js"]
-    }
   }
 }
