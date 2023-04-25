@@ -1,29 +1,22 @@
 {
   "name": "@goatim/client",
+  "type": "module",
   "author": "Goatim",
   "version": "0.18.4",
   "license": "MIT",
   "repository": "git@github.com:goatim/client.git",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "jsnext:main": "dist/index.esm.js",
-  "browser:min": "dist/index.umd.min.js",
-  "browser": "dist/index.umd.js",
-  "typings": "dist/index.d.ts",
+  "cjs": "dist/index.cjs",
+  "umd": "dist/index.umd.js",
   "types": "dist/index.d.ts",
-  "keywords": [
-    "Goatim",
-    "React",
-    "Client"
-  ],
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     },
     "./dist/*": "./dist/*"
   },
