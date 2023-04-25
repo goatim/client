@@ -2,7 +2,7 @@
   "name": "@goatim/client",
   "type": "module",
   "author": "Goatim",
-  "version": "0.18.7",
+  "version": "0.18.8",
   "license": "MIT",
   "repository": "git@github.com:goatim/client.git",
   "main": "dist/index.cjs",
