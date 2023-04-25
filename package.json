@@ -6,6 +6,7 @@
   "license": "MIT",
   "repository": "git@github.com:goatim/client.git",
   "main": "dist/index.js",
+  "main:min": "dist/index.min.js",
   "cjs": "dist/index.cjs",
   "umd": "dist/index.umd.js",
   "types": "dist/index.d.ts",

@@ -32,12 +32,16 @@ export default [
         name: pkg.name,
         file: pkg.main,
         format: 'es',
+      },
+      {
+        name: pkg.name,
+        file: pkg['main:min'],
+        format: 'es',
         plugins: [terser()]
       },
       {
         file: pkg.cjs,
         format: 'cjs',
-        plugins: [terser()]
       },
       {
         name: pkg.name,
@@ -46,7 +50,6 @@ export default [
         globals: {
           react: 'React',
         },
-        plugins: [terser()]
       },
     ],
   },
