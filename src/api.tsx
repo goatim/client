@@ -279,7 +279,7 @@ export function useApi(): ApiContext {
 }
 
 function storeHost(host: string | null, duration: DurationLike = { year: 1 }): string | null {
-  if (typeof document !== undefined) {
+  if (typeof document !== 'undefined') {
     document.cookie = cookie.serialize('host', host || '', {
       expires: host ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
@@ -288,7 +288,7 @@ function storeHost(host: string | null, duration: DurationLike = { year: 1 }): s
 }
 
 function storeApiKey(apiKey: string | null, duration: DurationLike = { year: 1 }): string | null {
-  if (typeof document !== undefined) {
+  if (typeof document !== 'undefined') {
     document.cookie = cookie.serialize('api_key', apiKey || '', {
       expires: apiKey ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
@@ -297,7 +297,7 @@ function storeApiKey(apiKey: string | null, duration: DurationLike = { year: 1 }
 }
 
 function storeLocale(locale: string | null, duration: DurationLike = { year: 1 }): string | null {
-  if (typeof document !== undefined) {
+  if (typeof document !== 'undefined') {
     document.cookie = cookie.serialize('locale', locale || '', {
       expires: locale ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
@@ -309,7 +309,7 @@ function storeBearerToken(
   bearerToken: string | null,
   duration: DurationLike = { year: 1 },
 ): string | null {
-  if (typeof document !== undefined) {
+  if (typeof document !== 'undefined') {
     document.cookie = cookie.serialize('bearer_token', bearerToken || '', {
       expires: bearerToken ? DateTime.now().plus(duration).toJSDate() : new Date(0),
     });
@@ -336,7 +336,7 @@ function storeConfig(config?: ApiConfig, duration?: DurationLike): void {
 }
 
 function retrieveConfig(): ApiConfig | undefined {
-  if (typeof document !== undefined) {
+  if (typeof document !== 'undefined') {
     const {
       host,
       api_key: apiKey,
