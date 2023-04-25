@@ -23,7 +23,7 @@ export interface Composition<P = Player | string> extends Model<'composition'> {
   wallet?: Wallet | string;
   setting?: CompositionSetting | string;
   positions?: CompositionPosition<P>[];
-  status: CompositionStatus;
+  status?: CompositionStatus;
   gains?: number;
   variation?: number;
   score?: number;

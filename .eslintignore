@@ -1,4 +1,5 @@
 node_modules
+build
 dist
-rollup.config.js
-.idea
+static
+*.js

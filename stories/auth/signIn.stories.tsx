@@ -1,5 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JSXElementConstructor, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Field, Form, FormContext, FormFields, FormState } from '@cezembre/forms';
 import { GoatimClient, useActiveSession, useSignIn, useSignOut } from '../../src';
 
@@ -8,11 +7,9 @@ interface Credentials extends FormFields {
   password: string;
 }
 
-interface Props {}
-
 export default {
   title: 'Auth/SignIn',
-} as ComponentMeta<JSXElementConstructor<Props>>;
+};
 
 function App() {
   const [formState, setFormState] = useState<FormState<Credentials>>();
@@ -56,12 +53,12 @@ function App() {
   );
 }
 
-const Template: ComponentStory<JSXElementConstructor<Props>> = ({}: Props) => (
-  <GoatimClient host="http://localhost:4200" apiKey="pk_aXJeQNWOzfe8IsHyzGtN93nzrEFmBFmF9gIakI3W">
-    <App />
-  </GoatimClient>
-);
+function Template() {
+  return (
+    <GoatimClient host="http://localhost:4200" apiKey="pk_aXJeQNWOzfe8IsHyzGtN93nzrEFmBFmF9gIakI3W">
+      <App />
+    </GoatimClient>
+  );
+}
 
 export const Default = Template.bind({});
-
-Default.args = {};

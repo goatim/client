@@ -1,23 +1,19 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { JSXElementConstructor } from 'react';
 import { formatCurrencyAmount } from '../../../src';
-
-interface Props {}
 
 export default {
   title: 'Market/CurrenciesAdapter',
-} as ComponentMeta<JSXElementConstructor<Props>>;
+};
 
 function App() {
-  return <div></div>;
+  return <div />;
 }
 
-const Template: ComponentStory<JSXElementConstructor<Props>> = ({}: Props) => (
-  <div>
-    <h1>Amount: {formatCurrencyAmount(500, 'GTC', 2, false)}</h1>
-  </div>
-);
+function Template() {
+  return (
+    <div>
+      <h1>Amount: {formatCurrencyAmount(500, 'GTC', 2, false)}</h1>
+    </div>
+  );
+}
 
 export const Default = Template.bind({});
-
-Default.args = {};
