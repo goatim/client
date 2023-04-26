@@ -23,6 +23,7 @@ export interface GoatimClientProps {
   host?: string;
   locale?: string;
   children: ReactElement;
+  state?: unknown;
 }
 
 export function GoatimClient({
@@ -30,6 +31,7 @@ export function GoatimClient({
   host = 'https://api.goatim.com',
   apiKey,
   locale = 'fr',
+  state,
 }: GoatimClientProps): ReactElement {
   const [wallet, setWallet] = useState<string>('default');
 
@@ -55,8 +57,10 @@ export function GoatimClient({
     <goatimClientContext.Provider value={value}>
       <ApiProvider config={apiConfig}>
         <QueryClientProvider client={queryClient} contextSharing>
-          {children}
-          <ReactQueryDevtools initialIsOpen={false} />
+          <Hydrate state={state}>
+            {children}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
         </QueryClientProvider>
       </ApiProvider>
     </goatimClientContext.Provider>
