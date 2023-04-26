@@ -38,7 +38,7 @@ export function useRanks(
   options?: Omit<UseQueryOptions<RankList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<RankList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<RankList, ApiError | AxiosError>('ranks', () => getRanks(api), options);
+  return useQuery<RankList, ApiError | AxiosError>(['ranks'], () => getRanks(api), options);
 }
 
 export interface RankBody extends RequestBody {

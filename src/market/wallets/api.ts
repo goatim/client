@@ -19,7 +19,7 @@ import {
   useApi,
 } from '../../api';
 import { useGoatimClient } from '../../client';
-import { useActiveSession, useDoesActiveSessionUserHasVerifiedEmail } from '../../auth';
+import { useDoesActiveSessionUserHasVerifiedEmail } from '../../auth';
 
 export interface GetWalletQuery extends RequestQuery {
   ranking?: string;

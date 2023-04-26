@@ -26,7 +26,7 @@ export async function getCurrenciesRate(
 export function useCurrenciesRate(
   id?: string,
   query?: GetCurrenciesRateQuery,
-  options?: Omit<UseQueryOptions<CurrenciesRate, ApiError | AxiosError>, 'queryKey' | 'queryKey'>,
+  options?: Omit<UseQueryOptions<CurrenciesRate, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<CurrenciesRate, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<CurrenciesRate, ApiError | AxiosError>(
