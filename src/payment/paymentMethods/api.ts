@@ -18,7 +18,7 @@ export async function getPaymentMethods(api: ApiContext): Promise<PaymentMethodL
 
 export function usePaymentMethods(): UseQueryResult<PaymentMethodList> {
   const api = useApi();
-  return useQuery<PaymentMethodList>('payment_methods', () => getPaymentMethods(api));
+  return useQuery<PaymentMethodList>(['payment_methods'], () => getPaymentMethods(api));
 }
 
 export interface CreditCardBody extends RequestBody {
@@ -102,7 +102,7 @@ export function usePostCreditCard(): UseMutationResult<
     {
       onSuccess: (paymentMethod: PaymentMethod) => {
         queryClient.setQueryData<PaymentMethodList>(
-          'payment_methods',
+          ['payment_methods'],
           (paymentMethodList?: PaymentMethodList) =>
             mergePaymentMethodInList(paymentMethod, paymentMethodList),
         );

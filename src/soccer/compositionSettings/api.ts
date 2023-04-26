@@ -52,7 +52,7 @@ export function useCompositionSettings(
 ): UseQueryResult<CompositionSettingList, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<CompositionSettingList, ApiError | AxiosError>(
-    'composition_settings',
+    ['composition_settings'],
     () => getCompositionSettings(api),
     options,
   );

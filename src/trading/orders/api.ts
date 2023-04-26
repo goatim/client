@@ -138,7 +138,7 @@ export function useDeleteOrder(
     async onSuccess(res, id: string) {
       queryClient.removeQueries(['orders', id], { exact: true });
       // TODO : Remove in list
-      await queryClient.refetchQueries('orders');
+      await queryClient.refetchQueries(['orders']);
     },
     ...options,
   });
