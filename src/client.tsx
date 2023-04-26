@@ -58,8 +58,10 @@ export function GoatimClient({
     <goatimClientContext.Provider value={value}>
       <ApiProvider config={apiConfig}>
         <QueryClientProvider client={queryClient}>
-          <Hydrate state={dehydratedState}>{children}</Hydrate>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <Hydrate state={dehydratedState}>
+            {children}
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
         </QueryClientProvider>
       </ApiProvider>
     </goatimClientContext.Provider>
