@@ -1,9 +1,8 @@
 import { createContext, ReactElement, useContext, useMemo, useState } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, Hydrate } from 'react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useDehydratedState } from 'use-dehydrated-state';
 import { ApiConfig, ApiProvider } from './api';
-
-const queryClient = new QueryClient();
 
 export interface GoatimClientContext extends ApiConfig {
   wallet: string;
@@ -51,11 +50,15 @@ export function GoatimClient({
     };
   }, [apiKey, host, locale]);
 
+  const [queryClient] = useState(() => new QueryClient());
+
+  const dehydratedState = useDehydratedState();
+
   return (
     <goatimClientContext.Provider value={value}>
       <ApiProvider config={apiConfig}>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <Hydrate state={dehydratedState}>{children}</Hydrate>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </ApiProvider>
