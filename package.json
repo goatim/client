@@ -46,8 +46,7 @@
     "http-status": "^1.6.2",
     "lodash": "^4.17.21",
     "react-query": "^3.39.3",
-    "socket.io-client": "^4.6.1",
-    "use-dehydrated-state": "^0.1.0"
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
