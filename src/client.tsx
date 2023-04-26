@@ -23,6 +23,7 @@ export interface GoatimClientProps {
   host?: string;
   locale?: string;
   children: ReactElement;
+  cookie?: string;
   state?: unknown;
 }
 
@@ -32,6 +33,7 @@ export function GoatimClient({
   apiKey,
   locale = 'fr',
   state,
+  cookie,
 }: GoatimClientProps): ReactElement {
   const [wallet, setWallet] = useState<string>('default');
 
@@ -48,8 +50,9 @@ export function GoatimClient({
       host,
       api_key: apiKey,
       locale,
+      cookie,
     };
-  }, [apiKey, host, locale]);
+  }, [apiKey, host, locale, cookie]);
 
   const [queryClient] = useState(() => new QueryClient());
 
