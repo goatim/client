@@ -335,23 +335,28 @@ function storeConfig(config?: ApiConfig, duration?: DurationLike): void {
   }
 }
 
-function retrieveConfig(): ApiConfig | undefined {
-  if (typeof document !== 'undefined') {
-    const {
-      host,
-      api_key: apiKey,
-      locale,
-      bearer_token: bearerToken,
-    } = cookie.parse(document.cookie);
-    if (host || apiKey || locale || bearerToken) {
-      return { host, api_key: apiKey, locale, bearer_token: bearerToken };
-    }
+function retrieveConfig(cookieString?: string): ApiConfig | undefined {
+  let resolvedCookie: string | undefined;
+  if (cookieString) {
+    resolvedCookie = cookieString;
+  } else if (typeof document !== 'undefined') {
+    resolvedCookie = document.cookie;
   }
+
+  if (!resolvedCookie) {
+    return undefined;
+  }
+  const { host, api_key: apiKey, locale, bearer_token: bearerToken } = cookie.parse(resolvedCookie);
+
+  if (host || apiKey || locale || bearerToken) {
+    return { host, api_key: apiKey, locale, bearer_token: bearerToken };
+  }
+
   return undefined;
 }
 
-function hydrateConfig(config?: ApiConfig): ApiConfig | undefined {
-  const storedConfig = retrieveConfig();
+function hydrateConfig(config?: ApiConfig, cookieString?: string): ApiConfig | undefined {
+  const storedConfig = retrieveConfig(cookieString);
 
   if (storedConfig) {
     return storedConfig;
@@ -366,15 +371,17 @@ export interface ApiProviderProps {
   children?: ReactElement;
   config?: ApiConfig;
   persistConfig?: boolean;
+  cookieString?: string;
 }
 
 export function ApiProvider({
   children,
   config,
   persistConfig = true,
+  cookieString,
 }: ApiProviderProps): ReactElement {
   const [apiConfig, setApiConfig] = useState<ApiConfig | undefined>(
-    persistConfig ? hydrateConfig(config) : config,
+    persistConfig ? hydrateConfig(config, cookieString) : config,
   );
 
   const setConfig = useCallback(
