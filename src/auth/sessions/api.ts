@@ -5,9 +5,9 @@ import {
   useQuery,
   useQueryClient,
   UseQueryResult,
-} from 'react-query';
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import { Session } from './model';
 import { ApiContext, ApiError, RequestBody, RequestQuery, useApi } from '../../api';

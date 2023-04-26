@@ -4,7 +4,7 @@ import {
   useQuery,
   useQueryClient,
   UseQueryResult,
-} from 'react-query';
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ApiContext, ApiError, PaginatedList, RequestBody, useApi } from '../../api';
 import { PaymentMethod } from './model';

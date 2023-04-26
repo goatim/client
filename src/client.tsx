@@ -1,5 +1,5 @@
 import { createContext, ReactElement, useContext, useMemo, useState } from 'react';
-import { QueryClient, QueryClientProvider, Hydrate } from 'react-query';
+import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ApiConfig, ApiProvider } from './api';
 

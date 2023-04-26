@@ -4,8 +4,8 @@ import {
   UseMutationResult,
   useQuery,
   UseQueryResult,
-} from 'react-query';
-import { UseQueryOptions } from 'react-query/types/react/types';
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
   ApiContext,

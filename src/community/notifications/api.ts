@@ -5,9 +5,9 @@ import {
   useQuery,
   useQueryClient,
   UseQueryResult,
-} from 'react-query';
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
-import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import { Socket } from 'socket.io-client';
 import { Notification } from './model';

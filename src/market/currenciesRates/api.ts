@@ -1,6 +1,5 @@
-import { useQuery, UseQueryResult } from 'react-query';
+import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import {
   ApiContext,

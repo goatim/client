@@ -1,6 +1,5 @@
-import { useQuery, useQueryClient, UseQueryResult } from 'react-query';
+import { useQuery, useQueryClient, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
-import { UseQueryOptions } from 'react-query/types/react/types';
 import { AxiosError } from 'axios';
 import { Socket } from 'socket.io-client';
 import { PaymentIntent, PaymentIntentStatus } from './model';

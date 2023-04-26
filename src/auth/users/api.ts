@@ -5,8 +5,8 @@ import {
   useQuery,
   useQueryClient,
   UseQueryResult,
-} from 'react-query';
-import { UseQueryOptions } from 'react-query/types/react/types';
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { User } from './model';
 import { ApiContext, ApiError, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
@@ -54,7 +54,11 @@ export function useUsers(
   options?: Omit<UseQueryOptions<UserList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<UserList, ApiError | AxiosError> {
   const api = useApi();
-  return useQuery<UserList, ApiError | AxiosError>('users', () => getUsers(api, query), options);
+  return useQuery<UserList, ApiError | AxiosError>(
+    ['users', query],
+    () => getUsers(api, query),
+    options,
+  );
 }
 
 export interface UserBody extends RequestBody {
