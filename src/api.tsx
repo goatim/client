@@ -346,6 +346,7 @@ function retrieveConfig(cookieString?: string): ApiConfig | undefined {
   if (!resolvedCookie) {
     return undefined;
   }
+
   const { host, api_key: apiKey, locale, bearer_token: bearerToken } = cookie.parse(resolvedCookie);
 
   if (host || apiKey || locale || bearerToken) {
@@ -371,14 +372,14 @@ export interface ApiProviderProps {
   children?: ReactElement;
   config?: ApiConfig;
   persistConfig?: boolean;
-  cookieString?: string;
+  cookie?: string;
 }
 
 export function ApiProvider({
   children,
   config,
   persistConfig = true,
-  cookieString,
+  cookie: cookieString,
 }: ApiProviderProps): ReactElement {
   const [apiConfig, setApiConfig] = useState<ApiConfig | undefined>(
     persistConfig ? hydrateConfig(config, cookieString) : config,

@@ -50,15 +50,14 @@ export function GoatimClient({
       host,
       api_key: apiKey,
       locale,
-      cookie,
     };
-  }, [apiKey, host, locale, cookie]);
+  }, [apiKey, host, locale]);
 
   const [queryClient] = useState(() => new QueryClient());
 
   return (
     <goatimClientContext.Provider value={value}>
-      <ApiProvider config={apiConfig}>
+      <ApiProvider config={apiConfig} cookie={cookie}>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={state}>
             {children}
