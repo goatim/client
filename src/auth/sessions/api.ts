@@ -50,7 +50,7 @@ export function useActiveSession(): UseQueryResult<Session> {
     {
       retry: false,
       onSuccess: (session: Session | null) => {
-        if (session?.bearer_token) {
+        if (session?.bearer_token && session.bearer_token !== api.config?.bearer_token) {
           api.setBearerToken(session.bearer_token);
         }
       },
