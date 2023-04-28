@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 export interface Env {
   SERVER_NAME?: string;
   DOMAIN_NAME?: string;
