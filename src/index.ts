@@ -1,4 +1,3 @@
-export * from './env';
 export * from './api';
 export * from './client';
 export * from './utils';
