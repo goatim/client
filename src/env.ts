@@ -26,11 +26,11 @@ export interface Env {
 }
 
 function parseEnv(): Env {
-  if (typeof process === 'undefined' || !process?.env) {
+  if (typeof global === 'undefined' || !global?.process?.env) {
     return {};
   }
 
-  const processEnv: NodeJS.ProcessEnv = process.env;
+  const processEnv: NodeJS.ProcessEnv = global.process.env;
   const env: Env = {};
 
   if (processEnv.SERVER_NAME !== undefined) {
