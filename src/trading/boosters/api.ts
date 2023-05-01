@@ -71,7 +71,7 @@ export function useBoosters(
   const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current) {
+    if (!socket.current && query?.wallet) {
       socket.current = api.createSocket('/boosters', {
         query,
       });
