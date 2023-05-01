@@ -8,6 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useMemo } from 'react';
 import { Wallet } from './model';
 import {
   ApiContext,
@@ -19,7 +20,7 @@ import {
   useApi,
 } from '../../api';
 import { useGoatimClient } from '../../client';
-import { useDoesActiveSessionUserHasVerifiedEmail } from '../../auth';
+import { useActiveSession } from '../../auth';
 
 export interface GetWalletQuery extends RequestQuery {
   ranking?: string;
@@ -55,13 +56,18 @@ export function useActiveWallet(
   options?: Omit<UseQueryOptions<Wallet, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<Wallet> {
   const { wallet } = useGoatimClient();
-  const userHasVerifiedEmail = useDoesActiveSessionUserHasVerifiedEmail();
+  const session = useActiveSession();
+
+  const userIsVerified = useMemo<boolean>(() => {
+    if (session.data?.user && typeof session.data.user === 'object') {
+      return !!session.data.user.verified_email && !!session.data.user.verified_phone;
+    }
+    return false;
+  }, [session.data?.user]);
+
   return useWallet(wallet, query, {
     ...options,
-    enabled:
-      options?.enabled !== undefined
-        ? options.enabled && userHasVerifiedEmail
-        : userHasVerifiedEmail,
+    enabled: options?.enabled !== undefined ? userIsVerified : userIsVerified,
   });
 }
 

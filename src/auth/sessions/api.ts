@@ -11,7 +11,6 @@ import { useCallback } from 'react';
 import { AxiosError } from 'axios';
 import { Session } from './model';
 import { ApiContext, ApiError, RequestBody, RequestQuery, useApi } from '../../api';
-import { User } from '../users';
 
 export interface GetSessionQuery extends RequestQuery {
   auto_refresh?: boolean;
@@ -62,16 +61,6 @@ export function useActiveSession(): UseQueryResult<Session> {
       enabled: !!api.config?.bearer_token,
     },
   );
-}
-
-export function useActiveSessionUser(): User | undefined {
-  const session = useActiveSession();
-  return typeof session.data?.user === 'object' ? session.data.user : undefined;
-}
-
-export function useDoesActiveSessionUserHasVerifiedEmail(): boolean {
-  const user = useActiveSessionUser();
-  return !!user?.verified_email;
 }
 
 export interface SignInBody extends RequestBody {
