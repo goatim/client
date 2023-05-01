@@ -70,7 +70,7 @@ export function usePaymentIntents(
 
   useEffect(() => {
     if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/payment_intents', {
+      socket.current = api.createSocket('/payment-intents', {
         query,
       });
 

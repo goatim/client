@@ -71,7 +71,7 @@ export function useBoosterFactories(
 
   useEffect(() => {
     if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/booster_factories', {
+      socket.current = api.createSocket('/booster-factories', {
         query,
       });
 
