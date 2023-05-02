@@ -11,7 +11,7 @@ export interface Wallet extends Model<'wallet'> {
   slug?: string;
   type?: WalletType;
   amount?: number;
-  floor_withdrawal?: number;
+  withdrawable_amount?: number;
   portfolios_quotation?: number;
   portfolios_session_variation?: number;
   is_default?: boolean;
