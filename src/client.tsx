@@ -24,6 +24,7 @@ export interface GoatimClientProps {
   locale?: string;
   children: ReactElement;
   cookie?: string;
+  queryClient?: QueryClient;
   state?: unknown;
 }
 
@@ -34,6 +35,7 @@ export function GoatimClient({
   locale = 'fr',
   state,
   cookie,
+  queryClient,
 }: GoatimClientProps): ReactElement {
   const [wallet, setWallet] = useState<string>('default');
 
@@ -53,12 +55,12 @@ export function GoatimClient({
     };
   }, [apiKey, host, locale]);
 
-  const [queryClient] = useState(() => new QueryClient());
+  const [internalQueryClient] = useState<QueryClient>(() => queryClient || new QueryClient());
 
   return (
     <goatimClientContext.Provider value={value}>
       <ApiProvider config={apiConfig} cookie={cookie}>
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={internalQueryClient}>
           <Hydrate state={state}>
             {children}
             <ReactQueryDevtools initialIsOpen={false} />
