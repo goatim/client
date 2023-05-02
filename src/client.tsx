@@ -6,6 +6,8 @@ import { ApiConfig, ApiProvider } from './api';
 export interface GoatimClientContext extends ApiConfig {
   wallet: string;
   setWallet(wallet: string): void;
+  queryClient: QueryClient;
+  apiConfig: ApiConfig;
 }
 
 const goatimClientContext = createContext<GoatimClientContext | undefined>(undefined);
@@ -24,7 +26,6 @@ export interface GoatimClientProps {
   locale?: string;
   children: ReactElement;
   cookie?: string;
-  queryClient?: QueryClient;
   state?: unknown;
 }
 
@@ -35,17 +36,10 @@ export function GoatimClient({
   locale = 'fr',
   state,
   cookie,
-  queryClient,
 }: GoatimClientProps): ReactElement {
-  const [wallet, setWallet] = useState<string>('default');
+  const [queryClient] = useState<QueryClient>(() => new QueryClient());
 
-  const value = useMemo<GoatimClientContext>(
-    () => ({
-      wallet,
-      setWallet,
-    }),
-    [wallet],
-  );
+  const [wallet, setWallet] = useState<string>('default');
 
   const apiConfig = useMemo<ApiConfig>(() => {
     return {
@@ -55,12 +49,20 @@ export function GoatimClient({
     };
   }, [apiKey, host, locale]);
 
-  const [internalQueryClient] = useState<QueryClient>(() => queryClient || new QueryClient());
+  const value = useMemo<GoatimClientContext>(
+    () => ({
+      wallet,
+      setWallet,
+      queryClient,
+      apiConfig,
+    }),
+    [apiConfig, queryClient, wallet],
+  );
 
   return (
     <goatimClientContext.Provider value={value}>
       <ApiProvider config={apiConfig} cookie={cookie}>
-        <QueryClientProvider client={internalQueryClient}>
+        <QueryClientProvider client={queryClient}>
           <Hydrate state={state}>
             {children}
             <ReactQueryDevtools initialIsOpen={false} />
