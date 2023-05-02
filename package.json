@@ -37,7 +37,7 @@
   "peerDependencies": {
     "@cezembre/forms": ">=1.7.0",
     "luxon": ">=2.0.0",
-    "react": ">=18.0.0"
+    "react": ">=17.0.2"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.29.5",
