@@ -7,9 +7,8 @@ import {
   UseQueryResult,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { AxiosError } from 'axios';
-import { Socket } from 'socket.io-client';
 import {
   ApiContext,
   ApiError,
@@ -115,40 +114,36 @@ export function useCheckouts(
 ): UseQueryResult<CheckoutList, ApiError | AxiosError> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/checkouts', {
-        query,
-      });
+    const socket = api.openSocket('/checkouts', ['checkouts', query], {
+      query,
+    });
 
-      socket.current.on('connect_error', (error) => {
-        console.error(error);
-      });
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
 
-      socket.current.on('created', async (checkout: Checkout) => {
-        if (options?.onCreated) {
-          options.onCreated(checkout);
-        }
-        await queryClient.setQueryData(['checkouts', checkout.id], checkout);
-        await queryClient.refetchQueries(['checkouts', query]);
-      });
+    socket.on('created', async (checkout: Checkout) => {
+      if (options?.onCreated) {
+        options.onCreated(checkout);
+      }
+      await queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      await queryClient.refetchQueries(['checkouts', query]);
+    });
 
-      socket.current.on('updated', async (checkout: Checkout) => {
-        if (options?.onUpdated) {
-          options.onUpdated(checkout);
-        }
-        await queryClient.setQueryData(['checkouts', checkout.id], checkout);
-        await queryClient.refetchQueries(['checkouts', query]);
-      });
-    }
+    socket.on('updated', async (checkout: Checkout) => {
+      if (options?.onUpdated) {
+        options.onUpdated(checkout);
+      }
+      await queryClient.setQueryData(['checkouts', checkout.id], checkout);
+      await queryClient.refetchQueries(['checkouts', query]);
+    });
 
     return () => {
-      if (socket.current) {
-        socket.current.close();
-        socket.current = null;
-      }
+      socket.off('connect_error');
+      socket.off('created');
+      socket.off('updated');
     };
   }, [api, options, query, queryClient]);
 

@@ -7,9 +7,8 @@ import {
   UseQueryResult,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { AxiosError } from 'axios';
-import { Socket } from 'socket.io-client';
 import { Post } from './model';
 import {
   ApiContext,
@@ -66,38 +65,34 @@ export function usePosts(
 ): UseQueryResult<PostList, ApiError | AxiosError> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/posts', {
-        query,
-      });
+    const socket = api.openSocket('/posts', ['posts', query], {
+      query,
+    });
 
-      socket.current.on('connect_error', (error) => {
-        console.error(error);
-      });
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
 
-      socket.current.on('created', async (post: Post) => {
-        if (options?.onCreated) {
-          options.onCreated(post);
-        }
-        await queryClient.refetchQueries(['posts', query]);
-      });
+    socket.on('created', async (post: Post) => {
+      if (options?.onCreated) {
+        options.onCreated(post);
+      }
+      await queryClient.refetchQueries(['posts', query]);
+    });
 
-      socket.current.on('updated', async (post: Post) => {
-        if (options?.onUpdated) {
-          options.onUpdated(post);
-        }
-        await queryClient.refetchQueries(['posts', query]);
-      });
-    }
+    socket.on('updated', async (post: Post) => {
+      if (options?.onUpdated) {
+        options.onUpdated(post);
+      }
+      await queryClient.refetchQueries(['posts', query]);
+    });
 
     return () => {
-      if (socket.current) {
-        socket.current.close();
-        socket.current = null;
-      }
+      socket.off('connect_error');
+      socket.off('created');
+      socket.off('updated');
     };
   }, [api, options, query, queryClient]);
 

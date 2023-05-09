@@ -8,8 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useEffect, useRef } from 'react';
-import { Socket } from 'socket.io-client';
+import { useEffect } from 'react';
 import {
   ApiContext,
   ApiError,
@@ -68,38 +67,34 @@ export function useBoosters(
 ): UseQueryResult<BoosterList, ApiError | AxiosError> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/boosters', {
-        query,
-      });
+    const socket = api.openSocket('/boosters', ['boosters', query], {
+      query,
+    });
 
-      socket.current.on('connect_error', (error) => {
-        console.error(error);
-      });
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
 
-      socket.current.on('created', async (booster: Booster) => {
-        if (options?.onCreated) {
-          options.onCreated(booster);
-        }
-        await queryClient.refetchQueries(['boosters', query]);
-      });
+    socket.on('created', async (booster: Booster) => {
+      if (options?.onCreated) {
+        options.onCreated(booster);
+      }
+      await queryClient.refetchQueries(['boosters', query]);
+    });
 
-      socket.current.on('updated', async (booster: Booster) => {
-        if (options?.onUpdated) {
-          options.onUpdated(booster);
-        }
-        await queryClient.refetchQueries(['boosters', query]);
-      });
-    }
+    socket.on('updated', async (booster: Booster) => {
+      if (options?.onUpdated) {
+        options.onUpdated(booster);
+      }
+      await queryClient.refetchQueries(['boosters', query]);
+    });
 
     return () => {
-      if (socket.current) {
-        socket.current.close();
-        socket.current = null;
-      }
+      socket.off('connect_error');
+      socket.off('created');
+      socket.off('updated');
     };
   }, [api, options, query, queryClient]);
 

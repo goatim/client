@@ -1,4 +1,12 @@
-import { createContext, ReactElement, useCallback, useContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  ReactElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import axios, {
   AxiosError,
   AxiosRequestConfig,
@@ -13,6 +21,7 @@ import { ManagerOptions } from 'socket.io-client/build/esm/manager';
 import { SocketOptions } from 'socket.io-client/build/esm/socket';
 import { DateTime } from 'luxon';
 import { DurationLike } from 'luxon/src/duration';
+import { hashQueryKey, QueryKey } from '@tanstack/react-query';
 import { ModelName } from './utils';
 
 export interface Model<N extends ModelName = ModelName> {
@@ -265,7 +274,14 @@ export interface ApiContext {
     query?: Q,
   ): Promise<AxiosResponse<D>>;
 
-  createSocket: (namespace?: string, opts?: Partial<ManagerOptions & SocketOptions>) => Socket;
+  sockets: Record<string, Socket>;
+  openSocket: (
+    namespace: string,
+    queryKey: QueryKey,
+    opts?: Partial<ManagerOptions & SocketOptions>,
+  ) => Socket;
+  closeSocket: (queryKey: QueryKey) => void;
+  closeAllSockets: () => void;
 }
 
 const apiContext = createContext<ApiContext | undefined>(undefined);
@@ -435,18 +451,62 @@ export function ApiProvider({
     [persistConfig],
   );
 
-  const createSocket = useCallback(
-    (namespace?: string, opts?: Partial<ManagerOptions & SocketOptions>): Socket => {
-      return io((apiConfig?.host || '') + namespace, {
-        ...opts,
+  const [sockets, setSockets] = useState<Record<string, Socket>>({});
+
+  const openSocket = useCallback(
+    (
+      namespace: string,
+      queryKey: QueryKey,
+      opts?: Partial<ManagerOptions & SocketOptions>,
+    ): Socket => {
+      const hash = hashQueryKey(queryKey);
+
+      if (hash in sockets) {
+        return sockets[hash];
+      }
+
+      const socket = io((apiConfig?.host || '') + namespace, {
         auth: {
           api_key: apiConfig?.api_key,
           bearer_token: apiConfig?.bearer_token,
         },
+        ...opts,
       });
+
+      setSockets((_sockets) => ({ ..._sockets, [hash]: socket }));
+
+      return socket;
     },
-    [apiConfig?.api_key, apiConfig?.bearer_token, apiConfig?.host],
+    [apiConfig?.api_key, apiConfig?.bearer_token, apiConfig?.host, sockets],
   );
+
+  const closeSocket = useCallback(
+    (queryKey: QueryKey): void => {
+      const hash = hashQueryKey(queryKey);
+
+      if (hash in sockets && sockets[hash]) {
+        sockets[hash].disconnect();
+        setSockets(({ ..._sockets }) => {
+          delete _sockets[hash];
+          return _sockets;
+        });
+      }
+    },
+    [sockets],
+  );
+
+  const closeAllSockets = useCallback((): void => {
+    Object.values(sockets).forEach((socket) => {
+      socket.disconnect();
+    });
+    setSockets({});
+  }, [sockets]);
+
+  useEffect(() => {
+    return () => {
+      closeAllSockets();
+    };
+  }, [closeAllSockets]);
 
   const value = useMemo<ApiContext>(
     () => ({
@@ -462,9 +522,23 @@ export function ApiProvider({
       put: (route: string, body?: RequestBody, query?: RequestQuery) =>
         apiPut(route, body, apiConfig, query),
       delete: (route: string, query?: RequestQuery) => apiDelete(route, apiConfig, query),
-      createSocket,
+      sockets,
+      openSocket,
+      closeSocket,
+      closeAllSockets,
     }),
-    [apiConfig, createSocket, setApiKey, setBearerToken, setConfig, setHost, setLocale],
+    [
+      apiConfig,
+      closeAllSockets,
+      closeSocket,
+      openSocket,
+      setApiKey,
+      setBearerToken,
+      setConfig,
+      setHost,
+      setLocale,
+      sockets,
+    ],
   );
 
   return <apiContext.Provider value={value}>{children}</apiContext.Provider>;

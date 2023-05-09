@@ -8,8 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useEffect, useRef } from 'react';
-import { Socket } from 'socket.io-client';
+import { useEffect } from 'react';
 import {
   ApiContext,
   ApiError,
@@ -67,38 +66,34 @@ export function useBoosterFactories(
 ): UseQueryResult<BoosterFactoryList, ApiError | AxiosError> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/booster-factories', {
-        query,
-      });
+    const socket = api.openSocket('/booster-factories', ['booster-factories', query], {
+      query,
+    });
 
-      socket.current.on('connect_error', (error) => {
-        console.error(error);
-      });
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
 
-      socket.current.on('created', async (boosterFactory: BoosterFactory) => {
-        if (options?.onCreated) {
-          options.onCreated(boosterFactory);
-        }
-        await queryClient.refetchQueries(['booster_factories', query]);
-      });
+    socket.on('created', async (boosterFactory: BoosterFactory) => {
+      if (options?.onCreated) {
+        options.onCreated(boosterFactory);
+      }
+      await queryClient.refetchQueries(['booster_factories', query]);
+    });
 
-      socket.current.on('updated', async (boosterFactory: BoosterFactory) => {
-        if (options?.onUpdated) {
-          options.onUpdated(boosterFactory);
-        }
-        await queryClient.refetchQueries(['booster_factories', query]);
-      });
-    }
+    socket.on('updated', async (boosterFactory: BoosterFactory) => {
+      if (options?.onUpdated) {
+        options.onUpdated(boosterFactory);
+      }
+      await queryClient.refetchQueries(['booster_factories', query]);
+    });
 
     return () => {
-      if (socket.current) {
-        socket.current.close();
-        socket.current = null;
-      }
+      socket.off('connect_error');
+      socket.off('created');
+      socket.off('updated');
     };
   }, [api, options, query, queryClient]);
 

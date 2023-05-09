@@ -109,7 +109,7 @@ export function useNotifications(
 
     return () => {
       if (socket.current) {
-        socket.current.close();
+        socket.current?.disconnect();
         socket.current = null;
       }
     };
