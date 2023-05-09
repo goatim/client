@@ -480,27 +480,26 @@ export function ApiProvider({
     [apiConfig?.api_key, apiConfig?.bearer_token, apiConfig?.host, sockets],
   );
 
-  const closeSocket = useCallback(
-    (queryKey: QueryKey): void => {
-      const hash = hashQueryKey(queryKey);
+  const closeSocket = useCallback((queryKey: QueryKey): void => {
+    const hash = hashQueryKey(queryKey);
 
-      if (hash in sockets && sockets[hash]) {
-        sockets[hash].disconnect();
-        setSockets(({ ..._sockets }) => {
-          delete _sockets[hash];
-          return _sockets;
-        });
+    setSockets(({ ..._sockets }) => {
+      if (hash in _sockets && _sockets[hash]) {
+        _sockets[hash].disconnect();
+        delete _sockets[hash];
       }
-    },
-    [sockets],
-  );
+      return _sockets;
+    });
+  }, []);
 
   const closeAllSockets = useCallback((): void => {
-    Object.values(sockets).forEach((socket) => {
-      socket.disconnect();
+    setSockets((_sockets) => {
+      Object.values(_sockets).forEach((socket) => {
+        socket.disconnect();
+      });
+      return {};
     });
-    setSockets({});
-  }, [sockets]);
+  }, []);
 
   useEffect(() => {
     return () => {
