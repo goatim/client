@@ -7,9 +7,8 @@ import {
   UseQueryResult,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { AxiosError } from 'axios';
-import { Socket } from 'socket.io-client';
 import { Notification } from './model';
 import {
   ApiContext,
@@ -80,38 +79,34 @@ export function useNotifications(
 ): UseQueryResult<NotificationList, ApiError | AxiosError> {
   const api = useApi();
   const queryClient = useQueryClient();
-  const socket = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!socket.current && query?.wallet) {
-      socket.current = api.createSocket('/notifications', {
-        query,
-      });
+    const socket = api.openSocket('/notifications', ['notifications', query], {
+      query,
+    });
 
-      socket.current.on('connect_error', (error) => {
-        console.error(error);
-      });
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
 
-      socket.current.on('created', async (notification: Notification) => {
-        if (options?.onCreated) {
-          options.onCreated(notification);
-        }
-        await queryClient.refetchQueries(['notifications', query]);
-      });
+    socket.on('created', async (notification: Notification) => {
+      if (options?.onCreated) {
+        options.onCreated(notification);
+      }
+      await queryClient.refetchQueries(['notifications', query]);
+    });
 
-      socket.current.on('updated', async (notification: Notification) => {
-        if (options?.onUpdated) {
-          options.onUpdated(notification);
-        }
-        await queryClient.refetchQueries(['notifications', query]);
-      });
-    }
+    socket.on('updated', async (notification: Notification) => {
+      if (options?.onUpdated) {
+        options.onUpdated(notification);
+      }
+      await queryClient.refetchQueries(['notifications', query]);
+    });
 
     return () => {
-      if (socket.current) {
-        socket.current?.disconnect();
-        socket.current = null;
-      }
+      socket.off('connect_error');
+      socket.off('created');
+      socket.off('updated');
     };
   }, [api, options, query, queryClient]);
 
