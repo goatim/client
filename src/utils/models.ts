@@ -39,12 +39,14 @@ export type ModelName =
   | 'spotlight'
   | 'stock'
   | 'tax'
+  | 'ticket'
   | 'tournament'
   | 'tournament_participant'
   | 'transaction'
   | 'user'
   | 'user_event'
   | 'wallet'
+  | 'wheel_draw'
   | 'withdrawal'
   | 'post';
 
@@ -91,12 +93,14 @@ export enum ModelISO {
   SPOTLIGHT = 'sp',
   STOCK = 'st',
   TAX = 'ta',
+  TICKET = 'ti',
   TOURNAMENT = 'to',
   TOURNAMENT_PARTICIPANT = 'tp',
   TRANSACTION = 'tr',
   USER = 'us',
   USER_EVENT = 'ue',
   WALLET = 'wa',
+  WHEEL_DRAW = 'wd',
   WITHDRAWAL = 'wi',
 }
 
@@ -141,12 +145,14 @@ export enum ModelIdLength {
   SPOTLIGHT = 8,
   STOCK = 30,
   TAX = 15,
+  TICKET = 30,
   TOURNAMENT = 10,
   TOURNAMENT_PARTICIPANT = 15,
   TRANSACTION = 10,
   USER = 15,
   USER_EVENT = 40,
   WALLET = 12,
+  WHEEL_DRAW = 30,
   WITHDRAWAL = 30,
   POST = 30,
 }
