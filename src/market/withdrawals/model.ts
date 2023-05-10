@@ -13,7 +13,7 @@ export interface Withdrawal extends Model<'withdrawal'> {
   wallet?: Wallet | string;
   status?: WithdrawalStatus;
   error?: string;
-  amount?: number;
+  coins?: number;
   capture?: Capture | string;
   currency_iso?: WithdrawalCurrencyIso;
   currencies_rate?: CurrenciesRate | string;

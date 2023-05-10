@@ -10,8 +10,8 @@ export interface Wallet extends Model<'wallet'> {
   name?: string;
   slug?: string;
   type?: WalletType;
-  amount?: number;
-  withdrawable_amount?: number;
+  coins?: number;
+  withdrawable_coins?: number;
   tickets?: number;
   portfolios_quotation?: number;
   portfolios_session_variation?: number;

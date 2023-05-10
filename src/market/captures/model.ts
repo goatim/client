@@ -5,6 +5,6 @@ export type CaptureStatus = 'created' | 'cancelled' | 'processed' | 'errored';
 
 export interface Capture extends Model<'capture'> {
   wallet?: Wallet | string;
-  amount?: number;
+  coins?: number;
   status?: CaptureStatus;
 }

@@ -80,7 +80,7 @@ export function useActiveWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'wa
 
 export interface WithdrawalBody extends RequestBody {
   wallet?: string | null;
-  amount?: number | null;
+  coins?: number | null;
   currency_iso?: string | null;
   receiver_wallet?: string | null;
 }
