@@ -1,5 +1,5 @@
 import { Model } from '../../api';
-import { Ticket, Wallet } from '../index';
+import { Wallet } from '../index';
 
 export type WheelDrawType = 'pack' | 'ticket' | 'loss';
 
@@ -11,7 +11,6 @@ export interface WheelDrawResult {
 
 export interface WheelDraw extends Model<'wheel_draw'> {
   wallet?: Wallet | string;
-  ticket?: Ticket | string;
   type?: WheelDrawType;
   result?: WheelDrawResult;
 }

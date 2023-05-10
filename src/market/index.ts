@@ -7,6 +7,5 @@ export * from './currenciesRates';
 export * from './items';
 export * from './taxes';
 export * from './wallets';
-export * from './tickets';
 export * from './wheelDraws';
 export * from './withdrawals';

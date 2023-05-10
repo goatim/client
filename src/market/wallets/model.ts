@@ -12,6 +12,7 @@ export interface Wallet extends Model<'wallet'> {
   type?: WalletType;
   amount?: number;
   withdrawable_amount?: number;
+  tickets?: number;
   portfolios_quotation?: number;
   portfolios_session_variation?: number;
   is_default?: boolean;
