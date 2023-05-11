@@ -44,8 +44,11 @@ export function useWallet(
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const socket = api.openSocket(`/wallets/${id}`, ['boosters', id, query], {
-      query,
+    const socket = api.openSocket('/wallet', ['wallets', id, query], {
+      query: {
+        wallet: id,
+        ...query,
+      },
     });
 
     socket.on('connect_error', (error) => {
