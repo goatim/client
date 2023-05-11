@@ -8,7 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Wallet } from './model';
 import {
   ApiContext,
@@ -41,6 +41,27 @@ export function useWallet(
   options?: Omit<UseQueryOptions<Wallet, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
 ): UseQueryResult<Wallet, ApiError | AxiosError> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const socket = api.openSocket(`/wallets/${id}`, ['boosters', id, query], {
+      query,
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
+
+    socket.on('updated', async (wallet: Wallet) => {
+      await queryClient.setQueryData(['wallets', id, query], wallet);
+    });
+
+    return () => {
+      socket.off('connect_error');
+      socket.off('updated');
+    };
+  }, [api, id, options, query, queryClient]);
+
   return useQuery<Wallet, ApiError | AxiosError>(
     ['wallets', id, query],
     () => getWallet(api, id as string, query),
