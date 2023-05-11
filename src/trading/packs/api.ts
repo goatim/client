@@ -8,6 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useEffect } from 'react';
 import {
   ApiContext,
   ApiError,
@@ -48,11 +49,49 @@ export async function getPacks(api: ApiContext, query?: GetPacksQuery): Promise<
   return data;
 }
 
+export interface UsePacksOptions
+  extends Omit<UseQueryOptions<PackList, ApiError | AxiosError>, 'queryFn' | 'queryKey'> {
+  onCreated?: (pack: Pack) => unknown;
+  onUpdated?: (pack: Pack) => unknown;
+}
+
 export function usePacks(
   query?: GetPacksQuery,
-  options?: Omit<UseQueryOptions<PackList, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
+  options?: UsePacksOptions,
 ): UseQueryResult<PackList, ApiError | AxiosError> {
   const api = useApi();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const socket = api.openSocket('/packs', ['packs', query], {
+      query,
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error(error);
+    });
+
+    socket.on('created', async (pack: Pack) => {
+      if (options?.onCreated) {
+        options.onCreated(pack);
+      }
+      await queryClient.refetchQueries(['packs', query]);
+    });
+
+    socket.on('updated', async (pack: Pack) => {
+      if (options?.onUpdated) {
+        options.onUpdated(pack);
+      }
+      await queryClient.refetchQueries(['packs', query]);
+    });
+
+    return () => {
+      socket.off('connect_error');
+      socket.off('created');
+      socket.off('updated');
+    };
+  }, [api, options, query, queryClient]);
+
   return useQuery<PackList, ApiError | AxiosError>(
     ['packs', query],
     () => getPacks(api, query),
