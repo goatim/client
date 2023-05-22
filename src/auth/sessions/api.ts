@@ -82,8 +82,8 @@ export function useSignIn(
     (body: SignInBody) => signIn(api, body),
     {
       onSuccess(session: Session) {
-        queryClient.setQueryData(['sessions', 'active'], session);
         api.setBearerToken(session.bearer_token);
+        queryClient.setQueryData(['sessions', 'active'], session);
       },
       ...options,
     },
