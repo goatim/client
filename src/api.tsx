@@ -403,50 +403,50 @@ export function ApiProvider({
 
   const setConfig = useCallback(
     (_config: ApiConfig, duration?: DurationLike) => {
+      setApiConfig(_config);
       if (persistConfig) {
         storeConfig(_config, duration);
       }
-      setApiConfig(_config);
     },
     [persistConfig],
   );
 
   const setHost = useCallback(
     (host: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, host: host || undefined }));
       if (persistConfig) {
         storeHost(host, duration);
       }
-      setApiConfig((oldConfig) => ({ ...oldConfig, host: host || undefined }));
     },
     [persistConfig],
   );
 
   const setApiKey = useCallback(
     (apiKey: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, api_key: apiKey || undefined }));
       if (persistConfig) {
         storeApiKey(apiKey, duration);
       }
-      setApiConfig((oldConfig) => ({ ...oldConfig, api_key: apiKey || undefined }));
     },
     [persistConfig],
   );
 
   const setLocale = useCallback(
     (locale: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, locale: locale || undefined }));
       if (persistConfig) {
         storeLocale(locale, duration);
       }
-      setApiConfig((oldConfig) => ({ ...oldConfig, locale: locale || undefined }));
     },
     [persistConfig],
   );
 
   const setBearerToken = useCallback(
     (bearerToken: string | null, duration?: DurationLike) => {
+      setApiConfig((oldConfig) => ({ ...oldConfig, bearer_token: bearerToken || undefined }));
       if (persistConfig) {
         storeBearerToken(bearerToken, duration);
       }
-      setApiConfig((oldConfig) => ({ ...oldConfig, bearer_token: bearerToken || undefined }));
     },
     [persistConfig],
   );

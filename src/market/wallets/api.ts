@@ -44,25 +44,29 @@ export function useWallet(
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const socket = api.openSocket('/wallet', ['wallets', id, query], {
-      query: {
-        wallet: id,
-        ...query,
-      },
-    });
+    if (options?.enabled !== undefined ? options?.enabled && !!id : !!id) {
+      const socket = api.openSocket('/wallet', ['wallets', id, query], {
+        query: {
+          wallet: id,
+          ...query,
+        },
+      });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+      socket.on('connect_error', (error) => {
+        console.error(error);
+      });
 
-    socket.on('updated', async (wallet: Wallet) => {
-      await queryClient.setQueryData(['wallets', id, query], wallet);
-    });
+      socket.on('updated', async (wallet: Wallet) => {
+        await queryClient.setQueryData(['wallets', id, query], wallet);
+      });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('updated');
-    };
+      return () => {
+        socket.off('connect_error');
+        socket.off('updated');
+      };
+    }
+
+    return () => {};
   }, [api, id, options, query, queryClient]);
 
   return useQuery<Wallet, ApiError | AxiosError>(
