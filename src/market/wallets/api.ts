@@ -82,16 +82,20 @@ export function useActiveWallet(
   const { wallet } = useGoatimClient();
   const session = useActiveSession();
 
-  const userIsVerified = useMemo<boolean>(() => {
-    if (session.data?.user && typeof session.data.user === 'object') {
+  const enabled = useMemo<boolean>(() => {
+    if (!session.data) {
+      return false;
+    }
+
+    if (session.data.user && typeof session.data.user === 'object') {
       return !!session.data.user.verified_email && !!session.data.user.verified_phone;
     }
     return false;
-  }, [session.data?.user]);
+  }, [session.data]);
 
   return useWallet(wallet, query, {
     ...options,
-    enabled: options?.enabled !== undefined ? userIsVerified : userIsVerified,
+    enabled: options?.enabled !== undefined ? options.enabled && enabled : enabled,
   });
 }
 

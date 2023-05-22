@@ -22,9 +22,14 @@ export function useUser(
   options?: Omit<UseQueryOptions<User, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
 ): UseQueryResult<User, ApiError | AxiosError> {
   const api = useApi();
+  const session = useActiveSession();
+
   return useQuery<User, ApiError | AxiosError>(['users', id], () => getUser(api, id as string), {
     ...options,
-    enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
+    enabled:
+      options?.enabled !== undefined
+        ? options?.enabled && !!id && !!session.data
+        : !!id && !!session.data,
   });
 }
 

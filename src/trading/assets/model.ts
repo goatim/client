@@ -22,5 +22,6 @@ export interface Asset extends Model<'asset'> {
   bank_proposal_quotation?: number;
   average_dividends_percentage?: number;
   average_dividends_amount?: number;
+  total_dividends?: number;
   total_dividends_distributed?: number;
 }
