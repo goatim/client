@@ -40,12 +40,12 @@ export function useAsset(
 export type AssetList = PaginatedList<'assets', Asset>;
 
 export interface GetAssetsQuery extends ListRequestQuery {
-  type?: AssetType;
-  league?: string;
-  club?: string;
-  asset?: string;
+  type?: AssetType | AssetType[];
+  league?: string | string[];
+  club?: string | string[];
+  asset?: string | string[];
   search?: string;
-  player_position?: PlayerPosition;
+  player_position?: PlayerPosition | PlayerPosition[];
 }
 
 export async function getAssets(api: ApiContext, query?: GetAssetsQuery): Promise<AssetList> {

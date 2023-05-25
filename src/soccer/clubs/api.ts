@@ -18,6 +18,7 @@ import {
   useApi,
 } from '../../api';
 import { Club } from './model';
+import { League } from '../leagues';
 
 export type GetClubQuery = RequestQuery;
 
@@ -45,7 +46,7 @@ export function useClub(
 export type ClubList = PaginatedList<'clubs', Club>;
 
 export interface GetClubsQuery extends ListRequestQuery {
-  league?: string;
+  league?: string | string[];
 }
 
 export async function getClubs(api: ApiContext, query?: GetClubsQuery): Promise<ClubList> {
