@@ -133,7 +133,10 @@ export async function postSpotlightIllustration(
   id: string,
   body: PostSpotlightIllustrationBody,
 ): Promise<Spotlight> {
-  const { data } = await api.post<Spotlight>(`/spotlights/${id}/illustration`, body);
+  const { data } = await api.post<Spotlight, PostSpotlightIllustrationBody>(
+    `/spotlights/${id}/illustration`,
+    body,
+  );
   return data;
 }
 

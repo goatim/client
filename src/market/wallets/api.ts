@@ -186,7 +186,7 @@ export async function postWalletPicture(
   id: string,
   body: PostWalletPictureBody,
 ): Promise<Wallet> {
-  const { data } = await api.post<Wallet>(`/wallets/${id}/picture`, body);
+  const { data } = await api.post<Wallet, PostWalletPictureBody>(`/wallets/${id}/picture`, body);
   return data;
 }
 

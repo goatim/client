@@ -123,7 +123,10 @@ export async function attachTournamentMatch(
   id: string,
   body: AttachTournamentMatchBody,
 ): Promise<Tournament> {
-  const { data } = await api.put<Tournament>(`/tournaments/${id}/attach_match`, body);
+  const { data } = await api.put<Tournament, AttachTournamentMatchBody>(
+    `/tournaments/${id}/attach_match`,
+    body,
+  );
   return data;
 }
 

@@ -84,7 +84,7 @@ export interface UserEventBody {
 }
 
 export async function postUserEvent(api: ApiContext, body: UserEventBody): Promise<UserEvent> {
-  const { data } = await api.post<UserEvent>('/user_events', body);
+  const { data } = await api.post<UserEvent, UserEventBody>('/user_events', body);
   return data;
 }
 
