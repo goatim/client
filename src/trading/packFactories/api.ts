@@ -137,7 +137,10 @@ export async function postPackFactoryIcon(
   id: string,
   body: PostPackFactoryIconBody,
 ): Promise<PackFactory> {
-  const { data } = await api.post<PackFactory>(`/pack_factories/${id}/icon`, body);
+  const { data } = await api.post<PackFactory, PostPackFactoryIconBody>(
+    `/pack_factories/${id}/icon`,
+    body,
+  );
   return data;
 }
 
