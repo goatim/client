@@ -89,11 +89,7 @@ export function isApiError(error: unknown): boolean {
   );
 }
 
-export interface RequestBody {
-  [key: string]: unknown;
-}
-
-export function buildRequestBody<B extends RequestBody = RequestBody>(body: B): FormData {
+export function buildRequestBody<B extends object = Record<string, unknown>>(body: B): FormData {
   const formData = new FormData();
 
   Object.entries(body).forEach(([param, value]) => {
@@ -197,7 +193,7 @@ export async function apiGet<D = unknown, Q extends RequestQuery = RequestQuery>
 
 export async function apiPost<
   D = unknown,
-  B extends RequestBody = RequestBody,
+  B extends object = Record<string, unknown>,
   Q extends RequestQuery = RequestQuery,
 >(url: string, body?: B, apiConfig?: ApiConfig, query?: Q): Promise<AxiosResponse<D>> {
   const config = buildRequestConfig<Q>(apiConfig, query);
@@ -215,7 +211,7 @@ export async function apiPost<
 
 export async function apiPut<
   D = unknown,
-  B extends RequestBody = RequestBody,
+  B extends object = Record<string, unknown>,
   Q extends RequestQuery = RequestQuery,
 >(url: string, body?: B, apiConfig?: ApiConfig, query?: Q): Promise<AxiosResponse<D>> {
   const config = buildRequestConfig<Q>(apiConfig, query);
@@ -259,12 +255,20 @@ export interface ApiContext {
     route: string,
     query?: Q,
   ): Promise<AxiosResponse<D>>;
-  post<D = unknown, B extends RequestBody = RequestBody, Q extends RequestQuery = RequestQuery>(
+  post<
+    D = unknown,
+    B extends object = Record<string, unknown>,
+    Q extends RequestQuery = RequestQuery,
+  >(
     route: string,
     body?: B,
     query?: Q,
   ): Promise<AxiosResponse<D>>;
-  put<D = unknown, B extends RequestBody = RequestBody, Q extends RequestQuery = RequestQuery>(
+  put<
+    D = unknown,
+    B extends object = Record<string, unknown>,
+    Q extends RequestQuery = RequestQuery,
+  >(
     route: string,
     body?: B,
     query?: Q,
@@ -516,9 +520,9 @@ export function ApiProvider({
       setLocale,
       setBearerToken,
       get: (route: string, query?: RequestQuery) => apiGet(route, apiConfig, query),
-      post: (route: string, body?: RequestBody, query?: RequestQuery) =>
+      post: (route: string, body?: object, query?: RequestQuery) =>
         apiPost(route, body, apiConfig, query),
-      put: (route: string, body?: RequestBody, query?: RequestQuery) =>
+      put: (route: string, body?: object, query?: RequestQuery) =>
         apiPut(route, body, apiConfig, query),
       delete: (route: string, query?: RequestQuery) => apiDelete(route, apiConfig, query),
       sockets,

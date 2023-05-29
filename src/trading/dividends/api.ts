@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Dividend, DividendType } from './model';
 
 export async function getDividend(api: ApiContext, id: string): Promise<Dividend> {
@@ -65,7 +58,7 @@ export function useDividends(
   );
 }
 
-export interface DividendBody extends RequestBody {
+export interface DividendBody {
   type?: DividendType;
   asset?: string | null;
   physical_event?: string | null;
@@ -141,7 +134,7 @@ export function usePutDividend(
   );
 }
 
-export interface PostDividendBulkBody extends RequestBody {
+export interface PostDividendBulkBody {
   bulk: File;
   physical_event?: string;
 }

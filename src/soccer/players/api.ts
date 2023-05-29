@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Player, PlayerPosition } from './model';
 
 export async function getPlayer(api: ApiContext, id: string): Promise<Player> {
@@ -67,7 +60,7 @@ export function usePlayers(
   );
 }
 
-export interface PlayerBody extends RequestBody {
+export interface PlayerBody {
   first_name?: string | null;
   last_name?: string | null;
   description?: string | null;
@@ -126,7 +119,7 @@ export function usePutPlayer(
   );
 }
 
-export interface PostPlayerBulkBody extends RequestBody {
+export interface PostPlayerBulkBody {
   bulk: File;
 }
 

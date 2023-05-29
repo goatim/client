@@ -9,14 +9,7 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Pack } from './model';
 
 export async function getPack(api: ApiContext, id: string): Promise<Pack> {
@@ -99,7 +92,7 @@ export function usePacks(
   );
 }
 
-export interface PostPackBody extends RequestBody {
+export interface PostPackBody {
   wallet?: string | null;
   share_bulks?: string | null;
   tags?: string | null;
@@ -129,7 +122,7 @@ export function usePostPack(
   );
 }
 
-export interface PutPackBody extends RequestBody {
+export interface PutPackBody {
   seen?: boolean;
   title?: string | null;
   message?: string | null;

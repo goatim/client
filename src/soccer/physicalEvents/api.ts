@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { PhysicalEvent, PhysicalEventType } from './model';
 
 export async function getPhysicalEvent(api: ApiContext, id: string): Promise<PhysicalEvent> {
@@ -65,7 +58,7 @@ export function usePhysicalEvents(
   );
 }
 
-export interface PhysicalEventBody extends RequestBody {
+export interface PhysicalEventBody {
   type?: PhysicalEventType;
   name?: string | null;
   description?: string | null;
@@ -131,7 +124,7 @@ export function usePutPhysicalEvent(
   );
 }
 
-export interface PostPhysicalEventIconBody extends RequestBody {
+export interface PostPhysicalEventIconBody {
   icon: File;
 }
 

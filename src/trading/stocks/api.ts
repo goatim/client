@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Stock } from './model';
 
 export async function getStock(api: ApiContext, id: string): Promise<Stock> {
@@ -58,7 +51,7 @@ export function useStocks(
   );
 }
 
-export interface PostStockBody extends RequestBody {
+export interface PostStockBody {
   asset?: string | null;
   tags?: string | null;
   initial_shares?: number;
@@ -85,7 +78,7 @@ export function usePostStock(
   );
 }
 
-export interface PutStockBody extends RequestBody {
+export interface PutStockBody {
   tags?: string | null;
 }
 

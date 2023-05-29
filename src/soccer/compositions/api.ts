@@ -12,7 +12,6 @@ import {
   ApiError,
   ListRequestQuery,
   PaginatedList,
-  RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
@@ -154,7 +153,7 @@ export interface CompositionPositionBody {
   booster_factory: string | null;
 }
 
-export interface CompositionBody extends RequestBody {
+export interface CompositionBody {
   match?: string | null;
   wallet?: string | null;
   setting?: string | null;

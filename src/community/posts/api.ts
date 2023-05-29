@@ -15,7 +15,6 @@ import {
   ApiError,
   ListRequestQuery,
   PaginatedList,
-  RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
@@ -101,7 +100,7 @@ export function usePosts(
   });
 }
 
-export interface PostBody extends RequestBody {
+export interface PostBody {
   user?: string;
   author?: string;
   wallet?: string;

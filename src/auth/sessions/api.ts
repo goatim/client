@@ -10,7 +10,7 @@ import {
 import { useCallback } from 'react';
 import { AxiosError } from 'axios';
 import { Session } from './model';
-import { ApiContext, ApiError, RequestBody, RequestQuery, useApi } from '../../api';
+import { ApiContext, ApiError, RequestQuery, useApi } from '../../api';
 
 export interface GetSessionQuery extends RequestQuery {
   auto_refresh?: boolean;
@@ -63,7 +63,7 @@ export function useActiveSession(): UseQueryResult<Session> {
   );
 }
 
-export interface SignInBody extends RequestBody {
+export interface SignInBody {
   email: string;
   password: string;
 }

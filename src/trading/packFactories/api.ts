@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { PackFactory } from './model';
 
 export async function getPackFactory(api: ApiContext, id: string): Promise<PackFactory> {
@@ -66,7 +59,7 @@ export function usePackFactories(
   );
 }
 
-export interface PackFactoryBody extends RequestBody {
+export interface PackFactoryBody {
   name?: string | null;
   description?: string | null;
   tags?: string | null;
@@ -135,7 +128,7 @@ export function usePutPackFactory(
   );
 }
 
-export interface PostPackFactoryIconBody extends RequestBody {
+export interface PostPackFactoryIconBody {
   icon: File;
 }
 

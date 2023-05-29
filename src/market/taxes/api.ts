@@ -8,7 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { ApiContext, ApiError, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ApiContext, ApiError, PaginatedList, RequestQuery, useApi } from '../../api';
 import { Tax } from './model';
 
 export async function getTax(api: ApiContext, id: string): Promise<Tax> {
@@ -56,7 +56,7 @@ export function useVats(
   return useTaxes({ tags: 'vat' }, options);
 }
 
-export interface TaxBody extends RequestBody {
+export interface TaxBody {
   tags?: string | null;
   name?: string | null;
   amount?: number;

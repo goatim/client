@@ -8,7 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { ApiContext, ApiError, PaginatedList, RequestBody, useApi } from '../../api';
+import { ApiContext, ApiError, PaginatedList, useApi } from '../../api';
 import { CompositionSetting } from './model';
 
 export async function getCompositionSetting(
@@ -58,7 +58,7 @@ export function useCompositionSettings(
   );
 }
 
-export interface CompositionSettingBody extends RequestBody {
+export interface CompositionSettingBody {
   name?: string | null;
   description?: string | null;
   is_default?: boolean;

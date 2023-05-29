@@ -9,14 +9,7 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Booster } from './model';
 import { useActiveWallet } from '../../market';
 
@@ -113,7 +106,7 @@ export function useActiveWalletBoosters(
   return useBoosters({ ...query, wallet: wallet.data?.id }, options);
 }
 
-export interface BoosterBody extends RequestBody {
+export interface BoosterBody {
   wallet?: string | null;
   order?: string | null;
   portfolio?: string | null;

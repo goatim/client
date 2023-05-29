@@ -15,7 +15,6 @@ import {
   ApiError,
   ListRequestQuery,
   PaginatedList,
-  RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
@@ -126,7 +125,7 @@ export function useWallets(
   );
 }
 
-export interface WalletBody extends RequestBody {
+export interface WalletBody {
   owner?: string | null;
   name?: string | null;
   type?: string | null;
@@ -178,7 +177,7 @@ export function usePutWallet(
   );
 }
 
-export interface PostWalletPictureBody extends RequestBody {
+export interface PostWalletPictureBody {
   picture: File;
 }
 

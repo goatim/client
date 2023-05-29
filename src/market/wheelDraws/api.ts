@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { WheelDraw } from './model';
 
 export async function getWheelDraw(api: ApiContext, id: string): Promise<WheelDraw> {
@@ -65,7 +58,7 @@ export function useWheelDraws(
   );
 }
 
-export interface PostWheelDrawBody extends RequestBody {
+export interface PostWheelDrawBody {
   wallet?: string | null;
 }
 
@@ -93,7 +86,7 @@ export function usePostWheelDraw(
   );
 }
 
-export interface PutWheelDrawBody extends RequestBody {
+export interface PutWheelDrawBody {
   wallet?: string | null;
 }
 

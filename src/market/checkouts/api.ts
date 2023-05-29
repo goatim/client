@@ -9,14 +9,7 @@ import {
 } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Checkout, CheckoutStatus } from './model';
 import { ItemType } from '../items';
 
@@ -154,14 +147,14 @@ export function useCheckouts(
   );
 }
 
-export interface CheckoutItemBody extends RequestBody {
+export interface CheckoutItemBody {
   type?: ItemType;
   order?: string;
   booster?: string;
   pack?: string;
 }
 
-export interface CheckoutBody extends RequestBody {
+export interface CheckoutBody {
   items?: CheckoutItemBody[] | string;
   wallet?: string;
   expiration?: string;
@@ -337,7 +330,7 @@ export function useRemoveCheckoutItem(
   );
 }
 
-export interface ConfirmCheckoutBody extends RequestBody {
+export interface ConfirmCheckoutBody {
   wallet?: string;
   billing?: string;
   payment_method?: string;

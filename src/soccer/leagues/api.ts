@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { League } from './model';
 
 export async function getLeague(api: ApiContext, id: string): Promise<League> {
@@ -63,7 +56,7 @@ export function useLeagues(
   );
 }
 
-export interface LeagueBody extends RequestBody {
+export interface LeagueBody {
   name?: string | null;
   description?: string | null;
 }
@@ -115,7 +108,7 @@ export function usePutLeague(
   );
 }
 
-export interface PostLeagueIconBody extends RequestBody {
+export interface PostLeagueIconBody {
   icon: File;
 }
 

@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Asset, AssetType } from './model';
 import { Quotation, QuotationHistory } from '../quotations';
 import { Transaction } from '../transactions';
@@ -65,7 +58,7 @@ export function useAssets(
   );
 }
 
-export interface AssetBody extends RequestBody {
+export interface AssetBody {
   name?: string | null;
   entity?: string | null;
 }
@@ -154,7 +147,7 @@ export function useAssetQuotationHistory(
   );
 }
 
-export interface AssetAcceptBankProposalBody extends RequestBody {
+export interface AssetAcceptBankProposalBody {
   wallet?: string;
   nb_shares?: number;
   bank_proposal_quotation?: number;

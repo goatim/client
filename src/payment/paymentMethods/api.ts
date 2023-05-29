@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { ApiContext, ApiError, PaginatedList, RequestBody, useApi } from '../../api';
+import { ApiContext, ApiError, PaginatedList, useApi } from '../../api';
 import { PaymentMethod } from './model';
 
 export type PaymentMethodList = PaginatedList<'payment_methods', PaymentMethod>;
@@ -21,7 +21,7 @@ export function usePaymentMethods(): UseQueryResult<PaymentMethodList> {
   return useQuery<PaymentMethodList>(['payment_methods'], () => getPaymentMethods(api));
 }
 
-export interface CreditCardBody extends RequestBody {
+export interface CreditCardBody {
   payment_method?: string;
 }
 

@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { TournamentParticipant } from './model';
 
 export async function getTournamentParticipant(
@@ -79,7 +72,7 @@ export function useTournamentParticipants(
   );
 }
 
-export interface TournamentParticipantBody extends RequestBody {
+export interface TournamentParticipantBody {
   tournament?: string | null;
   wallet?: string | null;
 }

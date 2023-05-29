@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { User } from './model';
-import { ApiContext, ApiError, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ApiContext, ApiError, PaginatedList, RequestQuery, useApi } from '../../api';
 import { useActiveSession } from '../sessions';
 
 export async function getUser(api: ApiContext, id: string): Promise<User> {
@@ -66,7 +66,7 @@ export function useUsers(
   );
 }
 
-export interface UserBody extends RequestBody {
+export interface UserBody {
   email?: string | null;
   gender?: string | null;
   first_name?: string | null;
@@ -119,7 +119,7 @@ export function usePostUser(
   );
 }
 
-export interface PostUserVerifyEmailBody extends RequestBody {
+export interface PostUserVerifyEmailBody {
   token: string;
 }
 
@@ -148,7 +148,7 @@ export function usePostUserVerifyEmail(
   );
 }
 
-export interface PostUserVerifyPhoneBody extends RequestBody {
+export interface PostUserVerifyPhoneBody {
   code: string;
 }
 
@@ -247,7 +247,7 @@ export function usePostUserPicture(
   );
 }
 
-export interface PostUserPasswordResetRequestBody extends RequestBody {
+export interface PostUserPasswordResetRequestBody {
   email: string;
 }
 
@@ -275,7 +275,7 @@ export function usePostUserPasswordResetRequest(
   );
 }
 
-export interface PostUserResetPasswordBody extends RequestBody {
+export interface PostUserResetPasswordBody {
   token: string;
   password: string;
 }

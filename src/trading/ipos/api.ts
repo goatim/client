@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Ipo, IpoType } from './model';
 
 export async function getIpo(api: ApiContext, id: string): Promise<Ipo> {
@@ -57,7 +50,7 @@ export function useIpos(
   );
 }
 
-export interface IpoBody extends RequestBody {
+export interface IpoBody {
   asset?: string | null;
   stocks_tags?: string | null;
   type?: IpoType | null;

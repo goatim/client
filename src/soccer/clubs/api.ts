@@ -13,7 +13,6 @@ import {
   ApiError,
   ListRequestQuery,
   PaginatedList,
-  RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
@@ -66,7 +65,7 @@ export function useClubs(
   );
 }
 
-export interface ClubBody extends RequestBody {
+export interface ClubBody {
   name?: string | null;
   short_name?: string | null;
   description?: string | null;
@@ -119,7 +118,7 @@ export function usePutClub(
   );
 }
 
-export interface PostClubIconBody extends RequestBody {
+export interface PostClubIconBody {
   icon: File;
 }
 

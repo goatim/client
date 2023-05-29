@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Order, OrderType } from './model';
 import { useActiveWallet } from '../../market';
 
@@ -72,7 +65,7 @@ export function useActiveWalletOrders(
   );
 }
 
-export interface OrderBody extends RequestBody {
+export interface OrderBody {
   wallet?: string | null;
   asset?: string | null;
   type?: OrderType;

@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Spotlight } from './model';
 
 export async function getSpotlight(api: ApiContext, id: string): Promise<Spotlight> {
@@ -66,7 +59,7 @@ export function useSpotlights(
   );
 }
 
-export interface SpotlightBody extends RequestBody {
+export interface SpotlightBody {
   tags?: string;
   type?: string;
   subtitle?: string;
@@ -131,7 +124,7 @@ export function usePutSpotlight(
   );
 }
 
-export interface PostSpotlightIllustrationBody extends RequestBody {
+export interface PostSpotlightIllustrationBody {
   illustration: File;
 }
 

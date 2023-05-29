@@ -15,7 +15,6 @@ import {
   ApiError,
   ListRequestQuery,
   PaginatedList,
-  RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
@@ -120,7 +119,7 @@ export function useNotifications(
   );
 }
 
-export interface NotificationBody extends RequestBody {
+export interface NotificationBody {
   is_seen?: boolean | string;
   is_read?: boolean | string;
 }

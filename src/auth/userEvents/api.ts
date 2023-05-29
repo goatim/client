@@ -9,7 +9,7 @@ import {
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { UserEvent } from './model';
-import { ApiContext, ApiError, PaginatedList, RequestBody, RequestQuery, useApi } from '../../api';
+import { ApiContext, ApiError, PaginatedList, RequestQuery, useApi } from '../../api';
 
 export async function getUserEvent(api: ApiContext, id: string): Promise<UserEvent> {
   const { data } = await api.get<UserEvent>(`/user_events/${id}`);
@@ -78,7 +78,7 @@ export function useDoesUserEventExists(
   );
 }
 
-export interface UserEventBody extends RequestBody {
+export interface UserEventBody {
   user?: string | null;
   code: string | null;
 }

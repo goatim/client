@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Tournament } from './model';
 
 export async function getTournament(api: ApiContext, id: string): Promise<Tournament> {
@@ -62,7 +55,7 @@ export function useTournaments(
   );
 }
 
-export interface TournamentBody extends RequestBody {
+export interface TournamentBody {
   title?: string | null;
   description?: string | null;
 }
@@ -121,7 +114,7 @@ export function usePutTournament(
   );
 }
 
-export interface AttachTournamentMatchBody extends RequestBody {
+export interface AttachTournamentMatchBody {
   match: string;
 }
 

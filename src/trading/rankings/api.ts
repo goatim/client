@@ -8,7 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { ApiContext, ApiError, PaginatedList, RequestBody, useApi } from '../../api';
+import { ApiContext, ApiError, PaginatedList, useApi } from '../../api';
 import { Ranking, RankingPeriod } from './model';
 
 export async function getRanking(api: ApiContext, id: string): Promise<Ranking> {
@@ -49,7 +49,7 @@ export function useRankings(
   );
 }
 
-export interface RankingBody extends RequestBody {
+export interface RankingBody {
   name?: string | null;
   description?: string | null;
   period?: RankingPeriod | null;

@@ -13,7 +13,6 @@ import {
   ApiError,
   ListRequestQuery,
   PaginatedList,
-  RequestBody,
   RequestQuery,
   useApi,
 } from '../../api';
@@ -78,7 +77,7 @@ export function useActiveWalletWithdrawals(query?: Omit<GetWithdrawalsQuery, 'wa
   return useWithdrawals({ ...query, wallet: wallet.data?.id });
 }
 
-export interface WithdrawalBody extends RequestBody {
+export interface WithdrawalBody {
   wallet?: string | null;
   coins?: number | null;
   currency_iso?: string | null;

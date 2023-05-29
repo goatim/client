@@ -8,14 +8,7 @@ import {
   UseQueryOptions,
 } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-  ApiContext,
-  ApiError,
-  ListRequestQuery,
-  PaginatedList,
-  RequestBody,
-  useApi,
-} from '../../api';
+import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Match, MatchStatus } from './model';
 
 export async function getMatch(api: ApiContext, id: string): Promise<Match> {
@@ -71,7 +64,7 @@ export function useSpotlightMatches(
   return useMatches({ spotlight: true, ...query }, options);
 }
 
-export interface MatchBody extends RequestBody {
+export interface MatchBody {
   title?: string | null;
   description?: string | null;
   beginning?: string | null;
@@ -124,7 +117,7 @@ export function usePutMatch(
   );
 }
 
-export interface PostMatchIconBody extends RequestBody {
+export interface PostMatchIconBody {
   icon: File;
 }
 
