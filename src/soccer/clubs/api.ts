@@ -127,14 +127,17 @@ export async function postClubIcon(
   id: string,
   body: PostClubIconBody,
 ): Promise<Club> {
-  const { data } = await api.post<Club>(`/clubs/${id}/icon`, body);
+  const { data } = await api.post<Club, PostClubIconBody>(`/clubs/${id}/icon`, body);
   return data;
 }
 
 export type PostClubIconVariables = PostClubIconBody & { id: string };
 
 export function usePostClubIcon(
-  options?: Omit<UseMutationOptions<Club, ApiError | AxiosError, ClubBody>, 'mutationFn'>,
+  options?: Omit<
+    UseMutationOptions<Club, ApiError | AxiosError, PostClubIconVariables>,
+    'mutationFn'
+  >,
 ): UseMutationResult<Club, ApiError | AxiosError, PostClubIconVariables> {
   const api = useApi();
   const queryClient = useQueryClient();

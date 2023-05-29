@@ -133,7 +133,10 @@ export async function postPhysicalEventIcon(
   id: string,
   body: PostPhysicalEventIconBody,
 ): Promise<PhysicalEvent> {
-  const { data } = await api.post<PhysicalEvent>(`/physical_events/${id}/picture`, body);
+  const { data } = await api.post<PhysicalEvent, PostPhysicalEventIconBody>(
+    `/physical_events/${id}/picture`,
+    body,
+  );
   return data;
 }
 

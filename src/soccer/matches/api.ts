@@ -126,7 +126,7 @@ export async function postMatchIcon(
   id: string,
   body: PostMatchIconBody,
 ): Promise<Match> {
-  const { data } = await api.post<Match>(`/matches/${id}/icon`, body);
+  const { data } = await api.post<Match, PostMatchIconBody>(`/matches/${id}/icon`, body);
   return data;
 }
 

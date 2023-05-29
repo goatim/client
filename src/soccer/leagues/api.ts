@@ -117,7 +117,7 @@ export async function postLeagueIcon(
   id: string,
   body: PostLeagueIconBody,
 ): Promise<League> {
-  const { data } = await api.post<League>(`/leagues/${id}/icon`, body);
+  const { data } = await api.post<League, PostLeagueIconBody>(`/leagues/${id}/icon`, body);
   return data;
 }
 
