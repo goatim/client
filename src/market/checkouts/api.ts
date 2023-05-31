@@ -149,6 +149,7 @@ export function useCheckouts(
 
 export interface CheckoutItemBody {
   type?: ItemType;
+  quantity?: number;
   order?: string;
   booster?: string;
   pack?: string;
