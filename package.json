@@ -1,7 +1,7 @@
 {
   "name": "@goatim/client",
   "author": "Goatim",
-  "version": "0.18.49",
+  "version": "0.18.50",
   "license": "MIT",
   "repository": "git@github.com:goatim/client.git",
   "main": "dist/index.js",
