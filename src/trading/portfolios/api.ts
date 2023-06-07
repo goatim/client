@@ -36,6 +36,7 @@ export type PortfolioList = PaginatedList<'portfolios', Portfolio>;
 
 export interface GetPortfoliosQuery extends ListRequestQuery {
   wallet?: string;
+  asset?: string;
 }
 
 export async function getPortfolios(
