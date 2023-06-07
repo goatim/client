@@ -71,8 +71,8 @@ export function useActiveWalletPortfolios(
 }
 
 export interface SellPortfolioToBankBody {
-  nb_shares?: string;
-  bank_proposal?: string;
+  nb_shares?: number;
+  bank_proposal?: number;
 }
 
 export async function sellPortfolioToBank(
