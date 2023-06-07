@@ -146,37 +146,3 @@ export function useAssetQuotationHistory(
     { ...options, enabled: options?.enabled !== undefined ? options.enabled && !!id : !!id },
   );
 }
-
-export interface AssetAcceptBankProposalBody {
-  wallet?: string;
-  nb_shares?: number;
-  bank_proposal_quotation?: number;
-}
-
-export async function postAssetAcceptBankProposal(
-  api: ApiContext,
-  id: string,
-  body: AssetAcceptBankProposalBody,
-): Promise<Transaction> {
-  const { data } = await api.post<Transaction, AssetAcceptBankProposalBody>(
-    `/assets/${id}/accept_bank_proposal`,
-    body,
-  );
-  return data;
-}
-
-export type PostAssetAcceptBankProposalVariables = AssetAcceptBankProposalBody & { id: string };
-
-export function usePostAssetAcceptBankProposal(
-  options?: Omit<
-    UseMutationOptions<Transaction, ApiError | AxiosError, PostAssetAcceptBankProposalVariables>,
-    'mutationFn'
-  >,
-): UseMutationResult<Transaction, ApiError | AxiosError, PostAssetAcceptBankProposalVariables> {
-  const api = useApi();
-  return useMutation<Transaction, ApiError | AxiosError, PostAssetAcceptBankProposalVariables>(
-    ({ id, ...body }: PostAssetAcceptBankProposalVariables) =>
-      postAssetAcceptBankProposal(api, id, body),
-    options,
-  );
-}

@@ -19,7 +19,6 @@ export interface Asset extends Model<'asset'> {
   club?: Club | string;
   league?: League | string;
   quotation_history?: QuotationHistory;
-  bank_proposal_quotation?: number;
   average_dividends_percentage?: number;
   average_dividends_amount?: number;
   total_dividends?: number;

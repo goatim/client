@@ -16,4 +16,5 @@ export interface Portfolio extends Model<'portfolio'> {
   total_gains?: number;
   total_variations?: number;
   boosters?: Booster[];
+  bank_proposal?: number;
 }

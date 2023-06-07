@@ -1,8 +1,16 @@
-import { useQuery, UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
+import {
+  useQuery,
+  UseQueryResult,
+  UseQueryOptions,
+  UseMutationOptions,
+  UseMutationResult,
+  useMutation,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ApiContext, ApiError, ListRequestQuery, PaginatedList, useApi } from '../../api';
 import { Portfolio } from './model';
 import { useActiveWallet } from '../../market';
+import { Transaction } from '../transactions';
 
 export async function getPortfolio(api: ApiContext, id: string): Promise<Portfolio> {
   const { data } = await api.get<Portfolio>(`/portfolios/${id}`);
@@ -58,5 +66,37 @@ export function useActiveWalletPortfolios(
   return usePortfolios(
     { ...query, wallet: wallet.data?.id },
     { enabled: !!wallet.data?.id, ...options },
+  );
+}
+
+export interface SellPortfolioToBankBody {
+  nb_shares?: string;
+  bank_proposal?: string;
+}
+
+export async function sellPortfolioToBank(
+  api: ApiContext,
+  id: string,
+  body: SellPortfolioToBankBody,
+): Promise<Transaction> {
+  const { data } = await api.put<Transaction, SellPortfolioToBankBody>(
+    `/portfolios/${id}/sell_to_bank`,
+    body,
+  );
+  return data;
+}
+
+export type SellPortfolioToBankVariables = SellPortfolioToBankBody & { id: string };
+
+export function useSellPortfolioToBank(
+  options?: Omit<
+    UseMutationOptions<Transaction, ApiError | AxiosError, SellPortfolioToBankVariables>,
+    'mutationFn'
+  >,
+): UseMutationResult<Transaction, ApiError | AxiosError, SellPortfolioToBankVariables> {
+  const api = useApi();
+  return useMutation<Transaction, ApiError | AxiosError, SellPortfolioToBankVariables>(
+    ({ id, ...body }: SellPortfolioToBankVariables) => sellPortfolioToBank(api, id, body),
+    options,
   );
 }
