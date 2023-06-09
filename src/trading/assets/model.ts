@@ -13,6 +13,8 @@ export interface Asset extends Model<'asset'> {
   total_shares?: number;
   last_dividend?: number;
   quotation?: number;
+  tags?: string[];
+  notation?: number;
   midnight_quotation?: number;
   day_variation?: number;
   player?: Player | string;
