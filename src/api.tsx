@@ -407,7 +407,6 @@ export function ApiProvider({
 
   const setConfig = useCallback(
     (_config: ApiConfig, duration?: DurationLike) => {
-      console.log('Set api config:', _config);
       setApiConfig(_config);
       if (persistConfig) {
         storeConfig(_config, duration);
@@ -418,7 +417,6 @@ export function ApiProvider({
 
   const setHost = useCallback(
     (host: string | null, duration?: DurationLike) => {
-      console.log('Set host:', host);
       setApiConfig((oldConfig) => ({ ...oldConfig, host: host || undefined }));
       if (persistConfig) {
         storeHost(host, duration);
@@ -429,7 +427,6 @@ export function ApiProvider({
 
   const setApiKey = useCallback(
     (apiKey: string | null, duration?: DurationLike) => {
-      console.log('Set api key:', apiKey);
       setApiConfig((oldConfig) => ({ ...oldConfig, api_key: apiKey || undefined }));
       if (persistConfig) {
         storeApiKey(apiKey, duration);
@@ -440,7 +437,6 @@ export function ApiProvider({
 
   const setLocale = useCallback(
     (locale: string | null, duration?: DurationLike) => {
-      console.log('Set locale:', locale);
       setApiConfig((oldConfig) => ({ ...oldConfig, locale: locale || undefined }));
       if (persistConfig) {
         storeLocale(locale, duration);
@@ -451,7 +447,6 @@ export function ApiProvider({
 
   const setBearerToken = useCallback(
     (bearerToken: string | null, duration?: DurationLike) => {
-      console.log('Set bearer token:', bearerToken);
       setApiConfig((oldConfig) => ({ ...oldConfig, bearer_token: bearerToken || undefined }));
       if (persistConfig) {
         storeBearerToken(bearerToken, duration);

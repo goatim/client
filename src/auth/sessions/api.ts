@@ -54,7 +54,6 @@ export function useActiveSession(): UseQueryResult<Session> {
 
   useEffect(() => {
     if (session.data && session.data.bearer_token !== api.config?.bearer_token) {
-      console.log('Set bearer token !', session.data.bearer_token);
       api.setBearerToken(session.data.bearer_token || null);
     }
   }, [api, session.data]);
@@ -77,14 +76,14 @@ export function useSessionStatus(): SessionStatus {
   const session = useActiveSession();
 
   return useMemo<SessionStatus>(() => {
-    if (session.fetchStatus === 'fetching') {
+    if (session.status === 'loading' && session.fetchStatus === 'fetching') {
       return 'pending';
     }
     if (session.fetchStatus === 'paused') {
       return 'disconnected';
     }
     return session.data?.bearer_token ? 'connected' : 'disconnected';
-  }, [session.data?.bearer_token, session.fetchStatus]);
+  }, [session.data?.bearer_token, session.fetchStatus, session.status]);
 }
 
 export interface SignInBody {
