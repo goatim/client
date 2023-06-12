@@ -7,7 +7,7 @@ import {
   UseQueryResult,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { AxiosError } from 'axios';
 import { Session } from './model';
 import { ApiContext, ApiError, RequestQuery, useApi } from '../../api';
@@ -68,6 +68,22 @@ export function useActiveSession(): UseQueryResult<Session> {
   }, [api, session.error]);
 
   return session;
+}
+
+export type SessionStatus = 'pending' | 'connected' | 'disconnected';
+
+export function useSessionStatus(): SessionStatus {
+  const session = useActiveSession();
+
+  return useMemo<SessionStatus>(() => {
+    if (session.fetchStatus === 'fetching') {
+      return 'pending';
+    }
+    if (session.fetchStatus === 'paused') {
+      return 'disconnected';
+    }
+    return session.data?.bearer_token ? 'connected' : 'disconnected';
+  }, [session.data?.bearer_token, session.fetchStatus]);
 }
 
 export interface SignInBody {
