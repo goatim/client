@@ -25,7 +25,7 @@ export async function getSession(
   try {
     const { data } = await api.get<Session, GetSessionQuery>(`/sessions/${id}`, query);
 
-    if (persist) {
+    if (persist && api.config?.bearer_token !== data.bearer_token) {
       api.setBearerToken(data.bearer_token || null);
     }
     return data;
