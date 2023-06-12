@@ -7,7 +7,7 @@ import {
   UseQueryResult,
   UseQueryOptions,
 } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { AxiosError } from 'axios';
 import { Session } from './model';
 import { ApiContext, ApiError, RequestQuery, useApi } from '../../api';
@@ -43,24 +43,31 @@ export function useSession(
 
 export function useActiveSession(): UseQueryResult<Session> {
   const api = useApi();
-  return useSession(
+  const session = useSession(
     'active',
     { auto_refresh: true },
     {
       retry: false,
-      onSuccess: (session: Session | null) => {
-        if (session?.bearer_token && session.bearer_token !== api.config?.bearer_token) {
-          api.setBearerToken(session.bearer_token);
-        }
-      },
-      onError: (error) => {
-        if (error.code === 'invalid_bearer_token' || error.code === 'not_found') {
-          api.setBearerToken(null);
-        }
-      },
       enabled: !!api.config?.bearer_token,
     },
   );
+
+  useEffect(() => {
+    if (session.data?.bearer_token && session.data.bearer_token !== api.config?.bearer_token) {
+      api.setBearerToken(session.data.bearer_token);
+    }
+  }, [api, session.data?.bearer_token]);
+
+  useEffect(() => {
+    if (
+      session.error &&
+      (session.error.code === 'invalid_bearer_token' || session.error.code === 'not_found')
+    ) {
+      api.setBearerToken(null);
+    }
+  }, [api, session.error]);
+
+  return session;
 }
 
 export interface SignInBody {
