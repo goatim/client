@@ -7,7 +7,7 @@ import {
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { AxiosError } from 'axios';
 import { Session } from './model';
 import { ApiContext, ApiError, RequestQuery, useApi } from '../../api';
@@ -20,39 +20,20 @@ export async function getSession(
   api: ApiContext,
   id: string,
   query?: GetSessionQuery,
-  persist = false,
 ): Promise<Session> {
-  try {
-    const { data } = await api.get<Session, GetSessionQuery>(`/sessions/${id}`, query);
-
-    if (persist && api.config?.bearer_token !== data.bearer_token) {
-      api.setBearerToken(data.bearer_token || null);
-    }
-    return data;
-  } catch (error) {
-    if (
-      persist &&
-      error &&
-      typeof error === 'object' &&
-      'code' in error &&
-      (error.code === 'invalid_bearer_token' || error.code === 'not_found')
-    ) {
-      api.setBearerToken(null);
-    }
-    throw error;
-  }
+  const { data } = await api.get<Session, GetSessionQuery>(`/sessions/${id}`, query);
+  return data;
 }
 
 export function useSession(
   id?: string,
   query?: GetSessionQuery,
   options?: Omit<UseQueryOptions<Session, ApiError | AxiosError>, 'queryKey' | 'queryFn'>,
-  persist = false,
 ): UseQueryResult<Session, ApiError | AxiosError> {
   const api = useApi();
   return useQuery<Session, ApiError | AxiosError>(
     ['sessions', id],
-    () => getSession(api, id as string, query, persist),
+    () => getSession(api, id as string, query),
     {
       ...options,
       enabled: options?.enabled !== undefined ? options?.enabled && !!id : !!id,
@@ -62,15 +43,32 @@ export function useSession(
 
 export function useActiveSession(): UseQueryResult<Session> {
   const api = useApi();
-  return useSession(
+  const session = useSession(
     'active',
     { auto_refresh: true },
     {
       retry: false,
       enabled: !!api.config?.bearer_token,
     },
-    true,
   );
+
+  useEffect(() => {
+    if (session.data && session.data.bearer_token !== api.config?.bearer_token) {
+      console.log('Set bearer token !', session.data.bearer_token);
+      api.setBearerToken(session.data.bearer_token || null);
+    }
+  }, [api, session.data]);
+
+  useEffect(() => {
+    if (
+      session.error &&
+      (session.error.code === 'invalid_bearer_token' || session.error.code === 'not_found')
+    ) {
+      api.setBearerToken(null);
+    }
+  }, [api, session.error]);
+
+  return session;
 }
 
 export type SessionStatus = 'pending' | 'connected' | 'disconnected';
