@@ -25,4 +25,5 @@ export interface Asset extends Model<'asset'> {
   average_dividends_amount?: number;
   total_dividends?: number;
   total_dividends_distributed?: number;
+  nb_shares_in_portfolios?: number;
 }
