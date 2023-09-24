@@ -22,4 +22,5 @@ export interface Match extends Model<'match'> {
   status?: MatchStatus;
   nb_participants?: number;
   podium?: Composition[];
+  userComposition?: Composition;
 }
