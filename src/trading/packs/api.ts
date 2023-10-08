@@ -55,35 +55,35 @@ export function usePacks(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/packs', ['packs', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/packs', ['packs', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (pack: Pack) => {
-      if (options?.onCreated) {
-        options.onCreated(pack);
-      }
-      await queryClient.refetchQueries(['packs', query]);
-    });
+  //   socket.on('created', async (pack: Pack) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(pack);
+  //     }
+  //     await queryClient.refetchQueries(['packs', query]);
+  //   });
 
-    socket.on('updated', async (pack: Pack) => {
-      if (options?.onUpdated) {
-        options.onUpdated(pack);
-      }
-      await queryClient.refetchQueries(['packs', query]);
-    });
+  //   socket.on('updated', async (pack: Pack) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(pack);
+  //     }
+  //     await queryClient.refetchQueries(['packs', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<PackList, ApiError | AxiosError>(
     ['packs', query],

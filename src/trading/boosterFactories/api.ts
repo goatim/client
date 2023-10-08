@@ -60,35 +60,35 @@ export function useBoosterFactories(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/booster-factories', ['booster-factories', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/booster-factories', ['booster-factories', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (boosterFactory: BoosterFactory) => {
-      if (options?.onCreated) {
-        options.onCreated(boosterFactory);
-      }
-      await queryClient.refetchQueries(['booster_factories', query]);
-    });
+  //   socket.on('created', async (boosterFactory: BoosterFactory) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(boosterFactory);
+  //     }
+  //     await queryClient.refetchQueries(['booster_factories', query]);
+  //   });
 
-    socket.on('updated', async (boosterFactory: BoosterFactory) => {
-      if (options?.onUpdated) {
-        options.onUpdated(boosterFactory);
-      }
-      await queryClient.refetchQueries(['booster_factories', query]);
-    });
+  //   socket.on('updated', async (boosterFactory: BoosterFactory) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(boosterFactory);
+  //     }
+  //     await queryClient.refetchQueries(['booster_factories', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<BoosterFactoryList, ApiError | AxiosError>(
     ['booster_factories', query],

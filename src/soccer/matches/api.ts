@@ -64,6 +64,37 @@ export function useSpotlightMatches(
   return useMatches({ spotlight: true, ...query }, options);
 }
 
+export type UserMatchList = PaginatedList<'matches', Match>;
+
+export interface GetUserMatchesQuery extends ListRequestQuery {
+  status?: MatchStatus;
+  spotlight?: boolean;
+  tournament?: string;
+  search?: string;
+}
+
+export async function getUserMatches(
+  api: ApiContext,
+  wallet: string,
+  query?: GetUserMatchesQuery,
+): Promise<UserMatchList> {
+  const { data } = await api.get<UserMatchList>(`/matches/wallet/${wallet}`, query);
+  return data;
+}
+
+export function useUserMatches(
+  wallet: string,
+  query?: GetUserMatchesQuery,
+  options?: Omit<UseQueryOptions<UserMatchList, ApiError | AxiosError>, 'queryFn' | 'queryKey'>,
+): UseQueryResult<MatchList, ApiError | AxiosError> {
+  const api = useApi();
+  return useQuery<UserMatchList, ApiError | AxiosError>(
+    ['matches', query],
+    () => getUserMatches(api, wallet, query),
+    options,
+  );
+}
+
 export interface MatchBody {
   title?: string | null;
   description?: string | null;

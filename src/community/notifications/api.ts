@@ -79,35 +79,35 @@ export function useNotifications(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/notifications', ['notifications', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/notifications', ['notifications', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (notification: Notification) => {
-      if (options?.onCreated) {
-        options.onCreated(notification);
-      }
-      await queryClient.refetchQueries(['notifications', query]);
-    });
+  //   socket.on('created', async (notification: Notification) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(notification);
+  //     }
+  //     await queryClient.refetchQueries(['notifications', query]);
+  //   });
 
-    socket.on('updated', async (notification: Notification) => {
-      if (options?.onUpdated) {
-        options.onUpdated(notification);
-      }
-      await queryClient.refetchQueries(['notifications', query]);
-    });
+  //   socket.on('updated', async (notification: Notification) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(notification);
+  //     }
+  //     await queryClient.refetchQueries(['notifications', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<NotificationList, ApiError | AxiosError>(
     ['notifications', query],

@@ -108,37 +108,37 @@ export function useCheckouts(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/checkouts', ['checkouts', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/checkouts', ['checkouts', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (checkout: Checkout) => {
-      if (options?.onCreated) {
-        options.onCreated(checkout);
-      }
-      await queryClient.setQueryData(['checkouts', checkout.id], checkout);
-      await queryClient.refetchQueries(['checkouts', query]);
-    });
+  //   socket.on('created', async (checkout: Checkout) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(checkout);
+  //     }
+  //     await queryClient.setQueryData(['checkouts', checkout.id], checkout);
+  //     await queryClient.refetchQueries(['checkouts', query]);
+  //   });
 
-    socket.on('updated', async (checkout: Checkout) => {
-      if (options?.onUpdated) {
-        options.onUpdated(checkout);
-      }
-      await queryClient.setQueryData(['checkouts', checkout.id], checkout);
-      await queryClient.refetchQueries(['checkouts', query]);
-    });
+  //   socket.on('updated', async (checkout: Checkout) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(checkout);
+  //     }
+  //     await queryClient.setQueryData(['checkouts', checkout.id], checkout);
+  //     await queryClient.refetchQueries(['checkouts', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<CheckoutList, ApiError | AxiosError>(
     ['checkouts', query],
