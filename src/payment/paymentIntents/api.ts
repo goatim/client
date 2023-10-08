@@ -66,35 +66,35 @@ export function usePaymentIntents(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/payment-intents', ['payment-intents', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/payment-intents', ['payment-intents', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (paymentIntent: PaymentIntent) => {
-      if (options?.onCreated) {
-        options.onCreated(paymentIntent);
-      }
-      await queryClient.refetchQueries(['payment_intents', query]);
-    });
+  //   socket.on('created', async (paymentIntent: PaymentIntent) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(paymentIntent);
+  //     }
+  //     await queryClient.refetchQueries(['payment_intents', query]);
+  //   });
 
-    socket.on('updated', async (paymentIntent: PaymentIntent) => {
-      if (options?.onUpdated) {
-        options.onUpdated(paymentIntent);
-      }
-      await queryClient.refetchQueries(['payment_intents', query]);
-    });
+  //   socket.on('updated', async (paymentIntent: PaymentIntent) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(paymentIntent);
+  //     }
+  //     await queryClient.refetchQueries(['payment_intents', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<PaymentIntentList, ApiError | AxiosError>(
     ['payment_intents', query],

@@ -65,35 +65,35 @@ export function usePosts(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/posts', ['posts', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/posts', ['posts', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (post: Post) => {
-      if (options?.onCreated) {
-        options.onCreated(post);
-      }
-      await queryClient.refetchQueries(['posts', query]);
-    });
+  //   socket.on('created', async (post: Post) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(post);
+  //     }
+  //     await queryClient.refetchQueries(['posts', query]);
+  //   });
 
-    socket.on('updated', async (post: Post) => {
-      if (options?.onUpdated) {
-        options.onUpdated(post);
-      }
-      await queryClient.refetchQueries(['posts', query]);
-    });
+  //   socket.on('updated', async (post: Post) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(post);
+  //     }
+  //     await queryClient.refetchQueries(['posts', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<PostList, ApiError | AxiosError>(['posts', query], () => getPosts(api, query), {
     staleTime: Infinity,

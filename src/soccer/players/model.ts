@@ -21,4 +21,5 @@ export interface Player extends Model<'player'> {
   resolved_short_position?: string;
   performance_index?: number;
   tenure_rate?: number;
+  country?: string; // TODO add country to player
 }

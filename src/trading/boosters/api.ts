@@ -61,35 +61,35 @@ export function useBoosters(
   const api = useApi();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const socket = api.openSocket('/boosters', ['boosters', query], {
-      query,
-    });
+  // useEffect(() => {
+  //   const socket = api.openSocket('/boosters', ['boosters', query], {
+  //     query,
+  //   });
 
-    socket.on('connect_error', (error) => {
-      console.error(error);
-    });
+  //   socket.on('connect_error', (error) => {
+  //     console.error(error);
+  //   });
 
-    socket.on('created', async (booster: Booster) => {
-      if (options?.onCreated) {
-        options.onCreated(booster);
-      }
-      await queryClient.refetchQueries(['boosters', query]);
-    });
+  //   socket.on('created', async (booster: Booster) => {
+  //     if (options?.onCreated) {
+  //       options.onCreated(booster);
+  //     }
+  //     await queryClient.refetchQueries(['boosters', query]);
+  //   });
 
-    socket.on('updated', async (booster: Booster) => {
-      if (options?.onUpdated) {
-        options.onUpdated(booster);
-      }
-      await queryClient.refetchQueries(['boosters', query]);
-    });
+  //   socket.on('updated', async (booster: Booster) => {
+  //     if (options?.onUpdated) {
+  //       options.onUpdated(booster);
+  //     }
+  //     await queryClient.refetchQueries(['boosters', query]);
+  //   });
 
-    return () => {
-      socket.off('connect_error');
-      socket.off('created');
-      socket.off('updated');
-    };
-  }, [api, options, query, queryClient]);
+  //   return () => {
+  //     socket.off('connect_error');
+  //     socket.off('created');
+  //     socket.off('updated');
+  //   };
+  // }, [api, options, query, queryClient]);
 
   return useQuery<BoosterList, ApiError | AxiosError>(
     ['boosters', query],
