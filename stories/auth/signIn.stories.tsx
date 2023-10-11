@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
-import { Field, Form, FormContext, FormFields, FormState } from '@cezembre/forms';
+import { Field, Form, FormContext, FormState } from '@cezembre/forms';
 import { GoatimClient, useActiveSession, useSignIn, useSignOut } from '../../src';
 
-interface Credentials extends FormFields {
+interface Credentials {
   email: string;
   password: string;
 }
@@ -22,12 +22,15 @@ function App() {
   const signIn = useSignIn();
   const signOut = useSignOut();
 
-  const submit = useCallback(async (credentials: Credentials) => {
-    if (!credentials.email || !credentials.password) {
-      return;
-    }
-    await signIn.mutateAsync(credentials);
-  }, []);
+  const submit = useCallback(
+    async (credentials: Credentials) => {
+      if (!credentials.email || !credentials.password) {
+        return;
+      }
+      await signIn.mutateAsync(credentials);
+    },
+    [signIn],
+  );
 
   return (
     <div>
@@ -37,9 +40,9 @@ function App() {
       <Form<Credentials> ref={form} className="auth-sessions-sign-in" onSubmit={submit}>
         <h1>Connection</h1>
 
-        <Field name="email" type="email" label="Email" />
+        <Field name="email" type="email" />
 
-        <Field name="password" type="password" label="Mot de passe" />
+        <Field name="password" type="password" />
 
         <button type="submit">Me connecter</button>
 
