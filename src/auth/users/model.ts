@@ -20,5 +20,7 @@ export interface User extends Model<'user'> {
   referral_code?: string;
   session?: Session;
   picture?: Image;
-  xp?: number;
+  xpg?: number;
+  level?: number;
+  total_xpg?: number;
 }
